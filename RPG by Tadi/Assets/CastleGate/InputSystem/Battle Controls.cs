@@ -4,7 +4,7 @@
 //     version 1.7.0
 //     from Assets/CastleGate/InputSystem/Battle Controls.inputactions
 //
-//     Changes to this file may cause incorrect behavior and will be lost if
+//     Changes to this file may cause incorrect behaveUnitObject and will be lost if
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------

@@ -1,0 +1,32 @@
+using UnityEditor.Animations;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New Character", menuName = "ScriptableObjects/Character", order = 1)]
+public class CharacterBaseData : ScriptableObject
+{
+    // Graphic
+    [SerializeField] private Sprite sprBody;
+    [SerializeField] private Sprite sprLeftHand;
+    [SerializeField] private Sprite sprLeftWeapon;
+    [SerializeField] private Sprite sprRightHand;
+    [SerializeField] private Sprite sprRightWeapon;
+    [SerializeField] private AnimatorController animatorController;
+
+    // Base Stats
+    [SerializeField] private const int hp;
+    [SerializeField] private int attack;
+    [SerializeField] private int defense;
+    [SerializeField] private int spAttack;
+    [SerializeField] private int spDefense;
+    [SerializeField] private int speed;
+
+
+    public Sprite SprBody { get { return sprBody; } }
+    public Sprite SprLeftHand { get {  return sprLeftHand; } }
+    public Sprite SprRightHand { get { return sprRightHand; } }
+    public Sprite SprLeftWeapon { get {  return sprLeftWeapon; } }
+    public Sprite SprRightWeapon { get { return sprRightWeapon; } }
+    public AnimatorController AnimatorController { get { return animatorController; } }
+
+
+}
