@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Unit : MonoBehaviour
+public class UnitController : MonoBehaviour
 {
     [SerializeField] private CharacterBaseData characterBaseData;
 
-    private Character character;
+    private CharacterController character;
 
     public CharacterBaseData CharacterBaseData
     {
@@ -21,12 +21,12 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        character = GetComponentInChildren<Character>();
+        character = GetComponentInChildren<CharacterController>();
     }
 
     private void Start()
     {
-        character.BaseData = characterBaseData;
+        //character.BaseData = characterBaseData;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

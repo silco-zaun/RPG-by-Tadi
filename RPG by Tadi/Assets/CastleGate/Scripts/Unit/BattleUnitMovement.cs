@@ -27,13 +27,13 @@ public class BattleUnitMovement : MonoBehaviour
     private void Awake()
     {
         behaviorPosition = transform.position;
-        characterAnimation =  GetComponentInChildren<CharacterAnimation>();
+        characterAnimation = GetComponentInChildren<CharacterAnimation>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -53,7 +53,7 @@ public class BattleUnitMovement : MonoBehaviour
 
     private void HandleSliding()
     {
-        transform.position += (slideTargetPosition -  transform.position) * slideSpeed * Time.fixedDeltaTime;
+        transform.position += (slideTargetPosition - transform.position) * slideSpeed * Time.fixedDeltaTime;
 
         bool isArriving = Vector3.Distance(transform.position, slideTargetPosition) < 0.1f;
 
@@ -65,24 +65,20 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
-    public void Attack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnAttackComplete)
+    public void Attack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnBehaviorComplete)
     {
         Vector3 attackDir = (targetPosition - behaviorPosition).normalized;
         Vector3 slideTargetPosition = targetPosition - attackDir * reachedDistance;
 
         // Slide to Target
         SlideToPosition(slideTargetPosition,
-            () => 
+            () =>
             {
                 // Arrived at Target, attack him
                 state = State.Busy;
-                
-                characterAnimation.PlayFireAnim(
+
+                characterAnimation.PlayFireAnim(OnAttackTarget,
                     () =>
-                    {
-                        OnAttackTarget();
-                    },
-                    () => 
                     {
                         // Attack completed, slide back
                         SlideToPosition(behaviorPosition,
@@ -91,7 +87,7 @@ public class BattleUnitMovement : MonoBehaviour
                                 // Slide back completed, back to idle
                                 state = State.Idle;
                                 characterAnimation.PlayMoveAnim(Vector2.zero);
-                                OnAttackComplete();
+                                OnBehaviorComplete();
                             });
                     });
             });
@@ -113,4 +109,8 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
+    public void RotateCharacter(bool isFacingLeft)
+    {
+        characterAnimation.RotateCharacter(isFacingLeft);
+    }
 }

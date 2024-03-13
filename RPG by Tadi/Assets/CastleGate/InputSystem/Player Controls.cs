@@ -323,7 +323,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""08a533c5-22e5-4f3a-b6c0-06daa2ada8ec"",
             ""actions"": [
                 {
-                    ""name"": ""Navigate"",
+                    ""name"": ""NavigateMenu"",
                     ""type"": ""PassThrough"",
                     ""id"": ""2d6efeac-85a8-4941-8d0a-2c26e7ed3edb"",
                     ""expectedControlType"": ""Vector2"",
@@ -421,7 +421,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -432,7 +432,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -443,7 +443,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -454,7 +454,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -465,7 +465,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -476,7 +476,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -487,7 +487,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -498,7 +498,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -509,7 +509,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -520,7 +520,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -531,7 +531,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -542,7 +542,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -553,7 +553,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -564,7 +564,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -575,7 +575,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -586,7 +586,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -597,7 +597,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -608,7 +608,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -619,7 +619,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -630,7 +630,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -641,7 +641,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -652,7 +652,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -663,7 +663,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -674,7 +674,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Navigate"",
+                    ""action"": ""NavigateMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -907,7 +907,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Defence = m_Player.FindAction("Defence", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+        m_UI_Navigate = m_UI.FindAction("NavigateMenu", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);

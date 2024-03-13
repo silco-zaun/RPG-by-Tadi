@@ -18,11 +18,11 @@ public class CharacterAnimation : MonoBehaviour
     private bool isFacingLeft = false;
     private bool isDefencing = false;
 
-    //public UnityAnimationEvent onAnimationStart;
-    //public UnityAnimationEvent onAnimationComplete;
+    //public UnityAnimationEvent OnAnimationStart;
+    //public UnityAnimationEvent OnAnimationComplete;
 
-    public System.Action onAnimationStart;
-    public System.Action onAnimationComplete;
+    public System.Action OnAnimationStart;
+    public System.Action OnAnimationComplete;
 
     private void Awake()
     {
@@ -39,18 +39,32 @@ public class CharacterAnimation : MonoBehaviour
         sprRightWeapon.sprite = data.SprRightWeapon;
     }
 
-    public void HandleSwordAttackAnimationStart(string name)
+    public void HandleKnightSwordAttackAnimationStart(string name)
     {
         Debug.Log($"{name} animation start.");
-        //onAnimationStart?.Invoke(name);
-        onAnimationStart?.Invoke();
+        //OnAnimationStart?.Invoke(name);
+        OnAnimationStart?.Invoke();
     }
 
-    public void HandleSwordAttackAnimationComplete(string name)
+    public void HandleKnightSwordAttackAnimationComplete(string name)
     {
         Debug.Log($"{name} animation complete.");
-        //onAnimationStart?.Invoke(name);
-        onAnimationComplete?.Invoke();
+        //OnAnimationStart?.Invoke(name);
+        OnAnimationComplete?.Invoke();
+    }
+
+    public void HandleOrcSwordAttackAnimationStart(string name)
+    {
+        Debug.Log($"{name} animation start.");
+        //OnAnimationStart?.Invoke(name);
+        OnAnimationStart?.Invoke();
+    }
+
+    public void HandleOrcSwordAttackAnimationComplete(string name)
+    {
+        Debug.Log($"{name} animation complete.");
+        //OnAnimationStart?.Invoke(name);
+        OnAnimationComplete?.Invoke();
     }
 
     public void PlayMoveAnim(Vector2 moveVec)
@@ -63,9 +77,7 @@ public class CharacterAnimation : MonoBehaviour
 
             if (isLeftDir != isFacingLeft)
             {
-                isFacingLeft = isLeftDir;
-
-                RotateCharacter();
+                RotateCharacter(isFacingLeft);
             }
         }
     }
@@ -89,8 +101,8 @@ public class CharacterAnimation : MonoBehaviour
     {
         PlayFireAnim();
 
-        this.onAnimationStart = OnAnimationStart;
-        this.onAnimationComplete = OnAnimationComplete;
+        this.OnAnimationStart = OnAnimationStart;
+        this.OnAnimationComplete = OnAnimationComplete;
     }
 
     public void PlayFireAnim()
@@ -103,10 +115,11 @@ public class CharacterAnimation : MonoBehaviour
         trailRender.emitting = emitting;
     }
     
-    private void RotateCharacter()
+    public void RotateCharacter(bool isFacingLeft)
     {
         //Vector3 mousePos = Input.mousePosition;
         //float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        this.isFacingLeft = isFacingLeft;
 
         if (isFacingLeft)
         {

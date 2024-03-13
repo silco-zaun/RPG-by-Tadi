@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BattleCommands : MonoBehaviour
+public class BattleSystemCommands : MonoBehaviour
 {
-    private BattleUI battleUI;
+    private BattleSystemController battleController;
 
     private BattleControls inputActions;
 
     private void Awake()
     {
-        battleUI = GetComponent<BattleUI>();
+        battleController = GetComponent<BattleSystemController>();
         inputActions = new BattleControls();
-        //battleControls.UI.Navigate;
+        //battleControls.UI.NavigateMenu;
     }
 
     private void OnEnable()
@@ -31,11 +31,19 @@ public class BattleCommands : MonoBehaviour
     {
         Vector2 vector = value.Get<Vector2>();
 
-        battleUI.SelectMenu(vector);
+        if (vector.x != 0 || vector.y != 0)
+        {
+            battleController.NavigateUI(vector);
+        }
     }
 
     private void OnSubmit()
     {
-        battleUI.SubmitItem();
+        battleController.SubmitUI();
+    }
+
+    private void OnCancel()
+    {
+        battleController.CancelUI();
     }
 }

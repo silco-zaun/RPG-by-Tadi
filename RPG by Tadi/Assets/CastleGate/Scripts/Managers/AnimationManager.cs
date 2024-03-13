@@ -57,9 +57,9 @@ public class AnimationManager : MonoBehaviour
 
                 if (animationClip.name.Equals("SwordAttack"))
                 {
-                    AddAnimationEvent(animationClip, $"Handle{animationClip.name}AnimationStart", 0);
+                    AddAnimationEvent(animationClip, $"Handle{controller.name}{animationClip.name}AnimationStart", 0);
 
-                    AddAnimationEvent(animationClip, $"Handle{animationClip.name}AnimationComplete", animationClip.length);
+                    AddAnimationEvent(animationClip, $"Handle{controller.name}{animationClip.name}AnimationComplete", animationClip.length);
                 }
             }
         }
@@ -97,14 +97,14 @@ public class AnimationManager : MonoBehaviour
         {
             time = eventTime,
             functionName = functionName,
-            stringParameter = animationClip.name
+            stringParameter = functionName
         };
 
         // Add the new animationEvent to the clip
         animationClip.AddEvent(newEvent);
 
-        string keyString = animationClip.GetInstanceID().ToString() + eventTime.ToString("F2");
-        animationEventDictionary.Add(keyString, newEvent);
+        //string keyString = animationClip.GetInstanceID().ToString() + eventTime.ToString("F2");
+        animationEventDictionary.Add(functionName, newEvent);
 
         // Refresh the animation clip
         //AnimationUtility.SetAnimationClipSettings(animationClip, new AnimationClipSettings());
@@ -126,10 +126,10 @@ public class AnimationManager : MonoBehaviour
             if (animationEvent.functionName == functionName)
             {
                 float eventTime = animationEvent.time;
-                string keyString = animationClip.GetInstanceID().ToString() + eventTime.ToString("F2");
-                animationEventDictionary.Remove(keyString);
+                //string keyString = animationClip.GetInstanceID().ToString() + eventTime.ToString("F2");
+                animationEventDictionary.Remove(functionName);
 
-                animationClip.events[i] = null; // Remove the animationEvent by setting it to null
+                animationClip.events[i] = null; // Remove the animationEvent by battleSetting it to null
 
                 break; // Exit the loop once the animationEvent is removed
             }

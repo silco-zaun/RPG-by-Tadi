@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbca8c2ee2c3e67488ab82f21c7cf403, type: 3}
   m_Name: Orc
   m_EditorClassIdentifier: 
-  character: 1
+  type: 1
   sprBody: {fileID: -491629717, guid: 17c624dcb86c70c42a28ba8298db1ad4, type: 3}
   sprLeftHand: {fileID: -2597094214951350933, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprLeftWeapon: {fileID: 1219222050, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}

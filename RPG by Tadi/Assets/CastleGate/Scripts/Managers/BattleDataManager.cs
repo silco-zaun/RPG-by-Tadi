@@ -6,7 +6,54 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class BattleDataManager
 {
+    public enum BattleState
+    {
+        SelectBehaviorUnit,
+        SelectBehavior,
+        SelectTargetUnit,
+        DoBehavior
+    }
+
+    public enum BattleResult
+    {
+        None = 0,
+        LeftWin,
+        RightWin,
+        Tie,
+    }
+
+    public enum BattleUnitBehavior
+    {
+        None = 0,
+        Attack,
+        Defence,
+        Skill,
+        Item,
+        Party,
+        Formation,
+        Escape
+    }
+
+    public enum BattleUnitBehaviorKor
+    {
+        대기 = 0,
+        공격,
+        방어,
+        스킬,
+        아이템,
+        파티,
+        진형,
+        도망
+    }
+
     private static BattleDataManager instance = null;
+
+    private const int MIN_LEVEL = 1;
+    private const int MAX_LEVEL = 100;
+    private const int MIN_BASE_STAT = 1;
+    private const int MAX_BASE_STAT = 200;
+    private const int MIN_IV_STAT = 1;
+    private const int MAX_IV_STAT = 40;
 
     public static BattleDataManager Instance
     {
@@ -20,13 +67,6 @@ public class BattleDataManager
     }
 
     private BattleDataManager() { }
-
-    private const int MIN_LEVEL = 1;
-    private const int MAX_LEVEL = 100;
-    private const int MIN_BASE_STAT = 1;
-    private const int MAX_BASE_STAT = 200;
-    private const int MIN_IV_STAT = 1;
-    private const int MAX_IV_STAT = 40;
 
     public int GetHP(int level, int baseHP, int ivHP)
     {
