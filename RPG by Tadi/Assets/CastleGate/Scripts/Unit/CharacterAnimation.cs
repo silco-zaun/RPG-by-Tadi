@@ -16,7 +16,7 @@ public class CharacterAnimation : MonoBehaviour
 
     private Animator animator;
     private bool isFacingLeft = false;
-    private bool isDefencing = false;
+    private bool isDefending = false;
 
     //public UnityAnimationEvent OnAnimationStart;
     //public UnityAnimationEvent OnAnimationComplete;
@@ -29,9 +29,9 @@ public class CharacterAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimData(CharacterBaseData data)
+    public void SetAnimationData(CharacterBaseData data)
     {
-        animator.runtimeAnimatorController = AnimationManager.Instance.AnimatorControllers[(int)data.Character];
+        animator.runtimeAnimatorController = GameManager.Ins.Anim.CharacterAnimator[(int)data.CharacterType - 1];
         sprBody.sprite = data.SprBody;
         sprLeftHand.sprite = data.SprLeftHand;
         sprLeftWeapon.sprite = data.SprLeftWeapon;
@@ -39,35 +39,17 @@ public class CharacterAnimation : MonoBehaviour
         sprRightWeapon.sprite = data.SprRightWeapon;
     }
 
-    public void HandleKnightSwordAttackAnimationStart(string name)
+    public void OnAttackAnimationStart(string name)
     {
-        Debug.Log($"{name} animation start.");
-        //OnAnimationStart?.Invoke(name);
         OnAnimationStart?.Invoke();
     }
 
-    public void HandleKnightSwordAttackAnimationComplete(string name)
+    public void OnAttackAnimationComplete(string name)
     {
-        Debug.Log($"{name} animation complete.");
-        //OnAnimationStart?.Invoke(name);
         OnAnimationComplete?.Invoke();
     }
 
-    public void HandleOrcSwordAttackAnimationStart(string name)
-    {
-        Debug.Log($"{name} animation start.");
-        //OnAnimationStart?.Invoke(name);
-        OnAnimationStart?.Invoke();
-    }
-
-    public void HandleOrcSwordAttackAnimationComplete(string name)
-    {
-        Debug.Log($"{name} animation complete.");
-        //OnAnimationStart?.Invoke(name);
-        OnAnimationComplete?.Invoke();
-    }
-
-    public void PlayMoveAnim(Vector2 moveVec)
+    public void PlayMoveAnimation(Vector2 moveVec)
     {
         animator.SetFloat("Speed", moveVec.magnitude);
 
@@ -82,35 +64,40 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public void PlayDefenceAnim(bool defencing)
+    public void PlayFireAnimation(System.Action OnAnimationStart, System.Action OnAnimationComplete)
     {
-        // 방어 상태가 바뀌었으면
-        if (defencing != isDefencing)
-        {
-            if (defencing)
-            {
-                animator.SetTrigger("Defence");
-            }
-
-            isDefencing = defencing;
-            animator.SetBool("IsDefencing", isDefencing);
-        }
-    }
-
-    public void PlayFireAnim(System.Action OnAnimationStart, System.Action OnAnimationComplete)
-    {
-        PlayFireAnim();
+        PlayFireAnimation();
 
         this.OnAnimationStart = OnAnimationStart;
         this.OnAnimationComplete = OnAnimationComplete;
     }
 
-    public void PlayFireAnim()
+    public void PlayFireAnimation()
     {
-        animator.SetTrigger("SwordAttack");
+        animator.SetTrigger("Attack");
     }
 
-    public void PlayTrailAnim(bool emitting)
+    public void PlayDefenseAnimation(bool defending)
+    {
+        // 방어 상태가 바뀌었으면
+        if (defending != isDefending)
+        {
+            if (defending)
+            {
+                animator.SetTrigger("Defense");
+            }
+
+            isDefending = defending;
+            animator.SetBool("IsDefending", isDefending);
+        }
+    }
+
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger("Death");
+    }
+
+    public void PlayTrailAnimation(bool emitting)
     {
         trailRender.emitting = emitting;
     }

@@ -1,25 +1,29 @@
-using System;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class CharacterController : MonoBehaviour
 {
     [SerializeField] private CharacterBaseData baseData;
+    [SerializeField] private SlideBarController healthBar;
 
     private CharacterAnimation characterAnimation;
 
-    private DataManager.CharacterType type;
+    private CharacterDataManager.CharacterType characterType;
+    private CharacterDataManager.DamageType damageType;
+    private CharacterDataManager.AttackType attackType;
 
     private int level;
-    private int hp;
-    private int attack;
-    private int defense;
-    private int spAtk;
-    private int spDef;
-    private int speed;
+    private float hp;
+    private float attack;
+    private float defense;
+    private float magicAttack;
+    private float magicDefense;
+    private float speed;
 
-    private int curHP;
+    private float curHP;
+
+    public System.Action OnFainted;
 
     public CharacterBaseData BaseData
     {
@@ -27,12 +31,23 @@ public class CharacterController : MonoBehaviour
         set
         {
             baseData = value;
-            characterAnimation.SetAnimData(baseData);
-            type = baseData.type;
+            characterAnimation.SetAnimationData(baseData);
+            characterType = baseData.characterType;
+            damageType = baseData.damageType;
+            attackType = baseData.attackType;
+
+            if (baseData.characterType == CharacterDataManager.CharacterType.None)
+                Debug.LogError($"Enum variable [CharacterType] must to be set.");
+            if (baseData.damageType == CharacterDataManager.DamageType.None)
+                Debug.LogError($"Enum variable [DamageType] must to be set.");
+            if (baseData.attackType == CharacterDataManager.AttackType.None)
+                Debug.LogError($"Enum variable [AttackType] must to be set.");
         }
     }
 
-    public DataManager.CharacterType Type { get { return type; } }
+    public CharacterDataManager.CharacterType CharacterType { get { return characterType; } }
+    public CharacterDataManager.DamageType DamageType { get { return damageType; } }
+    public CharacterDataManager.AttackType AttackType { get { return attackType; } }
 
     // Stats
     public int Level
@@ -40,12 +55,12 @@ public class CharacterController : MonoBehaviour
         get { return level; }
         set { level = value; SetStats(value); }
     }
-    public int CurHP { get { return curHP; } }
-    public int Attack { get { return attack; } }
-    public int Defense { get { return defense; } }
-    public int SpAtk { get { return spAtk; } }
-    public int SpDef { get { return spDef; } }
-    public int Speed { get { return speed; } }
+    public float CurHP { get { return curHP; } }
+    public float Attack { get { return attack; } }
+    public float Defense { get { return defense; } }
+    public float MagicAttack { get { return magicAttack; } }
+    public float MagicDefense { get { return magicDefense; } }
+    public float Speed { get { return speed; } }
 
     private void Awake()
     {
@@ -54,30 +69,53 @@ public class CharacterController : MonoBehaviour
 
     private void SetStats(int level)
     {
-        curHP = hp = BattleDataManager.Instance.GetHP(level, baseData.BaseHP, baseData.IVHP);
-        attack = BattleDataManager.Instance.GetStat(level, baseData.BaseAttack, baseData.IVAttack);
-        defense = BattleDataManager.Instance.GetStat(level, baseData.BaseDefense, baseData.IVDefense);
-        spAtk = BattleDataManager.Instance.GetStat(level, baseData.BaseSpAtk, baseData.IVSpAtk);
-        spDef = BattleDataManager.Instance.GetStat(level, baseData.BaseSpDef, baseData.IVSpDef);
-        speed = BattleDataManager.Instance.GetStat(level, baseData.BaseSpeed, baseData.IVSpeed);
+        curHP = hp = DataManager.Ins.Bat.GetHP(level, baseData.BaseHP, baseData.IVHP);
+        attack = DataManager.Ins.Bat.GetStat(level, baseData.BaseAttack, baseData.IVAttack);
+        defense = DataManager.Ins.Bat.GetStat(level, baseData.BaseDefense, baseData.IVDefense);
+        magicAttack = DataManager.Ins.Bat.GetStat(level, baseData.BaseMagicAtk, baseData.IVMagicAtk);
+        magicDefense = DataManager.Ins.Bat.GetStat(level, baseData.BaseMagicDef, baseData.IVMagicDef);
+        speed = DataManager.Ins.Bat.GetStat(level, baseData.BaseSpeed, baseData.IVSpeed);
     }
 
-    public void TakeDamage(int behaviorLevel, int behaviorAttack)
+    public void TakeDamage(CharacterController attacker, CharacterDataManager.DamageType attackType, bool defending, float skillMultiplier = 1f)
     {
-        int damage = BattleDataManager.Instance.GetDamage(behaviorLevel, behaviorAttack, defense);
+        float attackersAttack = 0f;
+        float defense = 0f;
 
-        Debug.Log($"hp : {hp}");
-        Debug.Log($"curHP : {curHP}");
-        Debug.Log($"damage : {damage}");
-
-        curHP -= damage;
-
-        if (curHP < 0)
+        switch (attackType)
         {
-            curHP = 0;
+            case CharacterDataManager.DamageType.Physical:
+                attackersAttack = attacker.Attack;
+                defense = this.defense;
+                break;
+            case CharacterDataManager.DamageType.Magic:
+                attackersAttack = attacker.MagicAttack;
+                defense = this.magicDefense;
+                break;
+            default:
+                Debug.LogError("enum variable [DamageType] must be set.");
+                return;
         }
 
-        Debug.Log($"curHP : {curHP}");
-        Debug.Log($"-- Turn Finished --");
+        float damage = DataManager.Ins.Bat.GetDamage(attackType, attacker.Level, attackersAttack, defense, skillMultiplier, defending);
+
+        curHP -= damage;
+        float normalizedHP = System.Math.Clamp(curHP / hp, 0f, hp);
+        healthBar.SetBar(normalizedHP);
+
+        bool isFainted = CheckIsFainted();
+
+        if (isFainted)
+        {
+            OnFainted?.Invoke();
+        }
+    }
+
+    public bool CheckIsFainted()
+    {
+        if (curHP < 1f)
+            return true;
+
+        return false;
     }
 }

@@ -33,7 +33,7 @@ public class BattleSystemCommands : MonoBehaviour
 
         if (vector.x != 0 || vector.y != 0)
         {
-            battleController.NavigateUI(vector);
+            battleController.Navigate(vector);
         }
     }
 

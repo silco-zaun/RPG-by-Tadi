@@ -19,7 +19,7 @@ public class PlayerUnitMovement: MonoBehaviour
 
     private void Awake()
     {
-        //playerControls.Player.Fire.performed += OnFire; // example
+        //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
 
         rigid = GetComponent<Rigidbody2D>();
     }
@@ -31,7 +31,7 @@ public class PlayerUnitMovement: MonoBehaviour
 
     private void LateUpdate()
     {
-        characterAnimation.PlayMoveAnim(moveVec);
+        characterAnimation.PlayMoveAnimation(moveVec);
         HandleDefence();
     }
 
@@ -42,7 +42,7 @@ public class PlayerUnitMovement: MonoBehaviour
 
     public void HandleDefence()
     {
-        characterAnimation.PlayDefenceAnim(IsDefencing);
+        characterAnimation.PlayDefenseAnimation(IsDefencing);
     }
 
     public void SetMoveVector(Vector2 moveVec)
@@ -52,7 +52,7 @@ public class PlayerUnitMovement: MonoBehaviour
 
     public void Fire()
     {
-        characterAnimation.PlayFireAnim();
+        characterAnimation.PlayFireAnimation();
     }
 
     public void Dash()
@@ -61,7 +61,7 @@ public class PlayerUnitMovement: MonoBehaviour
         {
             isDashing = true;
             curMoveSpeed = DASH_SPEED;
-            characterAnimation.PlayTrailAnim(true);
+            characterAnimation.PlayTrailAnimation(true);
             StartCoroutine(DashRoutine());
         }
     }
@@ -72,7 +72,7 @@ public class PlayerUnitMovement: MonoBehaviour
         float dashCD = .3f;
         yield return new WaitForSeconds(dashTime);
         curMoveSpeed = MOVE_SPEED;
-        characterAnimation.PlayTrailAnim(false);
+        characterAnimation.PlayTrailAnimation(false);
         yield return new WaitForSeconds(dashCD);
         isDashing = false;
     }

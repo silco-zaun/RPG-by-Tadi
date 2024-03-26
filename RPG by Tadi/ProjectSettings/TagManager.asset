@@ -50,3 +50,6 @@ TagManager:
   - name: Unit
     uniqueID: 2051676969
     locked: 0
+  - name: Bullet
+    uniqueID: 916893523
+    locked: 0

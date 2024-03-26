@@ -1,42 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class BattleDataManager
 {
     public enum BattleState
     {
-        SelectBehaviorUnit,
-        SelectBehavior,
-        SelectTargetUnit,
-        DoBehavior
+        SelectPlayerUnit, SelectAction, SelectTarget, SelectSkill, SelectSkillTarget, ProgressRound
     }
 
-    public enum BattleResult
+    public enum BattleCondition
     {
-        None = 0,
-        LeftWin,
-        RightWin,
-        Tie,
+        None, Victory, Defeated, Draw
     }
 
-    public enum BattleUnitBehavior
+    public enum BattleHorizontalLine
     {
-        None = 0,
+        First, Second, Third
+    }
+
+    public enum BattleVertialLine
+    {
+        First, Second
+    }
+
+    public enum BattleFormationRange
+    {
+        Single, Front, Rear, FirstLine, SecondLine, ThirdLine, Party, All
+    }
+
+    public enum BattleUnitParty
+    {
+        PlayerParty, EnemyParty
+    }
+
+    public enum BattleUnitAction
+    {
+        None,
         Attack,
-        Defence,
+        Defense,
         Skill,
-        Item,
-        Party,
-        Formation,
+        //Item,
+        //Party,
+        //Formation,
         Escape
     }
 
-    public enum BattleUnitBehaviorKor
+    public enum BattleUnitActionKor
     {
-        대기 = 0,
+        대기,
         공격,
         방어,
         스킬,
@@ -46,76 +58,99 @@ public class BattleDataManager
         도망
     }
 
-    private static BattleDataManager instance = null;
-
-    private const int MIN_LEVEL = 1;
-    private const int MAX_LEVEL = 100;
-    private const int MIN_BASE_STAT = 1;
-    private const int MAX_BASE_STAT = 200;
-    private const int MIN_IV_STAT = 1;
-    private const int MAX_IV_STAT = 40;
-
-    public static BattleDataManager Instance
+    public enum BattleUnitActionPriority
     {
-        get
-        {
-            if (instance == null)
-                instance = new BattleDataManager();
-
-            return instance;
-        }
+        NFive = -5,
+        NFour,
+        NThree,
+        NTwo,
+        NOne,
+        Zero,
+        One,
+        Tow,
+        Three,
+        Four,
+        Five,
     }
 
-    private BattleDataManager() { }
+    //private static BattleDataManager instance = null;
 
-    public int GetHP(int level, int baseHP, int ivHP)
+    // Bat info
+    public const int HORIZONTAL_LINE_UNIT_COUNT = 2;
+    public const int VERTICAL_LINE_UNIT_COUNT = 3;
+    public const int PARTY_UNIT_COUNT = 6;
+    public const int COMBAT_SKILL_MAX_LEVEL = 3;
+
+    // CharacterType stat
+    private const int MIN_LEVEL = 1;
+    private const int MAX_LEVEL = 100;
+    private const float MIN_BASE_STAT = 1f;
+    private const float MAX_BASE_STAT = 200f;
+    private const float MIN_IV_STAT = 1f;
+    private const float MAX_IV_STAT = 40f;
+
+    //private BattleDataManager() { }
+
+    public float GetHP(int level, float baseHP, float ivHP)
     {
         // Base stat values : Average 100 Total 600
         // Individual values : Average 20 Total 120
 
-        int evHP = ivHP; // Temp value
+        float evHP = ivHP; // Temp value
 
-        int hp = ((baseHP * 2 + ivHP + evHP) * level) / 100 + level + 10;
+        float hp = ((baseHP * 2f + ivHP + evHP) * level) / 100f + level + 10f;
 
         return hp;
     }
 
-    public int GetStat(int level, int baseStat, int ivStat)
+    public float GetStat(int level, float baseStat, float ivStat)
     {
         // Base stat values : Average 100 min 0 max 200 Total 600
         // Individual values : Average 20 min 0 max 40 Total 120
 
-        int evStat = ivStat; // Temp value
-        int nature = 1; // Temp value
+        float evStat = ivStat; // Temp value
+        float nature = 1f; // Temp value
 
-        int stat = (((baseStat * 2 + ivStat + evStat) * level) / 100 + 5) * nature;
+        float stat = (((baseStat * 2f + ivStat + evStat) * level) / 100f + 5f) * nature;
 
         return stat;
     }
 
-    private int GetMinStat(int level)
+    private float GetMinStat(int level)
     {
-        int minStat = GetStat(level, MIN_BASE_STAT, MIN_IV_STAT);
+        float minStat = GetStat(level, MIN_BASE_STAT, MIN_IV_STAT);
 
         return minStat;
     }
 
-    private int GetMaxStat(int level)
+    private float GetMaxStat(int level)
     {
-        int maxStat = GetStat(level, MAX_BASE_STAT, MAX_IV_STAT);
+        float maxStat = GetStat(level, MAX_BASE_STAT, MAX_IV_STAT);
 
         return maxStat;
     }
 
-    public int GetDamage(int behaviorLevel, int behaviorAttack, int targetDefense)
+    public float GetDamage(CharacterDataManager.DamageType attackType, int attackersLevel, float attackersAttack, float defendersDefense, float skillMultiplier, bool defending)
     {
-        int skillPower = 50; // Temp value
-        float critical = GetCritical(0); // Temp value
+        float type = 1f;
+
+        switch (attackType)
+        {
+            case CharacterDataManager.DamageType.Physical:
+                break;
+            case CharacterDataManager.DamageType.Magic:
+                type = 0.8f;
+                defending = false;
+                break;
+        }
+
+        float critical = GetCritical(0);
+        float defensive = defending ? 0.1f : 1f;
         float random = Random.Range(0.85f, 1.15f);
 
-        float unmodifiedDamage = (behaviorLevel * 2 / 5 + 2) * skillPower * behaviorAttack / targetDefense / 50 + 2;
-        float modifiers = random * critical;
-        int damage = Mathf.FloorToInt(unmodifiedDamage * modifiers);
+        float unmodifiedDamage = (attackersLevel * 2 / 5 + 2) * attackersAttack / defendersDefense + 2;
+        float modifiers = type * critical * skillMultiplier * defensive * random;
+        float damage = Mathf.FloorToInt(unmodifiedDamage * modifiers);
 
         return damage;
     }
@@ -133,13 +168,13 @@ public class BattleDataManager
         return critical;
     }
 
-    public float GetHitChance(int behaviorLevel, int targetLevel, int behaviorSpeed, int targetSpeed)
+    public float GetHitChance(int attackersLevel, int defendersLevel, float attackersSpeed, float defendersSpeed)
     {
-        float hitChanceBasedOnSpeed = GetHitChanceBasedOnSpeed(behaviorLevel, behaviorSpeed, targetLevel, targetSpeed); // 0.8 ~ 1
+        float hitChanceBasedOnSpeed = GetHitChanceBasedOnSpeed(attackersLevel, attackersSpeed, defendersLevel, defendersSpeed); // 0.8 ~ 1
         float skillAccuracy = GetHitChanceBasedOnSkillAccuracy();
         float random = Random.Range(0.95f, 1.05f);
 
-        // speed 0 ~ 5 : behaviorLevel 0 ~ 5 : skill 0 ~ 2
+        // speed 0 ~ 5 : attackersLevel 0 ~ 5 : usingSkill 0 ~ 2
         float hitChance = hitChanceBasedOnSpeed * skillAccuracy * random;
 
         return hitChance;
@@ -161,23 +196,23 @@ public class BattleDataManager
         return skillAccuracy;
     }
 
-    private float GetHitChanceBasedOnSpeed(int behaviorLevel, int behaviorSpeed, int targetLevel, int targetSpeed)
+    private float GetHitChanceBasedOnSpeed(int attackersLevel, float attackersSpeed, int defendersLevel, float defendersSpeed)
     {
-        float speedAccuracy = GetAccuracy(behaviorLevel, behaviorSpeed); // 0.9 ~ 1
-        float speedEvasion = GetEvasion(targetLevel, targetSpeed); // 0 ~ 0.1
+        float speedAccuracy = GetAccuracy(attackersLevel, attackersSpeed); // 0.9 ~ 1
+        float speedEvasion = GetEvasion(defendersLevel, defendersSpeed); // 0 ~ 0.1
         float hitChance = speedAccuracy - speedEvasion; // 0.8 ~ 1
 
         return hitChance;
     }
 
-    private float GetHitChanceModifierBasedOnLevel(int behaviorLevel, int targetLevel)
+    private float GetHitChanceModifierBasedOnLevel(int attackersLevel, int defendersLevel)
     {
-        float modifier = 1f + (behaviorLevel - targetLevel) / (MAX_LEVEL - MIN_LEVEL) * 0.1f; // 0.9 ~ 1.1
+        float modifier = 1f + (attackersLevel - defendersLevel) / (MAX_LEVEL - MIN_LEVEL) * 0.1f; // 0.9 ~ 1.1
 
         return modifier;
     }
 
-    private float GetAccuracy(int level, int speed)
+    private float GetAccuracy(int level, float speed)
     {
         float accuracy = 1f;
         float baseAccuracy = 0.95f;
@@ -190,7 +225,7 @@ public class BattleDataManager
         return accuracy;
     }
 
-    private float GetEvasion(int level, int speed)
+    private float GetEvasion(int level, float speed)
     {
         float evasion = 1f;
         float baseEvasion = 0.05f;
@@ -201,5 +236,54 @@ public class BattleDataManager
         evasion = baseEvasion + speedModifier; // 0 ~ 0.1
 
         return evasion;
+    }
+
+    public BattleUnitActionPriority GetActionPriority(BattleUnitAction action)
+    {
+        BattleUnitActionPriority priority;
+
+        switch (action)
+        {
+            case BattleUnitAction.Defense:
+                priority = BattleUnitActionPriority.Five;
+                break;
+            case BattleUnitAction.Attack:
+            case BattleUnitAction.Escape:
+            //case BattleUnitAction.Formation:
+            //case BattleUnitAction.Item:
+            //case BattleUnitAction.Party:
+            case BattleUnitAction.Skill:
+            default:
+                priority = BattleUnitActionPriority.Zero;
+                break;
+        }
+
+        return priority;
+    }
+
+    public int GetPriority(BattleUnitAction action, float speed)
+    {
+        int basePriority = 100;
+        int speedFactor = 1;
+
+        switch (action)
+        {
+            case BattleUnitAction.Defense:
+                basePriority = 0;
+                speedFactor = 0;
+                break;
+            case BattleUnitAction.Attack:
+            case BattleUnitAction.Escape:
+            //case BattleUnitAction.Formation:
+            //case BattleUnitAction.Item:
+            //case BattleUnitAction.Party:
+            case BattleUnitAction.Skill:
+            default:
+                break;
+        }
+
+        int priority = basePriority - (speedFactor * (int)speed);
+
+        return priority;
     }
 }

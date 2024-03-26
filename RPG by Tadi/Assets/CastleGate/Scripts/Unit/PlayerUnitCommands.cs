@@ -12,18 +12,18 @@ public class PlayerUnitCommands : MonoBehaviour
     private void Awake()
     {
         inputActions = new PlayerControls();
-        //playerControls.Player.Fire.performed += OnFire; // example
+        //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
     }
 
     private void OnEnable()
     {
-        //playerControls.Player.Fire.Enable(); // example
+        //playerControls.Player.FireBulletToTarget.Enable(); // example
         inputActions.Enable();
     }
 
     private void OnDisable()
     {
-        //playerControls.Player.Fire.Disable(); // example
+        //playerControls.Player.FireBulletToTarget.Disable(); // example
         inputActions.Disable();
     }
 

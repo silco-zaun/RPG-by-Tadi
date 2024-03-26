@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static WeaponDataManager;
 
 public class BattleUnitMovement : MonoBehaviour
 {
@@ -10,34 +11,41 @@ public class BattleUnitMovement : MonoBehaviour
 
     private State state;
     private float slideSpeed = 10f;
-    private Vector3 behaviorPosition;
+    //private float bulletInitSpeed = 10f;
+    //private float bulletCurSpeed = 10f;
+    //private float bulletAccel = 50f;
+    private Vector3 actorPosition;
     private Vector3 slideTargetPosition;
+    //private Vector3 fireTargetPosition;
     private float reachedDistance = 1f;
+    private Transform bullet;
 
     private System.Action OnSlideComplete;
+    private System.Action OnFireComplete;
 
     private enum State
     {
         Idle,
         Sliding,
+        FireBullet,
         Attack,
         Busy,
     }
 
     private void Awake()
     {
-        behaviorPosition = transform.position;
+        actorPosition = transform.position;
         characterAnimation = GetComponentInChildren<CharacterAnimation>();
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         switch (state)
         {
@@ -46,12 +54,75 @@ public class BattleUnitMovement : MonoBehaviour
             case State.Busy:
                 break;
             case State.Sliding:
-                HandleSliding();
+                HandleUnitSliding();
+                break;
+            case State.FireBullet:
+                HandleFireBullet();
                 break;
         }
     }
 
-    private void HandleSliding()
+    public void ExcuteAttack(CharacterDataManager.AttackType attackType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    {
+        if (attackType == CharacterDataManager.AttackType.Melee)
+        {
+            ExcuteMeleeAttack(targetPosition, OnAttackTarget, OnTurnComplete);
+        }
+        else if (attackType == CharacterDataManager.AttackType.Magic)
+        {
+            ExcuteMagicAttack(targetPosition, OnAttackTarget, OnTurnComplete);
+        }
+    }
+
+    public void ExcuteMeleeAttack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    {
+        Vector3 attackDir = (targetPosition - actorPosition).normalized;
+        Vector3 slideTargetPosition = targetPosition - attackDir * reachedDistance;
+
+        // Slide to Target
+        SlideUnitToTarget(slideTargetPosition,
+            () =>
+            {
+                // Arrived at Target, attack him
+                state = State.Busy;
+
+                characterAnimation.PlayFireAnimation(null,
+                    () =>
+                    {
+                        OnAttackTarget();
+
+                        // ExcuteMeleeAttack completed, slide back
+                        SlideUnitToTarget(actorPosition,
+                                () =>
+                                {
+                                    // Slide back completed, back to idle
+                                    state = State.Idle;
+                                    characterAnimation.PlayMoveAnimation(Vector2.zero);
+                                    OnTurnComplete();
+                                });
+                    });
+            });
+    }
+
+    public void ExcuteMagicAttack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    {
+        // Attack him
+        state = State.Busy;
+
+        characterAnimation.PlayFireAnimation(null,
+            () =>
+            {
+                FireBulletToTarget(targetPosition,
+                    () =>
+                    {
+                        state = State.Idle;
+                        OnAttackTarget();
+                        OnTurnComplete();
+                    });
+            });
+    }
+
+    private void HandleUnitSliding()
     {
         transform.position += (slideTargetPosition - transform.position) * slideSpeed * Time.fixedDeltaTime;
 
@@ -65,48 +136,60 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
-    public void Attack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnBehaviorComplete)
+    private void HandleFireBullet()
     {
-        Vector3 attackDir = (targetPosition - behaviorPosition).normalized;
-        Vector3 slideTargetPosition = targetPosition - attackDir * reachedDistance;
-
-        // Slide to Target
-        SlideToPosition(slideTargetPosition,
-            () =>
-            {
-                // Arrived at Target, attack him
-                state = State.Busy;
-
-                characterAnimation.PlayFireAnim(OnAttackTarget,
-                    () =>
-                    {
-                        // Attack completed, slide back
-                        SlideToPosition(behaviorPosition,
-                            () =>
-                            {
-                                // Slide back completed, back to idle
-                                state = State.Idle;
-                                characterAnimation.PlayMoveAnim(Vector2.zero);
-                                OnBehaviorComplete();
-                            });
-                    });
-            });
+        //bulletCurSpeed += bulletAccel * Time.fixedDeltaTime;
+        //Vector3 direction = (fireTargetPosition - bullet.position).normalized;
+        //float move = bulletCurSpeed * Time.fixedDeltaTime;
+        //
+        //bullet.position += direction * move;
+        //
+        //float distance = Vector3.Distance(bullet.position, fireTargetPosition);
+        //bool isArriving = distance < move;
+        //
+        //if (isArriving)
+        //{
+        //    bullet.position = fireTargetPosition;
+        //
+        //    // Arrived at Slide Target Position
+        //    bulletCurSpeed = bulletInitSpeed;
+        //    GameManager.Ins.Res.ReturnObjectToPool(bullet.gameObject);
+        //    OnFireComplete();
+        //}
     }
 
-    private void SlideToPosition(Vector3 slideTargetPosition, System.Action OnSlideComplete)
+    private void SlideUnitToTarget(Vector3 slideTargetPosition, System.Action OnSlideComplete)
     {
         this.slideTargetPosition = slideTargetPosition;
         this.OnSlideComplete = OnSlideComplete;
         state = State.Sliding;
+    }
 
-        if (slideTargetPosition.x > 0)
-        {
-            //characterBase.PlayAnimSlideRight();
-        }
-        else
-        {
-            //characterBase.PlayAnimSlideLeft();
-        }
+    private void FireBulletToTarget(Vector3 fireTargetPosition, System.Action OnFireComplete)
+    {
+        //this.fireTargetPosition = fireTargetPosition;
+        this.OnFireComplete = OnFireComplete;
+
+        bullet = GameManager.Ins.Res.GetObjectFromPool((int)ResourceManager.ResourcePrefabIndex.Bullet).transform;
+        bullet.GetComponent<BulletController>().SetBullet(MagicBulletType.MagicMissile, transform.position, fireTargetPosition, OnFireComplete);
+
+        //state = State.FireBullet;
+    }
+
+    public void PlayDeathAnimation()
+    {
+        characterAnimation.PlayDeathAnimation();
+    }
+
+    public void PlayDefenseAnimation(bool defending)
+    {
+        characterAnimation.PlayDefenseAnimation(defending);
+    }
+
+    public void PlayDefenseAnimation(bool defending, System.Action OnTurnComplete)
+    {
+        characterAnimation.PlayDefenseAnimation(defending);
+        OnTurnComplete();
     }
 
     public void RotateCharacter(bool isFacingLeft)

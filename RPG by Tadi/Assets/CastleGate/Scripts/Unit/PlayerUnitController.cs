@@ -4,15 +4,39 @@ using UnityEngine;
 
 public class PlayerUnitController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private CharacterBaseData characterBaseData;
+
+    private CharacterController character;
+
+    public CharacterBaseData CharacterBaseData
     {
-        
+        get { return characterBaseData; }
+        set
+        {
+            characterBaseData = value;
+            character.BaseData = value;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        character = GetComponentInChildren<CharacterController>();
+    }
+
+    private void Start()
+    {
+        //characterController.BaseData = characterBaseData;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        /*
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+        if (enemy)
+        {
+            // Start Bat
+        }
+        */
     }
 }

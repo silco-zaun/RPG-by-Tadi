@@ -7,76 +7,111 @@ public class BattleSystemUI : MonoBehaviour
 {
     [SerializeField] private ScrollViewController battleMenu;
 
-    private BattleSystemController battleController;
-    private BattleSystemUnits battleUnits;
+    // breadth index = parent breadth index * childs per parent + child index
 
-    private List<ItemInfo> unitMenuItemsInfo;
-    private int unitMenuDepthIndex = 0;
-    private int unitMenuBreadthIndex = 0;
-    //private int unitMenuBreadth = 1; // root
+    // Root
+    private const int DEPTH_ROOT_INDEX = 0;
+    private int rootBreadthIndex = 0; // 0
+    private int unitMenuItemCount;
 
-    private List<ItemInfo> behaviorMenuItemsInfo;
-    private int behaviorMenuDepthIndex = 1;
-    private int behaviorMenuBreadthIndex = 0; // Parent index
-    private int behaviorMenuBreadth; // Parent count
+    // Depth 1
+    private const int DEPTH_1_INDEX = 1;
+    private int depth1ChildsPerParent; // unitMenuItemCount
+    private int depth1BreadthIndex = 0; // unitMenuItemIndex
 
-    BattleUnitBehavior selectedBehavior = BattleUnitBehavior.None;
+    // Depth 2
+    private const int DEPTH_2_INDEX = 2;
+    private const int TARGET_MENU_CHILD_INDEX = 0;
+    private const int SKILL_MENU_CHILD_INDEX = 1;
+    private int depth2ChildsPerParent = 2; // 2
+    private int depth2BreadthIndex = 0; // depth1BreadthIndex * depth2ChildsPerParent + (TARGET_MENU_CHILD_INDEX or SKILL_MENU_CHILD_INDEX)
+
+    // Depth 3
+    private const int DEPTH_3_INDEX = 3;
+    private const int SKILL_TARGET_MENU_CHILD_INDEX = 0;
+    private int depth3ChildsPerParent = 1; // 1
+    private int depth3BreadthIndex = 0; // skillMenuBreadthIndex / depth2ChildsPerParent
 
     public ScrollViewController BattleMenu { get { return battleMenu; } }
-    public List<ItemInfo> UnitMenuItemsInfo { get { return unitMenuItemsInfo; } set { unitMenuItemsInfo = value; } }
-    public List<ItemInfo> BehaviorMenuItemsInfo { get { return behaviorMenuItemsInfo; } set { behaviorMenuItemsInfo = value; } }
     
     private void Awake()
     {
-        battleController = GetComponent<BattleSystemController>();
-        battleUnits = GetComponent<BattleSystemUnits>();
     }
 
-    public void CreateBattleMenu()
+    public void CreateBattleMenu(List<string> unitNames, List<string> actionNames)
     {
+        depth1ChildsPerParent = unitNames.Count; // unitMenuItemCount
+
         battleMenu.RemoveAllMenusInTree();
-        battleMenu.SetRootMenu(unitMenuItemsInfo);
-        BattleMenu.AddChildMenus(unitMenuDepthIndex, unitMenuBreadthIndex, behaviorMenuItemsInfo);
-
-        behaviorMenuBreadth = unitMenuItemsInfo.Count;
+        battleMenu.SetRootMenu(unitNames); // Root - Unit Menu
+        BattleMenu.AddChildMenus(DEPTH_ROOT_INDEX, depth1ChildsPerParent, actionNames); // Depth1 - Action Menu
+        BattleMenu.AddChildMenus(DEPTH_1_INDEX, depth2ChildsPerParent, null); // Depth2 - Target Menu, CharacterSkill Menu
+        BattleMenu.AddChildMenus(DEPTH_2_INDEX, depth3ChildsPerParent, null); // Depth3 - CharacterSkill Target Menu
     }
 
-    public void SetUIToSelectBehaviorUnit()
+    public int SetUIToSelectPlayerUnit()
     {
-        battleMenu.ChangeMenu(unitMenuDepthIndex, unitMenuBreadthIndex);
+        int index = battleMenu.ChangeMenu(DEPTH_ROOT_INDEX, rootBreadthIndex);
+
+        return index;
     }
     
-    public void SetUIToSelectBehavior()
+    public void SetUIToSelectAction()
     {
-        battleMenu.ChangeMenu(behaviorMenuDepthIndex, behaviorMenuBreadthIndex);
+        battleMenu.ChangeMenu(DEPTH_1_INDEX, depth1BreadthIndex);
     }
 
-    public void SetUIToSelectTargetUnit()
+    public void SetUIToSelectTargetUnit(List<string> targets)
     {
-        battleMenu.ClearMenus();
+        battleMenu.ChangeMenu(DEPTH_2_INDEX, depth2BreadthIndex, targets);
     }
 
-    public void SetUIToDoBehavior()
+    public void SetUIToSelectSkill(List<string> skills)
+    {
+        battleMenu.ChangeMenu(DEPTH_2_INDEX, depth2BreadthIndex, skills);
+    }
+
+    public void SetUIToSelectSkillTarget(List<string> targets)
+    {
+        battleMenu.ChangeMenu(DEPTH_3_INDEX, depth3BreadthIndex, targets);
+    }
+
+    public void SetUIToProgressRound()
     {
         battleMenu.ClearMenus();
     }
 
     public void SetUnitMenuItemColorState(ItemInfo.ItemColorState colorState)
     {
-        battleMenu.SetItemColorState(unitMenuDepthIndex, unitMenuBreadthIndex, behaviorMenuBreadthIndex, colorState);
+        battleMenu.SetItemColorState(DEPTH_ROOT_INDEX, rootBreadthIndex, depth1BreadthIndex, colorState);
     }
 
-    public void NavigateMenu(Vector2 vector)
+    public int NavigateMenu(Vector2 vector)
     {
-        battleMenu.SelectItem(vector);
+        int selectedItemIndex = battleMenu.SelectItem(vector);
+
+        return selectedItemIndex;
     }
 
     public int SubmitMenu(BattleState state)
     {
         int itemIndex = battleMenu.SubmitItem();
 
-        if  (state == BattleState.SelectBehaviorUnit)
-            behaviorMenuBreadthIndex = itemIndex;
+        switch (state)
+        {
+            case BattleState.SelectPlayerUnit:
+                depth1BreadthIndex = itemIndex;
+                break;
+            case BattleState.SelectTarget:
+                depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + TARGET_MENU_CHILD_INDEX;
+                break;
+            case BattleState.SelectSkill:
+                depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + SKILL_MENU_CHILD_INDEX;
+                break;
+            case BattleState.SelectSkillTarget:
+                depth3BreadthIndex = depth2BreadthIndex * depth3ChildsPerParent + SKILL_TARGET_MENU_CHILD_INDEX;
+                break;
+        }
 
         return itemIndex;
     }

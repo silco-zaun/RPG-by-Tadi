@@ -17,7 +17,7 @@ public class ScrollViewController : MonoBehaviour
         private int curItemPage;
         private int itemCountPerPage;
 
-        public List<ItemInfo> ItemsInfo { get { return itemsInfo; } }
+        public List<ItemInfo> ItemsInfos { get { return itemsInfo; } set { itemsInfo = value; } }
         public int PrevItemIndex
         {
             get { return prevItemIndex; }
@@ -98,19 +98,56 @@ public class ScrollViewController : MonoBehaviour
         }
     }
 
-    public void SetRootMenu(List<ItemInfo> itemsInfo)
+    public void SetRootMenu(List<string> itemsNames)
     {
-        root = new TreeNode<MenuInfo>(new MenuInfo(itemsInfo, itemCountPerPage)); // Assume a tree is constructed
+        List<ItemInfo> itemsInfos = GetItemInfoList(itemsNames);
+
+        root = new TreeNode<MenuInfo>(new MenuInfo(itemsInfos, itemCountPerPage)); // Assume a tree is constructed
     }
 
-    public void AddChildMenus(int depthIndex, int breadthIndex, List<ItemInfo> itemsInfo)
+    private List<ItemInfo> GetItemInfoList(List<string> strings)
     {
-        TreeNode<MenuInfo> node = root.FindNodeByIndices(depthIndex, breadthIndex);
+        if (strings == null)
+            return null;
 
-        for (int i = 0; i < node.value.ItemsInfo.Count; i++)
+        List<ItemInfo> itemsInfos = new List<ItemInfo>();
+
+        foreach (string itemName in strings)
         {
-            TreeNode<MenuInfo> child = new TreeNode<MenuInfo>(new MenuInfo(itemsInfo, itemCountPerPage));
-            node.AddChild(child);
+            itemsInfos.Add(new ItemInfo(itemName));
+        }
+
+        return itemsInfos;
+    }
+
+    public void AddChildMenus(int parentDepthIndex, int childsPerParent, List<string> itemsNames)
+    {
+        List<ItemInfo> itemsInfos = GetItemInfoList(itemsNames);
+        Tree<MenuInfo> tree = new Tree<MenuInfo>(root);
+        int breadthCount = tree.GetBreadthCountAtDepth(parentDepthIndex);
+
+        for (int i = 0;  i < breadthCount; i++)
+        {
+            TreeNode<MenuInfo> parent = root.FindNodeByIndices(parentDepthIndex, i);
+
+            for (int j = 0; j < childsPerParent; j++)
+            {
+                TreeNode<MenuInfo> child = new TreeNode<MenuInfo>(new MenuInfo(itemsInfos, itemCountPerPage));
+                parent.AddChild(child);
+            }
+        }
+    }
+
+    public void AddChildMenus(int parentDepthIndex, int parentBreadthIndex, int childCount, List<string> itemsNames)
+    {
+        List<ItemInfo> itemsInfos = GetItemInfoList(itemsNames);
+
+        TreeNode<MenuInfo> parent = root.FindNodeByIndices(parentDepthIndex, parentBreadthIndex);
+
+        for (int i = 0; i < childCount; i++)
+        {
+            TreeNode<MenuInfo> child = new TreeNode<MenuInfo>(new MenuInfo(itemsInfos, itemCountPerPage));
+            parent.AddChild(child);
         }
     }
 
@@ -123,10 +160,17 @@ public class ScrollViewController : MonoBehaviour
     {
         TreeNode<MenuInfo> node = root.FindNodeByIndices(depthIndex, breadthIndex);
 
+        if (node == null)
+        {
+            Debug.LogError($"depthIndex : {depthIndex}, breadthIndex : {breadthIndex}");
+
+            return null;
+        }
+
         return node.value;
     }
 
-    public void ChangeMenu(int depthIndex, int breadthIndex)
+    public int ChangeMenu(int depthIndex, int breadthIndex, List<string> itemsNames = null)
     {
         curDepthIndex = depthIndex;
         curBreadthIndex = breadthIndex;
@@ -135,13 +179,20 @@ public class ScrollViewController : MonoBehaviour
 
         MenuInfo menuInfo = GetMenuInfoFromTree(curDepthIndex, curBreadthIndex);
 
-        foreach (ItemInfo itemInfo in menuInfo.ItemsInfo)
+        if (itemsNames != null)
+        {
+            menuInfo.ItemsInfos = GetItemInfoList(itemsNames);
+        }
+
+        foreach (ItemInfo itemInfo in menuInfo.ItemsInfos)
         {
             ActivateItem(itemInfo);
         }
 
-        SetUpAndDownText(menuInfo.ItemsInfo.Count, menuInfo.ItemCountPerPage);
-        SetInitialSelectedItem();
+        SetUpAndDownText(menuInfo.ItemsInfos.Count, menuInfo.ItemCountPerPage);
+        int index = SetInitialSelectedItem();
+
+        return index;
     }
 
     public void ClearMenus()
@@ -150,7 +201,7 @@ public class ScrollViewController : MonoBehaviour
         SetUpAndDownText(false);
     }
 
-    private void SetInitialSelectedItem()
+    private int SetInitialSelectedItem()
     {
         MenuInfo menuInfo = GetMenuInfoFromTree(curDepthIndex, curBreadthIndex);
         int selectItemIndex = 0;
@@ -167,6 +218,8 @@ public class ScrollViewController : MonoBehaviour
         }
 
         SelectItem(selectItemIndex);
+
+        return selectItemIndex;
     }
 
     private void ActivateItem(ItemInfo itemInfo)
@@ -234,7 +287,7 @@ public class ScrollViewController : MonoBehaviour
             menuInfo.PrevItemIndex = 0;
             menuInfo.CurItemIndex = 0;
 
-            foreach (ItemInfo itemInfo in menuInfo.ItemsInfo)
+            foreach (ItemInfo itemInfo in menuInfo.ItemsInfos)
             {
                 itemInfo.colorState = ItemInfo.ItemColorState.OriginColor;
             }
@@ -245,7 +298,7 @@ public class ScrollViewController : MonoBehaviour
     {
         MenuInfo menuInfo = GetMenuInfoFromTree(depthIndex, breadthIndex);
 
-        menuInfo.ItemsInfo[itemIndex].colorState = colorState;
+        menuInfo.ItemsInfos[itemIndex].colorState = colorState;
     }
 
 
@@ -260,7 +313,7 @@ public class ScrollViewController : MonoBehaviour
         ChangePage(menuInfo.CurItemPage, menuInfo.ItemCountPerPage);
     }
 
-    public void SelectItem(Vector2 vector)
+    public int SelectItem(Vector2 vector)
     {
         MenuInfo menuInfo = GetMenuInfoFromTree(curDepthIndex, curBreadthIndex);
 
@@ -277,6 +330,8 @@ public class ScrollViewController : MonoBehaviour
 
         if (menuInfo.IsChangedPage)
             ChangePage(menuInfo.CurItemPage, menuInfo.ItemCountPerPage);
+
+        return menuInfo.CurItemIndex;
     }
 
     private void SetItemsColor(int selectedItemIndex)

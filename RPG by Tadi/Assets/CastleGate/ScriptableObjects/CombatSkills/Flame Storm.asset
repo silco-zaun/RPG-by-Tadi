@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb08be7fc3114174a840768c6b2467b7, type: 3}
+  m_Name: Flame Storm
+  m_EditorClassIdentifier: 
+  skillName: "\uD654\uC5FC \uD3ED\uD48D"
+  ability:
+  - description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C 50%\uC758 \uD654\uC5FC \uB370\uBBF8\uC9C0\uB97C
+      \uAC00\uD569\uB2C8\uB2E4."
+    physicalPower: 0
+    magicPower: 0.5
+    defensePower: 0
+    magicDefensePower: 0
+    fixedDamage: 0
+    percentageAmount: 0
+    accuracy: 1
+    evade: 0
+  - description: "\uC801 \uC804\uCCB4\uC5D0\uAC8C 65%\uC758 \uD654\uC5FC \uB370\uBBF8\uC9C0\uB97C
+      \uAC00\uD569\uB2C8\uB2E4."
+    physicalPower: 0
+    magicPower: 0.65
+    defensePower: 0
+    magicDefensePower: 0
+    fixedDamage: 0
+    percentageAmount: 0
+    accuracy: 1
+    evade: 0
+  - description: "\uC801 \uC804\uCCB4\uC5D0\uAC8C 80%\uC758 \uD654\uC5FC \uB370\uBBF8\uC9C0\uB97C
+      \uAC00\uD569\uB2C8\uB2E4."
+    physicalPower: 0
+    magicPower: 0.8
+    defensePower: 0
+    magicDefensePower: 0
+    fixedDamage: 0
+    percentageAmount: 0
+    accuracy: 1
+    evade: 0
+  cooltime: 3
+  powerType: 1
+  target: 1
+  range: 8
+  hitType: 0
+  actionType: 1
+  attackType: 2
+  percentageValue: 0
+  bossModifier: 0
+  bossModifierType: 0
+  defenseType: 0
+  effectType: 0
+  cureType: 0
+  propertyType: 3
+  stateType: 0

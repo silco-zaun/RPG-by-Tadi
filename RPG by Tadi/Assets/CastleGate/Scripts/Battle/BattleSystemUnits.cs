@@ -2,149 +2,230 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static BattleDataManager;
 
 public class BattleSystemUnits : MonoBehaviour
 {
     [System.Serializable]
-    public class PartyUnit
+    public class BattleUnitInfo
     {
-        [SerializeField] private GameObject formation;
-        [SerializeField] private CharacterBaseData data;
+        // -- Variables --
+        [SerializeField] private CharacterBaseData baseData;
+        [SerializeField] private BattleUnitParty battleUnitParty;
+        [SerializeField] private Formation formation;
 
-        private GameObject battleUnit;
-        private UnitController unitController;
-        private BattleUnitController battleUnitController;
-        private string name;
-
-        public GameObject Formation { get { return formation; } }
-        public CharacterBaseData Data { get { return data; } }
-        public GameObject BattleUnit
-        {
-            get { return battleUnit; }
-            set
-            {
-                battleUnit = value;
-                unitController = battleUnit.GetComponent<UnitController>();
-                battleUnitController = battleUnit.GetComponent<BattleUnitController>();
-            }
-        }
-        public UnitController UnitController { get { return unitController; } }
-        public BattleUnitController BattleUnitController { get { return battleUnitController; } }
-        public string Name { get { return name; } set { name = value; } }
-        public bool IsDefeated { get { return battleUnitController.IsDefeated; } }
+        // -- Formation --
+        public CharacterBaseData Data { get { return baseData; } }
+        public BattleUnitParty Party { get { return battleUnitParty; } }
+        public Formation Formation { get { return formation; } }
     }
 
+    // -- Variables --
     [SerializeField] private GameObject battleUnitPrefab;
-    [SerializeField] private List<PartyUnit> leftPartyUnits;
-    [SerializeField] private List<PartyUnit> rightPartyUnits;
+    [SerializeField] private List<BattleUnitInfo> battleUnitsInfos;
+    [SerializeField] private List<Formation> formations;
 
-    private List<BattleUnitController> battleUnitsOrderBySpeed = new List<BattleUnitController>();
     private BattleSystemUI battleUI;
 
-    private int selectedBehaviorUnitIndex = 0;
-    private int selectedTargetUnitIndex = 0;
-    private BattleUnitController selectedTargetUnitController;
+    private List<BattleUnitController> battleUnits = new List<BattleUnitController>();
+    Queue<BattleUnitController> turnOrder = new Queue<BattleUnitController>();
 
-    public List<BattleUnitController> BattleUnitsOrderBySpeed { get { return battleUnitsOrderBySpeed; } }
+    // -- Properties --
+    public GameObject Prefab { get { return battleUnitPrefab; } }
 
     private void Awake()
     {
         battleUI = GetComponent<BattleSystemUI>();
     }
 
-    public void SetBattleUnit()
+    public void InitializeBattleUnits()
     {
-        SetPartyUnis(ref leftPartyUnits, true);
-        SetPartyUnis(ref rightPartyUnits, false);
-        SetPlayerUnitsMenu();
+        InitializeFormation();
+        InstantiatePartyUnits();
+    }
 
-        List<PartyUnit> partyUnitsOrderBySpeed = leftPartyUnits.Concat(rightPartyUnits).OrderBy(u => u.BattleUnitController.Character.Speed).ToList();
-
-        foreach (PartyUnit partyUnit in partyUnitsOrderBySpeed)
+    private void InitializeFormation()
+    {
+        if (formations.Count != PARTY_UNIT_COUNT * 2)
         {
-            battleUnitsOrderBySpeed.Add(partyUnit.BattleUnitController);
+            Debug.LogError($"An error occurred: Formations count must be {PARTY_UNIT_COUNT * 2}.\ncurrent value : {formations.Count}");
+
+            return;
+        }
+
+        for (int i = 0; i < formations.Count; i++)
+        {
+            formations[i].Party = (BattleUnitParty)(i / PARTY_UNIT_COUNT);
+            formations[i].Index = i % PARTY_UNIT_COUNT;
+            formations[i].HlineIndex = i % HORIZONTAL_LINE_UNIT_COUNT;
+            formations[i].VlineIndex = (i / HORIZONTAL_LINE_UNIT_COUNT) % VERTICAL_LINE_UNIT_COUNT;
         }
     }
 
-    private void SetPartyUnis(ref List<PartyUnit> partyUnits, bool isPlayerUnit)
+    private void InstantiatePartyUnits()
     {
-        foreach (PartyUnit unit in partyUnits)
+        foreach (BattleUnitInfo unitInfo in battleUnitsInfos)
         {
-            Transform parent = unit.Formation.transform;
-            unit.BattleUnit = Instantiate(battleUnitPrefab, parent);
+            Transform parent = unitInfo.Formation.transform;
+            GameObject instance = Instantiate(battleUnitPrefab, parent);
 
-            unit.UnitController.CharacterBaseData = unit.Data;
-            unit.UnitController.SetCharacterData(1);
-            unit.BattleUnitController.IsPlayerParty = isPlayerUnit;
-            DataManager.CharacterTypeKor type = (DataManager.CharacterTypeKor)unit.BattleUnitController.Character.Type;
-            unit.Name = type.ToString();
+            BattleUnitController unit = instance.GetComponent<BattleUnitController>();
+            unit.CharacterBaseData = unitInfo.Data;
+            unit.Formation = unitInfo.Formation;
+            unit.Party = unitInfo.Party;
+            unit.SetCharacterData(1);
+
+            battleUnits.Add(unit);
         }
     }
 
-    private void SetPlayerUnitsMenu()
+    public void ResetBattleUnits()
     {
-        List<ItemInfo> infos = new List<ItemInfo>();
+        battleUnits.ForEach(u => u.ResetBattleUnit());
+    }
 
-        foreach (PartyUnit unit in leftPartyUnits)
+    public void SetTurnOrder()
+    {
+        List<BattleUnitController> units =
+            battleUnits.OrderByDescending(
+            u => u.CharacterController.Speed).OrderByDescending(
+            u => u.ActionPriority).ToList();
+
+        turnOrder.Clear();
+        turnOrder = new Queue<BattleUnitController>(units);
+    }
+
+    public BattleUnitController GetBehaveUnit()
+    {
+        while (turnOrder.Count > 0)
         {
-            ItemInfo info = new ItemInfo(unit.Name);
-            infos.Add(info);
+            BattleUnitController unit = turnOrder.Dequeue();
+
+            if (unit.IsFainted == false)
+            {
+                SetRandomTarget(unit);
+
+                return unit;
+            }
         }
+
+        return null;
+    }
+    
+    public List<string> GetAliveUnitsNames(BattleUnitParty party)
+    {
+        List<string> names = new List<string>();
+        List<BattleUnitController> alives = GetAliveUnits(party);
+
+        foreach (BattleUnitController unit in alives)
+        {
+            string name = DataManager.Ins.Cha.characterNames[(int)unit.CharacterController.CharacterType];
+            names.Add(name);
+        }
+
+        return names;
+    }
+
+    public List<string> GetAliveUnitsSkillNames(BattleUnitParty party, int index)
+    {
+        List<BattleUnitController> alives = GetAliveUnits(party);
+        List<string> names = alives[index].GetUsableSkillNameList();
+
+        return names;
+    }
+
+    public bool SetPlayerUnitAction(int index, BattleUnitAction action)
+    {
+        List<BattleUnitController> players = GetAliveUnits(BattleUnitParty.PlayerParty);
+        players[index].Action = action;
+        players[index].SetSelector(false);
         
-        battleUI.UnitMenuItemsInfo = infos;
+        bool allPlayersSelectingActions = CheckAllPlayersSelectingActions();
+
+        return allPlayersSelectingActions;
     }
 
-    public void SetSelectedPlayerUnitIndex(int itemIndex)
+    public void SetUsingSkill(BattleUnitParty party, int casterIndex, int skillIndex)
     {
-        selectedBehaviorUnitIndex = itemIndex;
+        List<BattleUnitController> actors = GetAliveUnits(party);
+        actors[casterIndex].SetUsingSkill(skillIndex);
     }
 
-    public bool ResetPlayersBehavior()
+    public void SetTarget(BattleUnitParty actorParty, int actor, BattleUnitParty targetParty, int target)
     {
-        battleUnitsOrderBySpeed.ForEach(u => u.Behavior = BattleDataManager.BattleUnitBehavior.None);
+        List<BattleUnitController> actors = GetAliveUnits(actorParty);
+        List<BattleUnitController> targets = GetAliveUnits(targetParty);
 
-        battleUI.SetUnitMenuItemColorState(ItemInfo.ItemColorState.OriginColor);
-
-        bool selectBehaviorComplete = CheckSelectBehaviorComplete();
-
-        return selectBehaviorComplete;
-    }
-
-    public bool SetPlayersBehavior(BattleDataManager.BattleUnitBehavior behavior)
-    {
-        BattleUnitController unitController = leftPartyUnits[selectedBehaviorUnitIndex].BattleUnitController;
-
-        unitController.Behavior = behavior;
-        battleUI.SetUnitMenuItemColorState(ItemInfo.ItemColorState.DeactivatedColor);
-
-        bool selectBehaviorComplete = CheckSelectBehaviorComplete();
-
-        return selectBehaviorComplete;
-    }
-
-    public void SetTargetUnit()
-    {
-        selectedTargetUnitController.SetSelector(false);
-
-        BattleUnitController behaveUnitController = leftPartyUnits[selectedBehaviorUnitIndex].BattleUnitController;
-
-        behaveUnitController.AddTarget(selectedTargetUnitController);
+        targets[target].SetSelector(false);
+        actors[actor].Targets.Add(targets[target]);
         battleUI.SetUnitMenuItemColorState(ItemInfo.ItemColorState.DeactivatedColor);
     }
 
-    public void SetAIUnitBehavior()
+    private void SetRandomTarget(BattleUnitController unit)
     {
-        foreach (PartyUnit unit in rightPartyUnits)
+        if (unit.Action == BattleUnitAction.Attack)
         {
-            unit.BattleUnitController.Behavior = BattleDataManager.BattleUnitBehavior.Attack;
-
-            unit.BattleUnitController.AddTarget(leftPartyUnits[0].BattleUnitController);
+            for (int i = 0; i < unit.Targets.Count; i++)
+            {
+                if (unit.Targets[i].IsFainted)
+                {
+                    unit.Targets[i] = GetRandomAliveUnit(unit.Targets[i].Party);
+                }
+            }
         }
     }
 
-    private bool CheckSelectBehaviorComplete()
+    public List<BattleUnitController> GetAliveUnits(BattleUnitParty party)
     {
-        if (leftPartyUnits.Where(u => u.BattleUnitController.Behavior == BattleDataManager.BattleUnitBehavior.None).Count() == 0)
+        List<BattleUnitController> units = battleUnits.Where(u => u.Party == party && u.IsFainted == false).ToList();
+
+        return units;
+    }
+
+    public BattleUnitController GetAliveUnit(BattleUnitParty party, int index)
+    {
+        List<BattleUnitController> units = battleUnits.Where(u => u.Party == party && u.Formation.Index == index && u.IsFainted == false).ToList();
+
+        return units?[0];
+    }
+
+    private BattleUnitController GetRandomAliveUnit(BattleUnitParty party)
+    {
+        List<BattleUnitController> alives = GetAliveUnits(party);
+
+        if (alives.Count == 0)
+            return null;
+
+        int random = Random.Range(0, alives.Count);
+
+        return alives[random];
+    }
+
+    public void SetEnemyUnitBehavior()
+    {
+        List<BattleUnitController> enemys = GetAliveUnits(BattleUnitParty.EnemyParty);
+
+        foreach (BattleUnitController unit in enemys)
+        {
+            if (Random.value * 100 <= 80f)
+            {
+                BattleUnitController player = GetRandomAliveUnit(BattleUnitParty.PlayerParty);
+
+                unit.Action = BattleUnitAction.Attack;
+                unit.Targets.Add(player);
+            }
+            else
+            {
+                unit.Action = BattleUnitAction.Defense;
+            }
+        }
+    }
+
+    private bool CheckAllPlayersSelectingActions()
+    {
+        List<BattleUnitController> alives = GetAliveUnits(BattleUnitParty.PlayerParty);
+
+        if (alives.Where(u => u.Action == BattleUnitAction.None).Count() == 0)
         {
             return true;
         }
@@ -152,76 +233,43 @@ public class BattleSystemUnits : MonoBehaviour
         return false;
     }
 
-    public BattleDataManager.BattleResult CheckBattleResult()
+    public BattleCondition CheckBattleCondition()
     {
-        BattleDataManager.BattleResult battleResult = BattleDataManager.BattleResult.None;
-        int leftPartyCount = leftPartyUnits.Where(u => !u.IsDefeated).Count();
-        int rightPartyCount = leftPartyUnits.Where(u => !u.IsDefeated).Count();
+        List<BattleUnitController> players = GetAliveUnits(BattleUnitParty.PlayerParty);
+        List<BattleUnitController> enemys = GetAliveUnits(BattleUnitParty.EnemyParty);
 
-        if (leftPartyCount == 0 && rightPartyCount == 0)
+        BattleCondition battleResult;
+        int playersCount = players.Count();
+        int enemysCount = enemys.Count();
+
+        if (playersCount == 0 && enemysCount == 0)
         {
-            // Tie
-            battleResult = BattleDataManager.BattleResult.Tie;
+            battleResult = BattleCondition.Draw;
         }
-        else if (leftPartyCount == 0)
+        else if (playersCount == 0)
         {
-            // Right win
-            battleResult = BattleDataManager.BattleResult.RightWin;
+            battleResult = BattleCondition.Defeated;
         }
-        else if (rightPartyCount == 0)
+        else if (enemysCount == 0)
         {
-            // Left win
-            battleResult = BattleDataManager.BattleResult.LeftWin;
+            battleResult = BattleCondition.Victory;
         }
         else
         {
             // Not game over
-            battleResult = BattleDataManager.BattleResult.None;
+            battleResult = BattleCondition.None;
         }
 
         return battleResult;
     }
 
-    public void SelectTargetUnit(bool selectEnemy, Vector2 vector)
+    public void NavigateUnit(BattleUnitParty party, int select, ref int selected)
     {
-        if (selectEnemy)
-        {
-            SelectTargetUnit(ref rightPartyUnits, vector);
-        }
-        else
-        {
-            // Select ally
-            SelectTargetUnit(ref leftPartyUnits, vector);
-        }
-    }
+        List<BattleUnitController> unit = GetAliveUnits(party);
 
-    private void SelectTargetUnit(ref List<PartyUnit> partyUnits, Vector2 vector)
-    {
-        // 2 3
-        // 0 1
-        // 4 5
-        int selectTargetUnitIndex = selectedTargetUnitIndex;
+        unit[selected].SetSelector(false);
+        unit[select].SetSelector(true);
 
-        if (vector.x != 0)
-        {
-            selectTargetUnitIndex = selectedTargetUnitIndex % 2 == 0 ? selectedTargetUnitIndex + 1 : selectedTargetUnitIndex - 1;
-        }
-        else if (vector.y > 0)
-        {
-            selectTargetUnitIndex = (selectedTargetUnitIndex + 2) % 6;
-        }
-        else if (vector.y < 0)
-        {
-            selectTargetUnitIndex = (selectedTargetUnitIndex + 4) % 6;
-        }
-
-        if (selectTargetUnitIndex < partyUnits.Count && 
-            partyUnits[selectTargetUnitIndex] != null)
-        {
-            partyUnits[selectedTargetUnitIndex].BattleUnitController.SetSelector(false);
-            partyUnits[selectTargetUnitIndex].BattleUnitController.SetSelector(true);
-            selectedTargetUnitIndex = selectTargetUnitIndex;
-            selectedTargetUnitController = partyUnits[selectedTargetUnitIndex].BattleUnitController;
-        }
+        selected = select;
     }
 }
