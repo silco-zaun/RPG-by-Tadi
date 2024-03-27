@@ -1,17 +1,20 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private CharacterBaseData baseData;
+    [SerializeField] private CharacterSO characterSO;
     [SerializeField] private SlideBarController healthBar;
 
     private CharacterAnimation characterAnimation;
+    private DamageFlash damageFlash;
 
-    private CharacterDataManager.CharacterType characterType;
-    private CharacterDataManager.DamageType damageType;
-    private CharacterDataManager.AttackType attackType;
+    private Datas.CharacterType characterType;
+    private Datas.DamageType damageType;
+    private Datas.AttackType attackType;
+    private Datas.BulletType bulletType;
 
     private int level;
     private float hp;
@@ -25,29 +28,35 @@ public class CharacterController : MonoBehaviour
 
     public System.Action OnFainted;
 
-    public CharacterBaseData BaseData
+    public CharacterSO CharacterSO
     {
-        get { return baseData; }
+        get { return characterSO; }
         set
         {
-            baseData = value;
-            characterAnimation.SetAnimationData(baseData);
-            characterType = baseData.characterType;
-            damageType = baseData.damageType;
-            attackType = baseData.attackType;
+            characterSO = value;
+            characterAnimation.SetAnimationData(characterSO);
+            characterType = characterSO.CharacterType;
+            damageType = characterSO.DamageType;
+            attackType = characterSO.AttackType;
+            bulletType = characterSO.BulletType;
 
-            if (baseData.characterType == CharacterDataManager.CharacterType.None)
+            if (characterSO.CharacterType == Datas.CharacterType.None)
                 Debug.LogError($"Enum variable [CharacterType] must to be set.");
-            if (baseData.damageType == CharacterDataManager.DamageType.None)
+            if (characterSO.DamageType == Datas.DamageType.None)
                 Debug.LogError($"Enum variable [DamageType] must to be set.");
-            if (baseData.attackType == CharacterDataManager.AttackType.None)
-                Debug.LogError($"Enum variable [AttackType] must to be set.");
+            if (characterSO.AttackType == Datas.AttackType.None)
+                Debug.LogError($"Enum variable [DamageType] must to be set.");
+            if ((characterSO.AttackType == Datas.AttackType.Ranged ||
+                characterSO.AttackType == Datas.AttackType.Magic) &&
+                characterSO.BulletType == Datas.BulletType.None)
+                Debug.LogError($"Enum variable [BulletType] must to be set.");
         }
     }
 
-    public CharacterDataManager.CharacterType CharacterType { get { return characterType; } }
-    public CharacterDataManager.DamageType DamageType { get { return damageType; } }
-    public CharacterDataManager.AttackType AttackType { get { return attackType; } }
+    public Datas.CharacterType CharacterType { get { return characterType; } }
+    public Datas.DamageType DamageType { get { return damageType; } }
+    public Datas.AttackType AttackType { get { return attackType; } }
+    public Datas.BulletType BulletType { get { return bulletType; } }
 
     // Stats
     public int Level
@@ -65,30 +74,33 @@ public class CharacterController : MonoBehaviour
     private void Awake()
     {
         characterAnimation = GetComponent<CharacterAnimation>();
+        damageFlash = GetComponent<DamageFlash>();
     }
 
     private void SetStats(int level)
     {
-        curHP = hp = DataManager.Ins.Bat.GetHP(level, baseData.BaseHP, baseData.IVHP);
-        attack = DataManager.Ins.Bat.GetStat(level, baseData.BaseAttack, baseData.IVAttack);
-        defense = DataManager.Ins.Bat.GetStat(level, baseData.BaseDefense, baseData.IVDefense);
-        magicAttack = DataManager.Ins.Bat.GetStat(level, baseData.BaseMagicAtk, baseData.IVMagicAtk);
-        magicDefense = DataManager.Ins.Bat.GetStat(level, baseData.BaseMagicDef, baseData.IVMagicDef);
-        speed = DataManager.Ins.Bat.GetStat(level, baseData.BaseSpeed, baseData.IVSpeed);
+        curHP = hp = Datas.Bat.GetHP(level, characterSO.BaseHP, characterSO.IVHP);
+        attack = Datas.Bat.GetStat(level, characterSO.BaseAttack, characterSO.IVAttack);
+        defense = Datas.Bat.GetStat(level, characterSO.BaseDefense, characterSO.IVDefense);
+        magicAttack = Datas.Bat.GetStat(level, characterSO.BaseMagicAtk, characterSO.IVMagicAtk);
+        magicDefense = Datas.Bat.GetStat(level, characterSO.BaseMagicDef, characterSO.IVMagicDef);
+        speed = Datas.Bat.GetStat(level, characterSO.BaseSpeed, characterSO.IVSpeed);
     }
 
-    public void TakeDamage(CharacterController attacker, CharacterDataManager.DamageType attackType, bool defending, float skillMultiplier = 1f)
+    public void TakeDamage(CharacterController attacker, Datas.DamageType attackType, bool defending, float skillMultiplier = 1f)
     {
+        damageFlash.CallDamageFlash();
+
         float attackersAttack = 0f;
         float defense = 0f;
 
         switch (attackType)
         {
-            case CharacterDataManager.DamageType.Physical:
+            case Datas.DamageType.Physical:
                 attackersAttack = attacker.Attack;
                 defense = this.defense;
                 break;
-            case CharacterDataManager.DamageType.Magic:
+            case Datas.DamageType.Magic:
                 attackersAttack = attacker.MagicAttack;
                 defense = this.magicDefense;
                 break;
@@ -97,7 +109,7 @@ public class CharacterController : MonoBehaviour
                 return;
         }
 
-        float damage = DataManager.Ins.Bat.GetDamage(attackType, attacker.Level, attackersAttack, defense, skillMultiplier, defending);
+        float damage = Datas.Bat.GetDamage(attackType, attacker.Level, attackersAttack, defense, skillMultiplier, defending);
 
         curHP -= damage;
         float normalizedHP = System.Math.Clamp(curHP / hp, 0f, hp);

@@ -9,41 +9,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbca8c2ee2c3e67488ab82f21c7cf403, type: 3}
+  m_Script: {fileID: 11500000, guid: caf892f37f2732e4a97fa95103e6fac7, type: 3}
   m_Name: Rogue
   m_EditorClassIdentifier: 
   characterType: 2
   damageType: 1
   attackType: 2
-  description: "\uAC01\uC885 \uBD88\uBC95\uC801\uC778 \uC77C\uC744 \uD558\uBA70 \uC0B4\uC544\uAC00\uB294
-    \uB3C4\uC801. \uC655\uC2E4\uC758 \uACE8\uCE6B\uAC70\uB9AC \uC774\uB2E4. \uC2A4\uD154\uC2A4,
-    \uC554\uC0B4, \uD568\uC815 \uBC0F \uB2E4\uC591\uD55C \uB2A5\uB825\uC744 \uC0AC\uC6A9\uD558\uC5EC
-    \uBAA9\uD45C\uB97C \uB2EC\uC131\uD55C\uB2E4."
+  bulletType: 1
   sprBody: {fileID: -1106366568, guid: 1284396345ec0fe459d05a51a4fe47e7, type: 3}
-  sprLeftHand: {fileID: 0}
-  sprLeftWeapon: {fileID: 0}
-  sprRightHand: {fileID: 0}
-  sprRightWeapon: {fileID: 0}
+  sprLeftHand: {fileID: -2523599077907299729, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprLeftWeapon: {fileID: -901909057, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
+  sprRightHand: {fileID: 8326627396399632596, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprRightWeapon: {fileID: -360524830, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
   baseHP: 80
   baseAttack: 120
   baseDefense: 80
-  baseMagicAtk: 0
-  baseMagicDef: 0
+  baseMagicAtk: 100
+  baseMagicDef: 100
   baseSpeed: 120
   ivHP: 15
-  ivAttack: 30
-  ivDefense: 10
-  ivMagicAtk: 0
-  ivMagicDef: 0
+  ivAttack: 25
+  ivDefense: 15
+  ivMagicAtk: 20
+  ivMagicDef: 20
   ivSpeed: 25
   skills:
   - skillBaseData: {fileID: 11400000, guid: 435c271c311bbd94d85e7b3197fda6d3, type: 2}
     learnLevel: 1
     skillLevel: 1
-  - skillBaseData: {fileID: 11400000, guid: 9808719fec057ab45aa3764a38ba4874, type: 2}
+  - skillBaseData: {fileID: 11400000, guid: 5831856edb3dc5648a69e44fd0acbf16, type: 2}
     learnLevel: 5
     skillLevel: 1
-  - skillBaseData: {fileID: 11400000, guid: 5831856edb3dc5648a69e44fd0acbf16, type: 2}
+  - skillBaseData: {fileID: 11400000, guid: 9808719fec057ab45aa3764a38ba4874, type: 2}
     learnLevel: 10
     skillLevel: 1
   - skillBaseData: {fileID: 11400000, guid: 9da08b3343d074a45a26c542b2007ec2, type: 2}

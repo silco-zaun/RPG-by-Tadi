@@ -19,53 +19,43 @@ public class AnimationManager : MonoBehaviour
     private void Awake()
     {
         bool check = CheckList();
-
-        if (!check)
-            return;
+        if (!check) return;
 
         InitializeAnimationEvent();
     }
 
     private bool CheckList()
     {
-        int enumCount = Enum.GetValues(typeof(CharacterDataManager.CharacterType)).Length;
+        bool check = Check(characterAnimator, typeof(Datas.CharacterType));
+        if (!check) return check;
 
-        if (characterAnimator.Count != enumCount - 1)
+        check = Check(bulletAnimator, typeof(Datas.BulletType));
+        if (!check) return check;
+
+        return check;
+    }
+
+    private bool Check(List<AnimatorController> animators, Type type)
+    {
+        Array enumValues = Enum.GetValues(type);
+        string enumName = type.Name;
+        int enumCount = enumValues.Length;
+        
+        if (animators.Count != enumCount - 1)
         {
-            Debug.LogError("Character animator must to be set.");
+            Debug.LogError($"{enumName} animator must to be set.");
             return false;
         }
 
-        for (int i = 0; i < characterAnimator.Count; i++)
+        for (int i = 0; i < animators.Count; i++)
         {
-            string name = ((CharacterDataManager.CharacterType)(i + 1)).ToString();
-            string animator = characterAnimator[i].name;
-            bool check = animator.Equals(name);
+            string enumValueName = enumValues.GetValue(i + 1).ToString();
+            string animator = animators[i].name;
+            bool check = animator.Equals(enumValueName);
 
             if (!check)
             {
-                Debug.LogError($"Character name and animator name are not matched.\nCharacter name : {name}\nAnimator name : {animator}");
-                return false;
-            }
-        }
-
-        enumCount = Enum.GetValues(typeof(WeaponDataManager.MagicBulletType)).Length;
-
-        if (bulletAnimator.Count != enumCount - 1)
-        {
-            Debug.LogError("Character animator must to be set.");
-            return false;
-        }
-
-        for (int i = 0; i < bulletAnimator.Count; i++)
-        {
-            string name = ((WeaponDataManager.MagicBulletType)(i + 1)).ToString();
-            string animator = bulletAnimator[i].name;
-            bool check = animator.Equals(name);
-
-            if (!check)
-            {
-                Debug.LogError($"Bullet name and animator name are not matched.\nBullet name : {name}\nAnimator name : {animator}");
+                Debug.LogError($"{enumName} name and animator name are not matched.\n{enumName} name : {enumValueName}\nAnimator name : {animator}");
                 return false;
             }
         }

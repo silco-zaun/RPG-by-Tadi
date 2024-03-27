@@ -9,32 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbca8c2ee2c3e67488ab82f21c7cf403, type: 3}
+  m_Script: {fileID: 11500000, guid: caf892f37f2732e4a97fa95103e6fac7, type: 3}
   m_Name: Skeleton Mage
   m_EditorClassIdentifier: 
   characterType: 5
   damageType: 2
   attackType: 3
-  description: "\uC655\uAD6D\uC744 \uC704\uD574 \uBAA9\uC228\uAC78\uACE0 \uC2F8\uC6E0\uB358
-    \uC655\uC2E4 \uB9C8\uBC95\uC0AC\uB4E4. \uD558\uC9C0\uB9CC \uADF8\uB4E4\uC758
-    \uD798\uC744 \uB450\uB824\uC6CC\uD55C \uC655\uC2E4\uC740 \uC804\uC7C1\uC774 \uB05D\uB09C
-    \uD6C4 \uADF8\uB4E4\uC744 \uBAA8\uB450 \uC81C\uAC70\uD588\uB2E4."
+  bulletType: 2
   sprBody: {fileID: -1336137469, guid: b3a45c9cd09dd1c4e8a846d3ebd5230d, type: 3}
-  sprLeftHand: {fileID: 3324120851293143344, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprLeftHand: {fileID: -4635145599977766490, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprLeftWeapon: {fileID: 650840343, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
-  sprRightHand: {fileID: -2497645041878999427, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprRightHand: {fileID: -706932262115829336, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprRightWeapon: {fileID: -580263076, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
   baseHP: 100
-  baseAttack: 50
-  baseDefense: 50
-  baseMagicAtk: 0
-  baseMagicDef: 0
+  baseAttack: 100
+  baseDefense: 80
+  baseMagicAtk: 140
+  baseMagicDef: 80
   baseSpeed: 100
   ivHP: 20
-  ivAttack: 10
-  ivDefense: 10
-  ivMagicAtk: 0
-  ivMagicDef: 0
+  ivAttack: 20
+  ivDefense: 15
+  ivMagicAtk: 30
+  ivMagicDef: 15
   ivSpeed: 20
   skills:
   - skillBaseData: {fileID: 11400000, guid: d53c45ed8007d3a46a0cdeb7aad8df2e, type: 2}

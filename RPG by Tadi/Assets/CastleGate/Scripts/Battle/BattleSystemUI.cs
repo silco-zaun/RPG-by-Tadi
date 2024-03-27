@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static BattleDataManager;
 
 public class BattleSystemUI : MonoBehaviour
 {
@@ -93,22 +92,22 @@ public class BattleSystemUI : MonoBehaviour
         return selectedItemIndex;
     }
 
-    public int SubmitMenu(BattleState state)
+    public int SubmitMenu(Datas.BattleState state)
     {
         int itemIndex = battleMenu.SubmitItem();
 
         switch (state)
         {
-            case BattleState.SelectPlayerUnit:
+            case Datas.BattleState.SelectPlayerUnit:
                 depth1BreadthIndex = itemIndex;
                 break;
-            case BattleState.SelectTarget:
+            case Datas.BattleState.SelectTarget:
                 depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + TARGET_MENU_CHILD_INDEX;
                 break;
-            case BattleState.SelectSkill:
+            case Datas.BattleState.SelectSkill:
                 depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + SKILL_MENU_CHILD_INDEX;
                 break;
-            case BattleState.SelectSkillTarget:
+            case Datas.BattleState.SelectSkillTarget:
                 depth3BreadthIndex = depth2BreadthIndex * depth3ChildsPerParent + SKILL_TARGET_MENU_CHILD_INDEX;
                 break;
         }

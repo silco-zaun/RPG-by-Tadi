@@ -60,7 +60,7 @@ public class BulletController : MonoBehaviour
         OnFireComplete?.Invoke();
     }
 
-    public void SetBullet(WeaponDataManager.MagicBulletType type, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    public void SetBullet(Datas.BulletType type, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
         animator.runtimeAnimatorController = GameManager.Ins.Anim.BulletAnimator[(int)type - 1];
 

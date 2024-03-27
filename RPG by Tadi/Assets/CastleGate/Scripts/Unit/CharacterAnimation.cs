@@ -29,7 +29,7 @@ public class CharacterAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimationData(CharacterBaseData data)
+    public void SetAnimationData(CharacterSO data)
     {
         animator.runtimeAnimatorController = GameManager.Ins.Anim.CharacterAnimator[(int)data.CharacterType - 1];
         sprBody.sprite = data.SprBody;
@@ -119,5 +119,4 @@ public class CharacterAnimation : MonoBehaviour
             //weaponCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
-
 }

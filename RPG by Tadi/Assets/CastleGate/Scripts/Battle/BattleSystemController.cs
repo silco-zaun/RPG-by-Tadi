@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static BattleDataManager;
 
 public class BattleSystemController : MonoBehaviour
 {
@@ -10,10 +9,10 @@ public class BattleSystemController : MonoBehaviour
     private BattleSystemUnits battleSystemUnits;
 
     // Bat Info
-    private BattleState state;
+    private Datas.BattleState state;
     private int selectedPlayerUnitIndex = 0;
-    private BattleUnitAction selectedAction = BattleUnitAction.None;
-    private BattleUnitParty targetUnitParty;
+    private Datas.BattleUnitAction selectedAction = Datas.BattleUnitAction.None;
+    private Datas.BattleUnitParty targetUnitParty;
     private int selectedTargetUnitIndex = 0;
     private int selectedSkillIndex = 0;
 
@@ -21,7 +20,7 @@ public class BattleSystemController : MonoBehaviour
     private List<string> unitNames;
     private List<string> actionNames;
 
-    public BattleState State { get { return state; } }
+    public Datas.BattleState State { get { return state; } }
 
     private void Awake()
     {
@@ -33,16 +32,16 @@ public class BattleSystemController : MonoBehaviour
     {
         battleSystemUnits.InitializeBattleUnits();
 
-        unitNames = battleSystemUnits.GetAliveUnitsNames(BattleUnitParty.PlayerParty);
+        unitNames = battleSystemUnits.GetAliveUnitsNames(Datas.BattleUnitParty.PlayerParty);
         actionNames = new List<string>()
         {
-            BattleUnitActionKor.공격.ToString(),
-            BattleUnitActionKor.방어.ToString(),
-            BattleUnitActionKor.스킬.ToString(),
+            Datas.BattleUnitActionKor.공격.ToString(),
+            Datas.BattleUnitActionKor.방어.ToString(),
+            Datas.BattleUnitActionKor.스킬.ToString(),
             //BattleUnitActionKor.아이템.ToString(),
             //BattleUnitActionKor.파티.ToString(),
             //BattleUnitActionKor.진형.ToString(),
-            BattleUnitActionKor.도망.ToString()
+            Datas.BattleUnitActionKor.도망.ToString()
         };
 
         battleSystemUI.CreateBattleMenu(unitNames, actionNames);
@@ -51,24 +50,24 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectPlayerUnit()
     {
-        state = BattleState.SelectPlayerUnit;
+        state = Datas.BattleState.SelectPlayerUnit;
         int index = battleSystemUI.SetUIToSelectPlayerUnit();
 
-        battleSystemUnits.NavigateUnit(BattleUnitParty.PlayerParty, index, ref selectedPlayerUnitIndex);
+        battleSystemUnits.NavigateUnit(Datas.BattleUnitParty.PlayerParty, index, ref selectedPlayerUnitIndex);
     }
 
     private void SelectAction()
     {
-        state = BattleState.SelectAction;
+        state = Datas.BattleState.SelectAction;
         battleSystemUI.SetUIToSelectAction();
     }
 
     private void SelectTarget()
     {
-        state = BattleState.SelectTarget;
+        state = Datas.BattleState.SelectTarget;
 
-        if (selectedAction == BattleUnitAction.Attack)
-            targetUnitParty = BattleUnitParty.EnemyParty;
+        if (selectedAction == Datas.BattleUnitAction.Attack)
+            targetUnitParty = Datas.BattleUnitParty.EnemyParty;
 
         List<string> names = battleSystemUnits.GetAliveUnitsNames(targetUnitParty);
         battleSystemUI.SetUIToSelectTargetUnit(names);
@@ -77,10 +76,10 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectSkillTarget()
     {
-        state = BattleState.SelectSkillTarget;
+        state = Datas.BattleState.SelectSkillTarget;
 
-        if (selectedAction == BattleUnitAction.Skill)
-            targetUnitParty = BattleUnitParty.EnemyParty;
+        if (selectedAction == Datas.BattleUnitAction.Skill)
+            targetUnitParty = Datas.BattleUnitParty.EnemyParty;
 
         List<string> names = battleSystemUnits.GetAliveUnitsNames(targetUnitParty);
         battleSystemUI.SetUIToSelectSkillTarget(names);
@@ -89,16 +88,16 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectSkill()
     {
-        state = BattleState.SelectSkill;
+        state = Datas.BattleState.SelectSkill;
 
-        List<string> skillNames = battleSystemUnits.GetAliveUnitsSkillNames(BattleUnitParty.PlayerParty, selectedPlayerUnitIndex);
+        List<string> skillNames = battleSystemUnits.GetAliveUnitsSkillNames(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex);
 
         battleSystemUI.SetUIToSelectSkill(skillNames);
     }
 
     private void ProgressRound()
     {
-        state = BattleState.ProgressRound;
+        state = Datas.BattleState.ProgressRound;
         battleSystemUI.SetUIToProgressRound();
         battleSystemUnits.SetEnemyUnitBehavior();
         battleSystemUnits.SetTurnOrder();
@@ -131,11 +130,11 @@ public class BattleSystemController : MonoBehaviour
 
     private void TurnComplete()
     {
-        BattleCondition condition = battleSystemUnits.CheckBattleCondition();
+        Datas.BattleCondition condition = battleSystemUnits.CheckBattleCondition();
         BattleUnitController unit = battleSystemUnits.GetBehaveUnit();
 
         // Bat Over
-        if (condition != BattleCondition.None)
+        if (condition != Datas.BattleCondition.None)
         {
             BattleOver();
         }
@@ -170,23 +169,23 @@ public class BattleSystemController : MonoBehaviour
 
     public void Navigate(Vector2 vector)
     {
-        if (state == BattleState.SelectPlayerUnit)
+        if (state == Datas.BattleState.SelectPlayerUnit)
         {
             if (vector.y != 0)
             {
                 int itemIndex = battleSystemUI.NavigateMenu(vector);
-                battleSystemUnits.NavigateUnit(BattleUnitParty.PlayerParty, itemIndex, ref selectedPlayerUnitIndex);
+                battleSystemUnits.NavigateUnit(Datas.BattleUnitParty.PlayerParty, itemIndex, ref selectedPlayerUnitIndex);
             }
         }
-        else if (state == BattleState.SelectAction)
+        else if (state == Datas.BattleState.SelectAction)
         {
             if (vector.y != 0)
             {
                 int itemIndex = battleSystemUI.NavigateMenu(vector);
-                selectedAction = (BattleUnitAction)(itemIndex + 1);
+                selectedAction = (Datas.BattleUnitAction)(itemIndex + 1);
             }
         }
-        else if (state == BattleState.SelectTarget)
+        else if (state == Datas.BattleState.SelectTarget)
         {
             if (vector.y != 0)
             {
@@ -194,14 +193,14 @@ public class BattleSystemController : MonoBehaviour
                 battleSystemUnits.NavigateUnit(targetUnitParty, itemIndex, ref selectedTargetUnitIndex);
             }
         }
-        else if (state == BattleState.SelectSkill)
+        else if (state == Datas.BattleState.SelectSkill)
         {
             if (vector.y != 0)
             {
                 int itemIndex = battleSystemUI.NavigateMenu(vector);
             }
         }
-        else if (state == BattleState.SelectSkillTarget)
+        else if (state == Datas.BattleState.SelectSkillTarget)
         {
             if (vector.y != 0)
             {
@@ -213,21 +212,21 @@ public class BattleSystemController : MonoBehaviour
 
     public void SubmitUI()
     {
-        if (state == BattleState.SelectPlayerUnit)
+        if (state == Datas.BattleState.SelectPlayerUnit)
         {
             battleSystemUI.SubmitMenu(state);
             SelectAction();
         }
-        else if (state == BattleState.SelectAction)
+        else if (state == Datas.BattleState.SelectAction)
         {
             int itemIndex = battleSystemUI.SubmitMenu(state);
-            selectedAction = (BattleUnitAction)(itemIndex + 1);
+            selectedAction = (Datas.BattleUnitAction)(itemIndex + 1);
 
-            if (selectedAction == BattleUnitAction.Attack)
+            if (selectedAction == Datas.BattleUnitAction.Attack)
             {
                 SelectTarget();
             }
-            else if (selectedAction == BattleUnitAction.Skill)
+            else if (selectedAction == Datas.BattleUnitAction.Skill)
             {
                 SelectSkill();
             }
@@ -236,20 +235,20 @@ public class BattleSystemController : MonoBehaviour
                 SetPlayersAction();
             }
         }
-        else if (state == BattleState.SelectTarget)
+        else if (state == Datas.BattleState.SelectTarget)
         {
-            battleSystemUnits.SetTarget(BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
+            battleSystemUnits.SetTarget(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
             SetPlayersAction();
         }
-        else if (state == BattleState.SelectSkill)
+        else if (state == Datas.BattleState.SelectSkill)
         {
             selectedSkillIndex = battleSystemUI.SubmitMenu(state);
             SelectSkillTarget();
         }
-        else if (state == BattleState.SelectSkillTarget)
+        else if (state == Datas.BattleState.SelectSkillTarget)
         {
-            battleSystemUnits.SetUsingSkill(BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, selectedSkillIndex);
-            battleSystemUnits.SetTarget(BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
+            battleSystemUnits.SetUsingSkill(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, selectedSkillIndex);
+            battleSystemUnits.SetTarget(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
             SetPlayersAction();
         }
     }
@@ -258,16 +257,16 @@ public class BattleSystemController : MonoBehaviour
     {
         switch (state)
         {
-            case BattleState.SelectPlayerUnit:
+            case Datas.BattleState.SelectPlayerUnit:
                 break;
-            case BattleState.SelectAction:
+            case Datas.BattleState.SelectAction:
                 SelectPlayerUnit();
                 break;
-            case BattleState.SelectTarget:
-            case BattleState.SelectSkill:
+            case Datas.BattleState.SelectTarget:
+            case Datas.BattleState.SelectSkill:
                 SelectAction();
                 break;
-            case BattleState.SelectSkillTarget:
+            case Datas.BattleState.SelectSkillTarget:
                 SelectSkill();
                 break;
         }
@@ -278,7 +277,7 @@ public class BattleSystemController : MonoBehaviour
         bool allPlayerUnitSelectingAction = battleSystemUnits.SetPlayerUnitAction(selectedPlayerUnitIndex, selectedAction);
         battleSystemUI.SetUnitMenuItemColorState(ItemInfo.ItemColorState.DeactivatedColor);
 
-        selectedAction = BattleUnitAction.None;
+        selectedAction = Datas.BattleUnitAction.None;
 
         if (allPlayerUnitSelectingAction)
         {
@@ -296,7 +295,8 @@ public class BattleSystemController : MonoBehaviour
         selectedTargetUnitIndex = 0;
 
         battleSystemUnits.ResetBattleUnits();
-        unitNames = battleSystemUnits.GetAliveUnitsNames(BattleUnitParty.PlayerParty);
+
+        unitNames = battleSystemUnits.GetAliveUnitsNames(Datas.BattleUnitParty.PlayerParty);
         battleSystemUI.CreateBattleMenu(unitNames, actionNames);
     }
 

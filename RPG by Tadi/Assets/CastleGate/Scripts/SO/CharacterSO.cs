@@ -6,14 +6,14 @@ using UnityEditor.Animations;
 using UnityEditor.Playables;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New CharacterType", menuName = "Scriptable Objects/CharacterType", order = 1)]
-public class CharacterBaseData : ScriptableObject
+[CreateAssetMenu(fileName = "New Character", menuName = "Scriptable Objects/Character", order = 1)]
+public class CharacterSO : ScriptableObject
 {
     // -- Variables --
-    [SerializeField] public CharacterDataManager.CharacterType characterType;
-    [SerializeField] public CharacterDataManager.DamageType damageType;
-    [SerializeField] public CharacterDataManager.AttackType attackType;
-    [SerializeField][TextArea] private string description;
+    [SerializeField] private Datas.CharacterType characterType;
+    [SerializeField] private Datas.DamageType damageType;
+    [SerializeField] private Datas.AttackType attackType;
+    [SerializeField] private Datas.BulletType bulletType;
 
     // Graphic
     [SerializeField] private Sprite sprBody;
@@ -44,9 +44,10 @@ public class CharacterBaseData : ScriptableObject
     [SerializeField] private List<CombatSkill> skills;
 
     // -- Properties --
-    public CharacterDataManager.CharacterType CharacterType { get { return characterType; } }
-    public CharacterDataManager.DamageType DamageType { get { return damageType; } }
-    public CharacterDataManager.AttackType AttackType { get { return attackType; } }
+    public Datas.CharacterType CharacterType { get { return characterType; } }
+    public Datas.DamageType DamageType { get { return damageType; } }
+    public Datas.AttackType AttackType { get { return attackType; } }
+    public Datas.BulletType BulletType { get { return bulletType; } }
 
     public Sprite SprBody { get { return sprBody; } }
     public Sprite SprLeftHand { get {  return sprLeftHand; } }
@@ -74,26 +75,27 @@ public class CharacterBaseData : ScriptableObject
 [System.Serializable]
 public class CombatSkill
 {
-    [SerializeField] private CombatSkillBaseData skillBaseData;
+    [SerializeField] private CombatSkillSO skillBaseData;
     [SerializeField] private int learnLevel = 1;
     [SerializeField] private int skillLevel = 1;
 
-    //public CombatSkillBaseData BaseData { get { return skillBaseData; } }
+    //public CombatSkillSO CharacterSO { get { return skillBaseData; } }
     public string Name { get { return skillBaseData.Name; } }
     public string Description { get { return skillBaseData.Ability[skillLevel].Description; } }
-    public CharacterDataManager.DamageType AttackType { get {  return skillBaseData.AttackType; } }
+    public Datas.DamageType DamageType { get {  return skillBaseData.AttackDamageType; } }
+    public Datas.AttackType AttackType { get {  return skillBaseData.AttackType; } }
     public float Power
     {
         get
         {
             float power = 1f;
 
-            switch (skillBaseData.AttackType)
+            switch (skillBaseData.AttackDamageType)
             {
-                case CharacterDataManager.DamageType.Physical:
+                case Datas.DamageType.Physical:
                     power = skillBaseData.Ability[skillLevel].PhysicalPower;
                     break;
-                case CharacterDataManager.DamageType.Magic:
+                case Datas.DamageType.Magic:
                     power = skillBaseData.Ability[skillLevel].MagicPower;
                     break;
             }
@@ -101,6 +103,8 @@ public class CombatSkill
             return power;
         }
     }
+    public Datas.BulletType Bullet { get { return skillBaseData.Bullet; } }
+
     public int LearnLevel { get { return learnLevel; } }
     public int SkillLevel
     {
@@ -108,7 +112,7 @@ public class CombatSkill
         set
         {
             // Ensure that the count of elements doesn't exceed the limit
-            if (value <= BattleDataManager.COMBAT_SKILL_MAX_LEVEL)
+            if (value <= Datas.Bat.COMBAT_SKILL_MAX_LEVEL)
             {
                 skillLevel = value;
             }

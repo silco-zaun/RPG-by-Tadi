@@ -41,10 +41,10 @@ public class ScrollViewItemController : MonoBehaviour
         switch (itemInfo.colorState)
         {
             case ItemInfo.ItemColorState.OriginColor:
-                text.color = UIDataManager.Instance.OriginColor;
+                text.color = UIManager.Instance.OriginColor;
                 break;
             case ItemInfo.ItemColorState.DeactivatedColor:
-                text.color = UIDataManager.Instance.DeactivateColor;
+                text.color = UIManager.Instance.DeactivateColor;
                 break;
             default:
                 break;
@@ -53,7 +53,7 @@ public class ScrollViewItemController : MonoBehaviour
 
     public void SetSelectedItemColor()
     {
-        GetComponent<Text>().color = UIDataManager.Instance.SelectedColor;
+        GetComponent<Text>().color = UIManager.Instance.SelectedColor;
     }
 }
 
@@ -66,7 +66,7 @@ public class ItemInfo
     }
 
     public string name;
-    public Color textColor = UIDataManager.Instance.OriginColor;
+    public Color textColor = UIManager.Instance.OriginColor;
     public ItemColorState colorState;
 
     public ItemInfo() { }

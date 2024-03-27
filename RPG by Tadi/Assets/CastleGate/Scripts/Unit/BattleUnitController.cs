@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class BattleUnitController : MonoBehaviour
 {
@@ -13,46 +11,46 @@ public class BattleUnitController : MonoBehaviour
     private BattleUnitMovement battleUnitMovement;
     private CharacterController characterController;
 
-    private CharacterBaseData characterBaseData;
+    private CharacterSO characterBaseData;
     private Formation formation;
-    private BattleDataManager.BattleUnitParty battleUnitParty;
-    private BattleDataManager.BattleUnitAction battleUnitAction;
-    private BattleDataManager.BattleUnitActionPriority actionPriority = 0; // 0 ~ 10
+    private Datas.BattleUnitParty battleUnitParty;
+    private Datas.BattleUnitAction battleUnitAction;
+    private Datas.BattleUnitActionPriority actionPriority = 0; // 0 ~ 10
     private CombatSkill usingSkill;
     private List<BattleUnitController> targetControllers = new List<BattleUnitController>();
 
     // -- Properties --
     public CharacterController CharacterController { get { return characterController; } }
-    public CharacterBaseData CharacterBaseData
+    public CharacterSO CharacterBaseData
     {
         get { return characterBaseData; }
         set
         {
             characterBaseData = value;
-            characterController.BaseData = value;
+            characterController.CharacterSO = value;
         }
     }
     public Formation Formation { get { return formation; } set { formation = value; } }
-    public BattleDataManager.BattleUnitParty Party
+    public Datas.BattleUnitParty Party
     {
         get { return battleUnitParty; }
         set
         {
             battleUnitParty = value;
-            bool isFacingLeft = battleUnitParty == BattleDataManager.BattleUnitParty.EnemyParty;
+            bool isFacingLeft = battleUnitParty == Datas.BattleUnitParty.EnemyParty;
             battleUnitMovement.RotateCharacter(isFacingLeft);
         }
     }
-    public BattleDataManager.BattleUnitAction Action
+    public Datas.BattleUnitAction Action
     {
         get { return battleUnitAction; }
         set
         {
             battleUnitAction = value;
-            actionPriority = DataManager.Ins.Bat.GetActionPriority(value);
+            actionPriority = Datas.Bat.GetActionPriority(value);
         }
     }
-    public BattleDataManager.BattleUnitActionPriority ActionPriority { get { return actionPriority; } }
+    public Datas.BattleUnitActionPriority ActionPriority { get { return actionPriority; } }
     public List<BattleUnitController> Targets { get { return targetControllers; } }
     public bool IsFainted { get { return characterController.CheckIsFainted(); } }
 
@@ -66,15 +64,15 @@ public class BattleUnitController : MonoBehaviour
 
     public void ExcuteAction(System.Action OnTurnComplete)
     {
-        if (battleUnitAction == BattleDataManager.BattleUnitAction.Attack)
+        if (battleUnitAction == Datas.BattleUnitAction.Attack)
         {
             ExcuteAttackAction(targetControllers, OnTurnComplete);
         }
-        else if (battleUnitAction == BattleDataManager.BattleUnitAction.Defense)
+        else if (battleUnitAction == Datas.BattleUnitAction.Defense)
         {
             ExcuteDefenseAction(OnTurnComplete);
         }
-        else if (battleUnitAction == BattleDataManager.BattleUnitAction.Skill)
+        else if (battleUnitAction == Datas.BattleUnitAction.Skill)
         {
             ExcuteSkillAction(usingSkill, targetControllers, OnTurnComplete);
         }
@@ -86,6 +84,7 @@ public class BattleUnitController : MonoBehaviour
         {
             battleUnitMovement.ExcuteAttack(
                 characterController.AttackType,
+                characterController.BulletType,
                 target.transform.position,
                 () => { target.TakeDamage(characterController, characterController.DamageType); },
                 OnTurnComplete);
@@ -99,38 +98,42 @@ public class BattleUnitController : MonoBehaviour
 
     public void ExcuteSkillAction(CombatSkill skill, List<BattleUnitController> targets, System.Action OnTurnComplete)
     {
-        CharacterDataManager.DamageType attackType = skill.AttackType;
+        Datas.DamageType damageType = skill.DamageType;
+        Datas.AttackType attackType = skill.AttackType;
         float skillMultiplier = skill.Power;
+        Datas.BulletType bullet = skill.Bullet;
 
         foreach (BattleUnitController target in targets)
         {
-            battleUnitMovement.ExcuteMeleeAttack(
+            battleUnitMovement.ExcuteAttack(
+                attackType,
+                bullet,
                 target.transform.position,
-                () => { target.TakeDamage(characterController, attackType, skillMultiplier); },
+                () => { target.TakeDamage(characterController, damageType, skillMultiplier); },
                 OnTurnComplete);
         }
     }
 
-    private void TakeDamage(CharacterController attacker, CharacterDataManager.DamageType attackType, float skillMultiplier = 1f)
+    private void TakeDamage(CharacterController attacker, Datas.DamageType damageType, float skillMultiplier = 1f)
     {
-        if (attackType == CharacterDataManager.DamageType.None)
+        if (damageType == Datas.DamageType.None)
         {
             Debug.LogError($"Enum variable [DamageType] must to be set.");
 
             return;
         }
 
-        bool defending = battleUnitAction == BattleDataManager.BattleUnitAction.Defense;
+        bool defending = battleUnitAction == Datas.BattleUnitAction.Defense;
 
-        characterController.TakeDamage(attacker, attackType, defending, skillMultiplier);
+        characterController.TakeDamage(attacker, damageType, defending, skillMultiplier);
     }
 
     public void ResetBattleUnit()
     {
-        if (battleUnitAction == BattleDataManager.BattleUnitAction.Defense)
+        if (battleUnitAction == Datas.BattleUnitAction.Defense)
             battleUnitMovement.PlayDefenseAnimation(false);
 
-        battleUnitAction = BattleDataManager.BattleUnitAction.None;
+        battleUnitAction = Datas.BattleUnitAction.None;
         targetControllers.Clear();
     }
 

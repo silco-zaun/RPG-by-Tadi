@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class EnemyUnitController : MonoBehaviour
 {
-    [SerializeField] private CharacterBaseData characterBaseData;
+    [SerializeField] private CharacterSO characterBaseData;
 
     private CharacterController character;
 
-    public CharacterBaseData CharacterBaseData
+    public CharacterSO CharacterBaseData
     {
         get { return characterBaseData; }
         set
         {
             characterBaseData = value;
-            character.BaseData = value;
+            character.CharacterSO = value;
         }
     }
 
@@ -25,7 +25,7 @@ public class EnemyUnitController : MonoBehaviour
 
     private void Start()
     {
-        //characterController.BaseData = characterBaseData;
+        //characterController.CharacterSO = characterBaseData;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

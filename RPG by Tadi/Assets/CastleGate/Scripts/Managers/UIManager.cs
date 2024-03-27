@@ -2,20 +2,20 @@
 
 using UnityEngine;
 
-public class UIDataManager
+public class UIManager
 {
-    private static UIDataManager instance = null;
+    private static UIManager instance = null;
 
     private Color originColor;
     private Color selectedColor;
     private Color deactivateColor;
 
-    public static UIDataManager Instance
+    public static UIManager Instance
     {
         get
         {
             if (instance == null)
-                instance = new UIDataManager();
+                instance = new UIManager();
 
             return instance;
         }
@@ -25,7 +25,7 @@ public class UIDataManager
     public Color SelectedColor { get { return selectedColor; } }
     public Color DeactivateColor { get { return deactivateColor; } }
 
-    private UIDataManager()
+    private UIManager()
     {
         originColor = Color.white;
         selectedColor = HexToColor("#FFA500");

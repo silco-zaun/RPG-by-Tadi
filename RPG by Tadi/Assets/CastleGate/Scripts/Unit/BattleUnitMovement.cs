@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static WeaponDataManager;
 
 public class BattleUnitMovement : MonoBehaviour
 {
@@ -21,7 +20,6 @@ public class BattleUnitMovement : MonoBehaviour
     private Transform bullet;
 
     private System.Action OnSlideComplete;
-    private System.Action OnFireComplete;
 
     private enum State
     {
@@ -57,20 +55,21 @@ public class BattleUnitMovement : MonoBehaviour
                 HandleUnitSliding();
                 break;
             case State.FireBullet:
-                HandleFireBullet();
                 break;
         }
     }
 
-    public void ExcuteAttack(CharacterDataManager.AttackType attackType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteAttack(Datas.AttackType attackType, Datas.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
-        if (attackType == CharacterDataManager.AttackType.Melee)
+        if (attackType == Datas.AttackType.Melee)
         {
             ExcuteMeleeAttack(targetPosition, OnAttackTarget, OnTurnComplete);
         }
-        else if (attackType == CharacterDataManager.AttackType.Magic)
+        else if (
+            attackType == Datas.AttackType.Ranged ||
+            attackType == Datas.AttackType.Magic)
         {
-            ExcuteMagicAttack(targetPosition, OnAttackTarget, OnTurnComplete);
+            ExcuteRangedAttack(bulletType, targetPosition, OnAttackTarget, OnTurnComplete);
         }
     }
 
@@ -104,15 +103,15 @@ public class BattleUnitMovement : MonoBehaviour
             });
     }
 
-    public void ExcuteMagicAttack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteRangedAttack(Datas.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
         // Attack him
-        state = State.Busy;
+        state = State.FireBullet;
 
         characterAnimation.PlayFireAnimation(null,
             () =>
             {
-                FireBulletToTarget(targetPosition,
+                FireBulletToTarget(bulletType, targetPosition,
                     () =>
                     {
                         state = State.Idle;
@@ -136,28 +135,6 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
-    private void HandleFireBullet()
-    {
-        //bulletCurSpeed += bulletAccel * Time.fixedDeltaTime;
-        //Vector3 direction = (fireTargetPosition - bullet.position).normalized;
-        //float move = bulletCurSpeed * Time.fixedDeltaTime;
-        //
-        //bullet.position += direction * move;
-        //
-        //float distance = Vector3.Distance(bullet.position, fireTargetPosition);
-        //bool isArriving = distance < move;
-        //
-        //if (isArriving)
-        //{
-        //    bullet.position = fireTargetPosition;
-        //
-        //    // Arrived at Slide Target Position
-        //    bulletCurSpeed = bulletInitSpeed;
-        //    GameManager.Ins.Res.ReturnObjectToPool(bullet.gameObject);
-        //    OnFireComplete();
-        //}
-    }
-
     private void SlideUnitToTarget(Vector3 slideTargetPosition, System.Action OnSlideComplete)
     {
         this.slideTargetPosition = slideTargetPosition;
@@ -165,15 +142,10 @@ public class BattleUnitMovement : MonoBehaviour
         state = State.Sliding;
     }
 
-    private void FireBulletToTarget(Vector3 fireTargetPosition, System.Action OnFireComplete)
+    private void FireBulletToTarget(Datas.BulletType bulletType, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
-        //this.fireTargetPosition = fireTargetPosition;
-        this.OnFireComplete = OnFireComplete;
-
         bullet = GameManager.Ins.Res.GetObjectFromPool((int)ResourceManager.ResourcePrefabIndex.Bullet).transform;
-        bullet.GetComponent<BulletController>().SetBullet(MagicBulletType.MagicMissile, transform.position, fireTargetPosition, OnFireComplete);
-
-        //state = State.FireBullet;
+        bullet.GetComponent<BulletController>().SetBullet(bulletType, transform.position, fireTargetPosition, OnFireComplete);
     }
 
     public void PlayDeathAnimation()

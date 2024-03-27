@@ -9,32 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbca8c2ee2c3e67488ab82f21c7cf403, type: 3}
+  m_Script: {fileID: 11500000, guid: caf892f37f2732e4a97fa95103e6fac7, type: 3}
   m_Name: Wizzard
   m_EditorClassIdentifier: 
   characterType: 3
   damageType: 2
   attackType: 3
-  description: "\uC815\uB839\uB4E4\uB3E0 \uC18C\uD1B5\uD558\uBA70 \uC138\uACC4\uC758
-    \uC9C8\uC11C\uB97C \uC9C0\uD0A4\uB294 \uB9C8\uBC95\uC0AC. \uBAA8\uB4E0\uAC83\uC744
-    \uBD88\uD0DC\uC6B0\uB294 \uD30C\uAD34\uB825\uC744 \uAC00\uC84C\uC9C0\uB9CC \uBC29\uC5B4\uB825\uC774
-    \uC57D\uD558\uB2E4."
+  bulletType: 1
   sprBody: {fileID: -1574211764, guid: 5b108b17a2c60d54091c504b29a6546b, type: 3}
   sprLeftHand: {fileID: -2523599077907299729, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprLeftWeapon: {fileID: -698569205, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
   sprRightHand: {fileID: 8326627396399632596, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprRightWeapon: {fileID: -208300474, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
   baseHP: 100
-  baseAttack: 50
-  baseDefense: 50
-  baseMagicAtk: 0
-  baseMagicDef: 0
+  baseAttack: 100
+  baseDefense: 80
+  baseMagicAtk: 140
+  baseMagicDef: 80
   baseSpeed: 100
   ivHP: 20
-  ivAttack: 10
-  ivDefense: 10
-  ivMagicAtk: 0
-  ivMagicDef: 0
+  ivAttack: 20
+  ivDefense: 15
+  ivMagicAtk: 30
+  ivMagicDef: 15
   ivSpeed: 20
   skills:
   - skillBaseData: {fileID: 11400000, guid: d53c45ed8007d3a46a0cdeb7aad8df2e, type: 2}

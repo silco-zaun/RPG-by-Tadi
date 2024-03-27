@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static CharacterDataManager;
 
-[CreateAssetMenu(fileName = "New Combat CombatSkill", menuName = "Scriptable Objects/Combat CombatSkill")]
-public class CombatSkillBaseData : ScriptableObject
+[CreateAssetMenu(fileName = "New Combat Skill", menuName = "Scriptable Objects/Combat Skill")]
+public class CombatSkillSO : ScriptableObject
 {
     [SerializeField] private string skillName;
     [SerializeField] private List<CombatSkillAbilityByLevel> ability;
@@ -15,32 +14,38 @@ public class CombatSkillBaseData : ScriptableObject
     [SerializeField] private CombatSkillHitType hitType;
     // Action
     [SerializeField] private CombatSkillActionType actionType;
-    [SerializeField] private DamageType attackType;
-    [SerializeField] private PercentageValue percentageValue;
+    [SerializeField] private Datas.DamageType attackDamageType;
+    [SerializeField] private Datas.PercentageType percentageValue;
     [SerializeField] private float bossModifier;
-    [SerializeField] private BossModifierType bossModifierType;
-    [SerializeField] private DamageType defenseType;
+    [SerializeField] private Datas.BossModifierType bossModifierType;
+    [SerializeField] private Datas.DamageType defenseDamageType;
+    [SerializeField] private Datas.BulletType skillBulletType;
+    [SerializeField] private Datas.AttackType attackType;
     // Effect
     [SerializeField] private CombatSkillEffectType effectType;
     // Cure
     [SerializeField] private CombatSkillCureType cureType;
     // Etc..
-    [SerializeField] private PropertyType propertyType;
-    [SerializeField] private StateType stateType;
+    [SerializeField] private Datas.PropertyType propertyType;
+    [SerializeField] private Datas.StateType stateType;
 
     public string Name { get { return skillName; } }
     public int Cooltime { get { return cooltime; } }
-    public CombatSkillActionType ActionType { get { return actionType; } }
-    public CombatSkillEffectType EffectType { get { return effectType; } }
-    public CombatSkillCureType CureType { get { return cureType; } }
     public CombatSKillPowerType PowerType { get { return powerType; } }
-    public PropertyType PropertyType { get { return propertyType; } }
-    public StateType StateType { get { return stateType; } }
-    public DamageType AttackType { get { return attackType; } }
-    public DamageType DefenseType { get { return defenseType; } }
     public CombatSkillTarget Target { get { return target; } }
     public CombatSkillRange Range { get { return range; } }
     public CombatSkillHitType HitType { get { return hitType; } }
+    // Action
+    public CombatSkillActionType ActionType { get { return actionType; } }
+    public Datas.DamageType AttackDamageType { get { return attackDamageType; } }
+    public Datas.DamageType DefenseDamageType { get { return defenseDamageType; } }
+    public Datas.BulletType Bullet { get { return skillBulletType; } }
+    public Datas.AttackType AttackType { get { return attackType; } }
+
+    public CombatSkillEffectType EffectType { get { return effectType; } }
+    public CombatSkillCureType CureType { get { return cureType; } }
+    public Datas.PropertyType PropertyType { get { return propertyType; } }
+    public Datas.StateType StateType { get { return stateType; } }
 
     public List<CombatSkillAbilityByLevel> Ability
     {
@@ -48,7 +53,7 @@ public class CombatSkillBaseData : ScriptableObject
         set
         {
             // Ensure that the count of elements doesn't exceed the limit
-            if (value.Count <= BattleDataManager.COMBAT_SKILL_MAX_LEVEL)
+            if (value.Count <= Datas.Bat.COMBAT_SKILL_MAX_LEVEL)
             {
                 ability = value;
             }
