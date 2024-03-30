@@ -29,7 +29,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""characterType"": ""Value"",
+                    ""unitType"": ""Value"",
                     ""id"": ""d3330588-9014-4d94-98dc-fd53908fd7e1"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -38,7 +38,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Look"",
-                    ""characterType"": ""Value"",
+                    ""unitType"": ""Value"",
                     ""id"": ""f5d7c129-9e24-4210-83aa-53b145757513"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -47,7 +47,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""FireBulletToTarget"",
-                    ""characterType"": ""Button"",
+                    ""unitType"": ""Button"",
                     ""id"": ""e73e8b23-6621-497a-b8be-c511b5a2a0f4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -284,7 +284,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Navigate"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""f842fd90-2770-46b1-a4e8-d43f19532691"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -293,7 +293,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Submit"",
-                    ""characterType"": ""Button"",
+                    ""unitType"": ""Button"",
                     ""id"": ""4e120601-36bc-4156-9bac-b935f8a5716e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -302,7 +302,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Cancel"",
-                    ""characterType"": ""Button"",
+                    ""unitType"": ""Button"",
                     ""id"": ""8c233ab9-1e8f-47bd-95ad-0be4b8778eaf"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -311,7 +311,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Point"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""22f010b1-e9ec-49be-9919-8dde7f7ee381"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -320,7 +320,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Click"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""7335311a-b201-464b-b607-932ec5a3c05a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -329,7 +329,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""ScrollWheel"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""c44965a7-e0c2-4e95-a58f-f8281d59cc36"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -338,7 +338,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""MiddleClick"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""db82270b-fb2a-44ff-a126-b24ba0a2543e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -347,7 +347,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RightClick"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""b1201bf4-b3cb-44bf-a950-40187f865108"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -356,7 +356,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""TrackedDevicePosition"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""2c5a1930-4d3e-4513-9647-c174e39639f7"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": """",
@@ -365,7 +365,7 @@ public partial class @BattleControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""TrackedDeviceOrientation"",
-                    ""characterType"": ""PassThrough"",
+                    ""unitType"": ""PassThrough"",
                     ""id"": ""afdd614d-9e2f-4339-8fe4-519ecfe2b6ad"",
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",

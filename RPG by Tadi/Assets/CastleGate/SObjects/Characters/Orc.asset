@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caf892f37f2732e4a97fa95103e6fac7, type: 3}
-  m_Name: Knight
+  m_Script: {fileID: 11500000, guid: 50174acde8295e6478ca5af9a7a33f13, type: 3}
+  m_Name: Orc
   m_EditorClassIdentifier: 
-  characterType: 1
+  characterType: 4
   damageType: 1
   attackType: 1
   bulletType: 0
-  sprBody: {fileID: -835012401, guid: 5ac3b2c3b3dc12a4b94a466d26c4497b, type: 3}
-  sprLeftHand: {fileID: -2523599077907299729, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprBody: {fileID: -491629717, guid: 17c624dcb86c70c42a28ba8298db1ad4, type: 3}
+  sprLeftHand: {fileID: -2597094214951350933, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprLeftWeapon: {fileID: 1219222050, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
-  sprRightHand: {fileID: 8326627396399632596, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprRightHand: {fileID: -6375015178641022721, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
   sprRightWeapon: {fileID: 1816589720, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
   baseHP: 100
   baseAttack: 100

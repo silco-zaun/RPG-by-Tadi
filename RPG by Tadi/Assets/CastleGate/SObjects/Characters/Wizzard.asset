@@ -9,18 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caf892f37f2732e4a97fa95103e6fac7, type: 3}
-  m_Name: Skeleton Mage
+  m_Script: {fileID: 11500000, guid: 50174acde8295e6478ca5af9a7a33f13, type: 3}
+  m_Name: Wizzard
   m_EditorClassIdentifier: 
-  characterType: 5
+  characterType: 3
   damageType: 2
   attackType: 3
-  bulletType: 2
-  sprBody: {fileID: -1336137469, guid: b3a45c9cd09dd1c4e8a846d3ebd5230d, type: 3}
-  sprLeftHand: {fileID: -4635145599977766490, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
-  sprLeftWeapon: {fileID: 650840343, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
-  sprRightHand: {fileID: -706932262115829336, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
-  sprRightWeapon: {fileID: -580263076, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
+  bulletType: 1
+  sprBody: {fileID: -1574211764, guid: 5b108b17a2c60d54091c504b29a6546b, type: 3}
+  sprLeftHand: {fileID: -2523599077907299729, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprLeftWeapon: {fileID: -698569205, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
+  sprRightHand: {fileID: 8326627396399632596, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
+  sprRightWeapon: {fileID: -208300474, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
   baseHP: 100
   baseAttack: 100
   baseDefense: 80

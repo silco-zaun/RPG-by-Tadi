@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleSystemUI : MonoBehaviour
 {
     [SerializeField] private ScrollViewController battleMenu;
+    [SerializeField] private Text dialogText;
 
     // breadth index = parent breadth index * childs per parent + child index
 
@@ -92,22 +94,22 @@ public class BattleSystemUI : MonoBehaviour
         return selectedItemIndex;
     }
 
-    public int SubmitMenu(Datas.BattleState state)
+    public int SubmitMenu(Tadi.Datas.BattleSystem.BattleState state)
     {
         int itemIndex = battleMenu.SubmitItem();
 
         switch (state)
         {
-            case Datas.BattleState.SelectPlayerUnit:
+            case Tadi.Datas.BattleSystem.BattleState.SelectPlayerUnit:
                 depth1BreadthIndex = itemIndex;
                 break;
-            case Datas.BattleState.SelectTarget:
+            case Tadi.Datas.BattleSystem.BattleState.SelectTarget:
                 depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + TARGET_MENU_CHILD_INDEX;
                 break;
-            case Datas.BattleState.SelectSkill:
+            case Tadi.Datas.BattleSystem.BattleState.SelectSkill:
                 depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + SKILL_MENU_CHILD_INDEX;
                 break;
-            case Datas.BattleState.SelectSkillTarget:
+            case Tadi.Datas.BattleSystem.BattleState.SelectSkillTarget:
                 depth3BreadthIndex = depth2BreadthIndex * depth3ChildsPerParent + SKILL_TARGET_MENU_CHILD_INDEX;
                 break;
         }
@@ -118,5 +120,22 @@ public class BattleSystemUI : MonoBehaviour
     public void ResetAllMenu()
     {
         battleMenu.ResetAllMenu();
+    }
+
+    public void SetDialogText()
+    {
+        //Managers.Ins.Dlg.dialogueText = dialogText;
+    }
+
+    public void TypeSentence(string line)
+    {
+        StopAllCoroutines();
+        StartCoroutine(Managers.Ins.Dlg.TypeSentence(dialogText, line));
+    }
+
+    public void DisplaySentence(string line)
+    {
+        StopAllCoroutines();
+        Managers.Ins.Dlg.DisplaySentence(dialogText, line);
     }
 }

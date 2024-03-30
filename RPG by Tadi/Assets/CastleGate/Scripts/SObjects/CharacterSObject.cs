@@ -1,19 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
-using UnityEditor.Playables;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Character", menuName = "Scriptable Objects/Character", order = 1)]
-public class CharacterSO : ScriptableObject
+public class CharacterSObject : ScriptableObject
 {
     // -- Variables --
-    [SerializeField] private Datas.CharacterType characterType;
-    [SerializeField] private Datas.DamageType damageType;
-    [SerializeField] private Datas.AttackType attackType;
-    [SerializeField] private Datas.BulletType bulletType;
+    [SerializeField] private Tadi.Datas.Unit.UnitType characterType;
+    [SerializeField] private Tadi.Datas.Combat.DamageType damageType;
+    [SerializeField] private Tadi.Datas.Combat.AttackType attackType;
+    [SerializeField] private Tadi.Datas.Weapon.BulletType bulletType;
 
     // Graphic
     [SerializeField] private Sprite sprBody;
@@ -41,13 +36,13 @@ public class CharacterSO : ScriptableObject
     [SerializeField] private int ivSpeed;
     
     // Skills
-    [SerializeField] private List<CombatSkill> skills;
+    [SerializeField] private List<CombatSkill_> skills;
 
     // -- Properties --
-    public Datas.CharacterType CharacterType { get { return characterType; } }
-    public Datas.DamageType DamageType { get { return damageType; } }
-    public Datas.AttackType AttackType { get { return attackType; } }
-    public Datas.BulletType BulletType { get { return bulletType; } }
+    public Tadi.Datas.Unit.UnitType CharacterType { get { return characterType; } }
+    public Tadi.Datas.Combat.DamageType DamageType { get { return damageType; } }
+    public Tadi.Datas.Combat.AttackType AttackType { get { return attackType; } }
+    public Tadi.Datas.Weapon.BulletType BulletType { get { return bulletType; } }
 
     public Sprite SprBody { get { return sprBody; } }
     public Sprite SprLeftHand { get {  return sprLeftHand; } }
@@ -69,21 +64,21 @@ public class CharacterSO : ScriptableObject
     public int IVMagicDef { get { return ivMagicDef; } }
     public int IVSpeed { get { return ivSpeed; } }
 
-    public List<CombatSkill> Skills { get { return skills; } }
+    public List<CombatSkill_> Skills { get { return skills; } }
 }
 
 [System.Serializable]
-public class CombatSkill
+public class CombatSkill_
 {
-    [SerializeField] private CombatSkillSO skillBaseData;
+    [SerializeField] private CombatSkillSObjects skillBaseData;
     [SerializeField] private int learnLevel = 1;
     [SerializeField] private int skillLevel = 1;
 
-    //public CombatSkillSO CharacterSO { get { return skillBaseData; } }
+    //public CombatSkillSObjects CharacterSObject { get { return skillBaseData; } }
     public string Name { get { return skillBaseData.Name; } }
     public string Description { get { return skillBaseData.Ability[skillLevel].Description; } }
-    public Datas.DamageType DamageType { get {  return skillBaseData.AttackDamageType; } }
-    public Datas.AttackType AttackType { get {  return skillBaseData.AttackType; } }
+    public Tadi.Datas.Combat.DamageType DamageType { get {  return skillBaseData.AttackDamageType; } }
+    public Tadi.Datas.Combat.AttackType AttackType { get {  return skillBaseData.AttackType; } }
     public float Power
     {
         get
@@ -92,10 +87,10 @@ public class CombatSkill
 
             switch (skillBaseData.AttackDamageType)
             {
-                case Datas.DamageType.Physical:
+                case Tadi.Datas.Combat.DamageType.Physical:
                     power = skillBaseData.Ability[skillLevel].PhysicalPower;
                     break;
-                case Datas.DamageType.Magic:
+                case Tadi.Datas.Combat.DamageType.Magic:
                     power = skillBaseData.Ability[skillLevel].MagicPower;
                     break;
             }
@@ -103,7 +98,7 @@ public class CombatSkill
             return power;
         }
     }
-    public Datas.BulletType Bullet { get { return skillBaseData.Bullet; } }
+    public Tadi.Datas.Weapon.BulletType Bullet { get { return skillBaseData.Bullet; } }
 
     public int LearnLevel { get { return learnLevel; } }
     public int SkillLevel
@@ -112,7 +107,7 @@ public class CombatSkill
         set
         {
             // Ensure that the count of elements doesn't exceed the limit
-            if (value <= Datas.Bat.COMBAT_SKILL_MAX_LEVEL)
+            if (value <= 3)
             {
                 skillLevel = value;
             }
@@ -123,5 +118,4 @@ public class CombatSkill
             }
         }
     }
-
 }

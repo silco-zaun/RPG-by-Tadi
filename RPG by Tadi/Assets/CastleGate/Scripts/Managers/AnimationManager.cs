@@ -1,35 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tadi.Datas.Res;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    [SerializeField] private List<AnimatorController> characterAnimator;
-    [SerializeField] private List<AnimatorController> bulletAnimator;
+    private List<AnimatorController> unitAnimator;
+    private List<AnimatorController> bulletAnimator;
 
     private Dictionary<string, AnimationEvent> animationEventDictionary = new Dictionary<string, AnimationEvent>();
-    //private List<float[]> eventTimes = new List<float[]>();
 
-    public List<AnimatorController> CharacterAnimator { get { return characterAnimator; } }
+    public List<AnimatorController> UnitAnimator { get { return unitAnimator; } }
     public List<AnimatorController> BulletAnimator { get { return bulletAnimator; } }
-
-    private void Awake()
-    {
-        bool check = CheckList();
-        if (!check) return;
-
-        InitializeAnimationEvent();
-    }
 
     private bool CheckList()
     {
-        bool check = Check(characterAnimator, typeof(Datas.CharacterType));
+        bool check = Check(unitAnimator, typeof(Tadi.Datas.Unit.UnitType));
         if (!check) return check;
 
-        check = Check(bulletAnimator, typeof(Datas.BulletType));
+        check = Check(bulletAnimator, typeof(Tadi.Datas.Weapon.BulletType));
         if (!check) return check;
 
         return check;
@@ -63,54 +55,26 @@ public class AnimationManager : MonoBehaviour
         return true;
     }
 
-    public void InitializeAnimationEvent()
+    public void AddAnimEvents(AnimatorController animController, string clipName, string eventKeyword)
     {
-        foreach (AnimatorController controller in characterAnimator)
+        AnimationClip[] clips = animController.animationClips;
+
+        for (int i = 0; i < clips.Length; i++)
         {
-            AnimationClip[] clips = controller.animationClips;
+            AnimationClip clip = clips[i];
 
-            for (int i = 0; i < clips.Length; i++)
+            if (clip.name.Equals(clipName))
             {
-                AnimationClip animationClip = clips[i];
+                AddAnimEvent(clip, $"On{eventKeyword}AnimStart", 0);
 
-                if (animationClip.name.Equals("LeftAttack") ||
-                    animationClip.name.Equals("RightAttack"))
-                {
-                    AddAnimationEvent(animationClip, $"OnAttackAnimationStart", 0);
-
-                    AddAnimationEvent(animationClip, $"OnAttackAnimationComplete", animationClip.length);
-                }
+                AddAnimEvent(clip, $"On{eventKeyword}AnimComplete", clip.length);
             }
         }
-
-        foreach (AnimatorController controller in bulletAnimator)
-        {
-            AnimationClip[] clips = controller.animationClips;
-
-            for (int i = 0; i < clips.Length; i++)
-            {
-                AnimationClip animationClip = clips[i];
-
-                if (animationClip.name.Equals("Explosion"))
-                {
-                    AddAnimationEvent(animationClip, $"OnExplosionAnimationStart", 0);
-
-                    AddAnimationEvent(animationClip, $"OnExplosionAnimationComplete", animationClip.length);
-                }
-            }
-        }
-
-
-        // Loop through all values of the CharacterClass enum
-        //foreach (DataManager.CharacterType characterType in Enum.GetValues(typeof//(DataManager.CharacterType)))
-        //{
-        //    Debug.Log("Class: " + characterType);
-        //}
     }
 
-    public void AddAnimationEvent(AnimationClip animationClip, string functionName, float eventTime)
+    private void AddAnimEvent(AnimationClip animationClip, string functionName, float eventTime)
     {
-        // Check if animationClip and functionName are assigned
+        // Check if clip and functionName are assigned
         if (animationClip == null || string.IsNullOrEmpty(functionName))
         {
             Debug.LogError("Animation clip or function skillName not assigned.");
@@ -144,12 +108,12 @@ public class AnimationManager : MonoBehaviour
         animationEventDictionary.Add(keyString, newEvent);
 
         // Refresh the animation clip
-        //AnimationUtility.SetAnimationClipSettings(animationClip, new AnimationClipSettings());
+        //AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings());
     }
 
-    public void RemoveAnimationEvent(AnimationClip animationClip, string functionName)
+    private void RemoveAnimEvent(AnimationClip animationClip, string functionName)
     {
-        // Check if animationClip and functionName are assigned
+        // Check if clip and functionName are assigned
         if (animationClip == null || string.IsNullOrEmpty(functionName))
         {
             Debug.LogWarning("Animation clip or function skillName not assigned.");
@@ -163,7 +127,7 @@ public class AnimationManager : MonoBehaviour
             if (animationEvent.functionName == functionName)
             {
                 float eventTime = animationEvent.time;
-                //string keyString = animationClip.GetInstanceID().ToString() + eventTime.ToString("F2");
+                //string keyString = clip.GetInstanceID().ToString() + eventTime.ToString("F2");
                 animationEventDictionary.Remove(functionName);
 
                 animationClip.events[i] = null; // Remove the animationEvent by battleSetting it to null

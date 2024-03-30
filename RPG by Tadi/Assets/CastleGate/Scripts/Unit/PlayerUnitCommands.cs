@@ -55,7 +55,7 @@ public class PlayerUnitCommands : MonoBehaviour
 
     private void HandleDefence()
     {
-        bool isDefenceBtnPressed = inputActions.Player.Defence.IsPressed();
+        bool isDefenceBtnPressed = inputActions.Player.Defense.IsPressed();
         playerMovement.IsDefencing = isDefenceBtnPressed;
     }
 }

@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 7128cdafebc4324488d723f344bfeb5f, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 7a6ebef2b041667439060928cdba2631, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleMenu: {fileID: 5413425820734783651}
+  dialogText: {fileID: 7903197936254162663}
 --- !u!114 &438669456394837872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,15 +253,15 @@ MonoBehaviour:
   - baseData: {fileID: 11400000, guid: 20dd43eb0133017428c5031178bda45e, type: 2}
     battleUnitParty: 0
     formation: {fileID: 5919653170308635982}
-  - baseData: {fileID: 11400000, guid: 20dd43eb0133017428c5031178bda45e, type: 2}
+  - baseData: {fileID: 11400000, guid: a3e55d37f9a3a7846b3976c9ff0ec66a, type: 2}
     battleUnitParty: 0
     formation: {fileID: 1970402336997018057}
   - baseData: {fileID: 11400000, guid: 71dcf89bed2b6ef48a22d5f78294ae0d, type: 2}
     battleUnitParty: 1
-    formation: {fileID: 8311566662723833397}
-  - baseData: {fileID: 11400000, guid: 71dcf89bed2b6ef48a22d5f78294ae0d, type: 2}
+    formation: {fileID: 2977841806300618787}
+  - baseData: {fileID: 11400000, guid: 69cc59dbfa99ec548a6d8de08e5984ef, type: 2}
     battleUnitParty: 1
-    formation: {fileID: 9182739692834194124}
+    formation: {fileID: 7388756208421588940}
   formations:
   - {fileID: 3467288829917876350}
   - {fileID: 4462502958013205958}
@@ -1599,7 +1600,7 @@ GameObject:
   - component: {fileID: 6991216122783575585}
   m_Layer: 0
   m_Name: Battle Camera
-  m_TagString: Untagged
+  m_TagString: BattleCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2265,7 +2266,7 @@ GameObject:
   - component: {fileID: 4387336467510678526}
   - component: {fileID: 2977841806300618787}
   m_Layer: 0
-  m_Name: FV2H1
+  m_Name: EFV2H1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2560,7 +2561,7 @@ GameObject:
   - component: {fileID: 7432720743062197139}
   - component: {fileID: 7388756208421588940}
   m_Layer: 0
-  m_Name: FV2H2
+  m_Name: EFV2H2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

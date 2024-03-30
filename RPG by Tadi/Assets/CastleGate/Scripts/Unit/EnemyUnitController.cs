@@ -1,31 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class EnemyUnitController : MonoBehaviour
 {
-    [SerializeField] private CharacterSO characterBaseData;
+    [SerializeField] private CharacterSObject characterSO;
 
-    private CharacterController character;
+    private UnitController characterController;
 
-    public CharacterSO CharacterBaseData
+    public CharacterSObject CharacterBaseData
     {
-        get { return characterBaseData; }
+        get { return characterSO; }
         set
         {
-            characterBaseData = value;
-            character.CharacterSO = value;
+            characterSO = value;
         }
     }
 
     private void Awake()
     {
-        character = GetComponentInChildren<CharacterController>();
+        if (characterSO == null)
+        {
+            Debug.LogError("Variable [characterSO] must to be set.");
+
+            return;
+        }
+
+        characterController = GetComponentInChildren<UnitController>();
     }
 
     private void Start()
     {
-        //characterController.CharacterSO = characterBaseData;
+        //characterController.CharacterSO = characterSO;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

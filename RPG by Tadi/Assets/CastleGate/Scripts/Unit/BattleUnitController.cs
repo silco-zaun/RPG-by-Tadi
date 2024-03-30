@@ -2,77 +2,67 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Tadi.Utils;
+using Tadi.Datas.BattleSystem;
+using Tadi.Datas.Unit;
 
 public class BattleUnitController : MonoBehaviour
 {
     // -- Variables --
     [SerializeField] private GameObject selector;
 
-    private BattleUnitMovement battleUnitMovement;
-    private CharacterController characterController;
+    private BattleUnitMovement move;
+    private UnitController unitController;
 
-    private CharacterSO characterBaseData;
-    private Formation formation;
-    private Datas.BattleUnitParty battleUnitParty;
-    private Datas.BattleUnitAction battleUnitAction;
-    private Datas.BattleUnitActionPriority actionPriority = 0; // 0 ~ 10
-    private CombatSkill usingSkill;
+    private UnitParty party;
+    private UnitAction action;
+    private UnitActionPriority actionPriority = 0; // 0 ~ 10
+    private CombatSkill_ usingSkill;
     private List<BattleUnitController> targetControllers = new List<BattleUnitController>();
 
     // -- Properties --
-    public CharacterController CharacterController { get { return characterController; } }
-    public CharacterSO CharacterBaseData
+    public UnitController UnitController { get { return unitController; } }
+    public UnitParty Party { get { return party; } }
+    public UnitAction Action
     {
-        get { return characterBaseData; }
+        get { return action; }
         set
         {
-            characterBaseData = value;
-            characterController.CharacterSO = value;
+            action = value;
+            actionPriority = Battle.GetActionPriority(value);
         }
     }
-    public Formation Formation { get { return formation; } set { formation = value; } }
-    public Datas.BattleUnitParty Party
-    {
-        get { return battleUnitParty; }
-        set
-        {
-            battleUnitParty = value;
-            bool isFacingLeft = battleUnitParty == Datas.BattleUnitParty.EnemyParty;
-            battleUnitMovement.RotateCharacter(isFacingLeft);
-        }
-    }
-    public Datas.BattleUnitAction Action
-    {
-        get { return battleUnitAction; }
-        set
-        {
-            battleUnitAction = value;
-            actionPriority = Datas.Bat.GetActionPriority(value);
-        }
-    }
-    public Datas.BattleUnitActionPriority ActionPriority { get { return actionPriority; } }
+    public UnitActionPriority ActionPriority { get { return actionPriority; } }
     public List<BattleUnitController> Targets { get { return targetControllers; } }
-    public bool IsFainted { get { return characterController.CheckIsFainted(); } }
+    public bool IsFainted { get { return unitController.CheckIsFainted(); } }
 
     private void Awake()
     {
-        battleUnitMovement = GetComponent<BattleUnitMovement>();
-        characterController = GetComponentInChildren<CharacterController>();
+        move = GetComponent<BattleUnitMovement>();
+        unitController = GetComponentInChildren<UnitController>();
+        unitController.OnFainted = SetFaintedUnit;
+    }
 
-        characterController.OnFainted = SetFaintedUnit;
+    public void Init(UnitType type, UnitParty party, int level)
+    {
+        unitController.Init(type, level);
+        this.party = party;
+
+        bool isFacingLeft = party == UnitParty.EnemyParty;
+        move.RotateCharacter(isFacingLeft);
     }
 
     public void ExcuteAction(System.Action OnTurnComplete)
     {
-        if (battleUnitAction == Datas.BattleUnitAction.Attack)
+        if (action == UnitAction.Attack)
         {
             ExcuteAttackAction(targetControllers, OnTurnComplete);
         }
-        else if (battleUnitAction == Datas.BattleUnitAction.Defense)
+        else if (action == UnitAction.Defense)
         {
             ExcuteDefenseAction(OnTurnComplete);
         }
-        else if (battleUnitAction == Datas.BattleUnitAction.Skill)
+        else if (action == UnitAction.Skill)
         {
             ExcuteSkillAction(usingSkill, targetControllers, OnTurnComplete);
         }
@@ -82,70 +72,65 @@ public class BattleUnitController : MonoBehaviour
     {
         foreach (BattleUnitController target in targets)
         {
-            battleUnitMovement.ExcuteAttack(
-                characterController.AttackType,
-                characterController.BulletType,
+            move.ExcuteAttack(
+                unitController.AttackType,
+                unitController.BulletType,
                 target.transform.position,
-                () => { target.TakeDamage(characterController, characterController.DamageType); },
+                () => { target.TakeDamage(unitController, unitController.DamageType); },
                 OnTurnComplete);
         }
     }
 
     public void ExcuteDefenseAction(System.Action OnTurnComplete)
     {
-        battleUnitMovement.PlayDefenseAnimation(true, OnTurnComplete);
+        move.PlayDefenseAnimation(true, OnTurnComplete);
     }
 
-    public void ExcuteSkillAction(CombatSkill skill, List<BattleUnitController> targets, System.Action OnTurnComplete)
+    public void ExcuteSkillAction(CombatSkill_ skill, List<BattleUnitController> targets, System.Action OnTurnComplete)
     {
-        Datas.DamageType damageType = skill.DamageType;
-        Datas.AttackType attackType = skill.AttackType;
+        Tadi.Datas.Combat.DamageType damageType = skill.DamageType;
+        Tadi.Datas.Combat.AttackType attackType = skill.AttackType;
         float skillMultiplier = skill.Power;
-        Datas.BulletType bullet = skill.Bullet;
+        Tadi.Datas.Weapon.BulletType bullet = skill.Bullet;
 
         foreach (BattleUnitController target in targets)
         {
-            battleUnitMovement.ExcuteAttack(
+            move.ExcuteAttack(
                 attackType,
                 bullet,
                 target.transform.position,
-                () => { target.TakeDamage(characterController, damageType, skillMultiplier); },
+                () => { target.TakeDamage(unitController, damageType, skillMultiplier); },
                 OnTurnComplete);
         }
     }
 
-    private void TakeDamage(CharacterController attacker, Datas.DamageType damageType, float skillMultiplier = 1f)
+    private void TakeDamage(UnitController attacker, Tadi.Datas.Combat.DamageType damageType, float skillMultiplier = 1f)
     {
-        if (damageType == Datas.DamageType.None)
+        if (damageType == Tadi.Datas.Combat.DamageType.None)
         {
             Debug.LogError($"Enum variable [DamageType] must to be set.");
 
             return;
         }
 
-        bool defending = battleUnitAction == Datas.BattleUnitAction.Defense;
+        bool defending = action == UnitAction.Defense;
 
-        characterController.TakeDamage(attacker, damageType, defending, skillMultiplier);
+        unitController.TakeDamage(attacker, damageType, defending, skillMultiplier);
     }
 
     public void ResetBattleUnit()
     {
-        if (battleUnitAction == Datas.BattleUnitAction.Defense)
-            battleUnitMovement.PlayDefenseAnimation(false);
+        if (action == UnitAction.Defense)
+            move.PlayDefenseAnimation(false);
 
-        battleUnitAction = Datas.BattleUnitAction.None;
+        action = UnitAction.None;
+        usingSkill = null;
         targetControllers.Clear();
     }
 
     private void SetFaintedUnit()
     {
-        battleUnitMovement.PlayDeathAnimation();
-    }
-
-    // Temp method
-    public void SetCharacterData(int level)
-    {
-        characterController.Level = level;
+        move.PlayDeathAnimation();
     }
 
     public void SetSelector(bool activating)
@@ -153,9 +138,16 @@ public class BattleUnitController : MonoBehaviour
         selector.SetActive(activating);
     }
 
+    public CombatSkill_ GetSkillInfo(int index)
+    {
+        List<CombatSkill_> skills = GetUsableSkills();
+
+        return skills[index];
+    }
+
     public void SetUsingSkill(int index)
     {
-        List<CombatSkill> skills = GetUsableSkills();
+        List<CombatSkill_> skills = GetUsableSkills();
 
         usingSkill = skills[index];
     }
@@ -163,9 +155,9 @@ public class BattleUnitController : MonoBehaviour
     public List<string> GetUsableSkillNameList()
     {
         List<string> names = new List<string>();
-        List<CombatSkill> skills = GetUsableSkills();
+        List<CombatSkill_> skills = GetUsableSkills();
 
-        foreach (CombatSkill skill in skills)
+        foreach (CombatSkill_ skill in skills)
         {
             names.Add(skill.Name);
         }
@@ -173,9 +165,9 @@ public class BattleUnitController : MonoBehaviour
         return names;
     }
 
-    private List<CombatSkill> GetUsableSkills()
+    private List<CombatSkill_> GetUsableSkills()
     {
-        List<CombatSkill> skills = characterBaseData.Skills.Where(s => s.LearnLevel <= characterController.Level).ToList();
+        List<CombatSkill_> skills = null;// = characterSO.Skills.Where(s => s.LearnLevel <= unitController.Level).ToList();
 
         return skills;
     }

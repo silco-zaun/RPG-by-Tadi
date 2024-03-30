@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BattleCamera
   layers:
   - Default
   - TransparentFX
@@ -12,7 +13,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Solid
   - 
   - 
   - 
@@ -52,4 +53,7 @@ TagManager:
     locked: 0
   - name: Bullet
     uniqueID: 916893523
+    locked: 0
+  - name: UI
+    uniqueID: 3951914921
     locked: 0

@@ -1,18 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tadi.Datas.BattleSystem;
+using Tadi.Utils;
 
 public class BattleSystemController : MonoBehaviour
 {
-    private BattleSystemUI battleSystemUI;
-    private BattleSystemUnits battleSystemUnits;
+    private BattleSystemUI ui;
+    private BattleSystemUnits units;
 
     // Bat Info
-    private Datas.BattleState state;
+    private BattleState state;
     private int selectedPlayerUnitIndex = 0;
-    private Datas.BattleUnitAction selectedAction = Datas.BattleUnitAction.None;
-    private Datas.BattleUnitParty targetUnitParty;
+    private UnitAction selectedAction = UnitAction.None;
+    private UnitParty targetUnitParty;
     private int selectedTargetUnitIndex = 0;
     private int selectedSkillIndex = 0;
 
@@ -20,89 +20,97 @@ public class BattleSystemController : MonoBehaviour
     private List<string> unitNames;
     private List<string> actionNames;
 
-    public Datas.BattleState State { get { return state; } }
+    public BattleState State { get { return state; } }
 
     private void Awake()
     {
-        battleSystemUI = GetComponent<BattleSystemUI>();
-        battleSystemUnits = GetComponent<BattleSystemUnits>();
+        ui = GetComponent<BattleSystemUI>();
+        units = GetComponent<BattleSystemUnits>();
     }
 
     private void Start()
     {
-        battleSystemUnits.InitializeBattleUnits();
-
-        unitNames = battleSystemUnits.GetAliveUnitsNames(Datas.BattleUnitParty.PlayerParty);
+        ui.SetDialogText();
+        unitNames = units.GetAliveUnitsNames(UnitParty.PlayerParty);
         actionNames = new List<string>()
         {
-            Datas.BattleUnitActionKor.공격.ToString(),
-            Datas.BattleUnitActionKor.방어.ToString(),
-            Datas.BattleUnitActionKor.스킬.ToString(),
+            UnitActionKor.공격.ToString(),
+            UnitActionKor.방어.ToString(),
+            UnitActionKor.스킬.ToString(),
             //BattleUnitActionKor.아이템.ToString(),
             //BattleUnitActionKor.파티.ToString(),
             //BattleUnitActionKor.진형.ToString(),
-            Datas.BattleUnitActionKor.도망.ToString()
+            UnitActionKor.도망.ToString()
         };
-
-        battleSystemUI.CreateBattleMenu(unitNames, actionNames);
+        ui.CreateBattleMenu(unitNames, actionNames);
         SelectPlayerUnit();
     }
 
     private void SelectPlayerUnit()
     {
-        state = Datas.BattleState.SelectPlayerUnit;
-        int index = battleSystemUI.SetUIToSelectPlayerUnit();
+        ui.TypeSentence("행동할 유닛을 선택합니다.");
+        state = BattleState.SelectPlayerUnit;
+        int index = ui.SetUIToSelectPlayerUnit();
 
-        battleSystemUnits.NavigateUnit(Datas.BattleUnitParty.PlayerParty, index, ref selectedPlayerUnitIndex);
+        units.NavigateUnit(UnitParty.PlayerParty, index, ref selectedPlayerUnitIndex);
     }
 
     private void SelectAction()
     {
-        state = Datas.BattleState.SelectAction;
-        battleSystemUI.SetUIToSelectAction();
+        ui.TypeSentence("행동을 정합니다.");
+        state = BattleState.SelectAction;
+        ui.SetUIToSelectAction();
     }
 
     private void SelectTarget()
     {
-        state = Datas.BattleState.SelectTarget;
+        ui.TypeSentence("타겟을 정합니다.");
+        state = BattleState.SelectTarget;
 
-        if (selectedAction == Datas.BattleUnitAction.Attack)
-            targetUnitParty = Datas.BattleUnitParty.EnemyParty;
+        if (selectedAction == UnitAction.Attack)
+            targetUnitParty = UnitParty.EnemyParty;
 
-        List<string> names = battleSystemUnits.GetAliveUnitsNames(targetUnitParty);
-        battleSystemUI.SetUIToSelectTargetUnit(names);
-        battleSystemUnits.NavigateUnit(targetUnitParty, 0, ref selectedTargetUnitIndex);
-    }
-
-    private void SelectSkillTarget()
-    {
-        state = Datas.BattleState.SelectSkillTarget;
-
-        if (selectedAction == Datas.BattleUnitAction.Skill)
-            targetUnitParty = Datas.BattleUnitParty.EnemyParty;
-
-        List<string> names = battleSystemUnits.GetAliveUnitsNames(targetUnitParty);
-        battleSystemUI.SetUIToSelectSkillTarget(names);
-        battleSystemUnits.NavigateUnit(targetUnitParty, 0, ref selectedTargetUnitIndex);
+        List<string> names = units.GetAliveUnitsNames(targetUnitParty);
+        ui.SetUIToSelectTargetUnit(names);
+        units.NavigateUnit(targetUnitParty, 0, ref selectedTargetUnitIndex);
     }
 
     private void SelectSkill()
     {
-        state = Datas.BattleState.SelectSkill;
+        //ui.TypeSentence("스킬을 선택 합니다.");
+        state = BattleState.SelectSkill;
 
-        List<string> skillNames = battleSystemUnits.GetAliveUnitsSkillNames(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex);
+        List<string> skillNames = units.GetAliveUnitsSkillNames(UnitParty.PlayerParty, selectedPlayerUnitIndex);
 
-        battleSystemUI.SetUIToSelectSkill(skillNames);
+        ui.SetUIToSelectSkill(skillNames);
+
+        CombatSkill_ skill = units.GetSkillInfo(UnitParty.PlayerParty, selectedPlayerUnitIndex, 0);
+        string description = skill.Description;
+        ui.DisplaySentence(description);
+    }
+
+    private void SelectSkillTarget()
+    {
+        ui.TypeSentence("타겟을 정합니다.");
+        state = BattleState.SelectSkillTarget;
+
+        if (selectedAction == UnitAction.Skill)
+            targetUnitParty = UnitParty.EnemyParty;
+
+        List<string> names = units.GetAliveUnitsNames(targetUnitParty);
+        ui.SetUIToSelectSkillTarget(names);
+        units.NavigateUnit(targetUnitParty, 0, ref selectedTargetUnitIndex);
     }
 
     private void ProgressRound()
     {
-        state = Datas.BattleState.ProgressRound;
-        battleSystemUI.SetUIToProgressRound();
-        battleSystemUnits.SetEnemyUnitBehavior();
-        battleSystemUnits.SetTurnOrder();
+        ui.TypeSentence("행동을 시작 합니다.");
+        state = BattleState.ProgressRound;
+        ui.SetUIToProgressRound();
+        units.SetEnemyUnitBehavior();
+        units.SetTurnOrder();
 
-        BattleUnitController unit = battleSystemUnits.GetBehaveUnit();
+        BattleUnitController unit = units.GetBehaveUnit();
         ProgressTurn(unit);
     }
 
@@ -130,15 +138,15 @@ public class BattleSystemController : MonoBehaviour
 
     private void TurnComplete()
     {
-        Datas.BattleCondition condition = battleSystemUnits.CheckBattleCondition();
-        BattleUnitController unit = battleSystemUnits.GetBehaveUnit();
+        BattleCondition condition = units.CheckBattleCondition();
+        BattleUnitController unit = units.GetBehaveUnit();
 
         // Bat Over
-        if (condition != Datas.BattleCondition.None)
+        if (condition != BattleCondition.None)
         {
             BattleOver();
         }
-        // All units behavior completed
+        // All Utils behavior completed
         else if (unit == null)
         {
             RoundComplete();
@@ -164,69 +172,72 @@ public class BattleSystemController : MonoBehaviour
 
     private void BattleOver()
     {
-        Debug.Log("Bat Over");
+        ui.TypeSentence("전투가 종료 되었습니다.");
     }
 
     public void Navigate(Vector2 vector)
     {
-        if (state == Datas.BattleState.SelectPlayerUnit)
+        if (state == BattleState.SelectPlayerUnit)
         {
             if (vector.y != 0)
             {
-                int itemIndex = battleSystemUI.NavigateMenu(vector);
-                battleSystemUnits.NavigateUnit(Datas.BattleUnitParty.PlayerParty, itemIndex, ref selectedPlayerUnitIndex);
+                int itemIndex = ui.NavigateMenu(vector);
+                units.NavigateUnit(UnitParty.PlayerParty, itemIndex, ref selectedPlayerUnitIndex);
             }
         }
-        else if (state == Datas.BattleState.SelectAction)
+        else if (state == BattleState.SelectAction)
         {
             if (vector.y != 0)
             {
-                int itemIndex = battleSystemUI.NavigateMenu(vector);
-                selectedAction = (Datas.BattleUnitAction)(itemIndex + 1);
+                int itemIndex = ui.NavigateMenu(vector);
+                selectedAction = (UnitAction)(itemIndex + 1);
             }
         }
-        else if (state == Datas.BattleState.SelectTarget)
+        else if (state == BattleState.SelectTarget)
         {
             if (vector.y != 0)
             {
-                int itemIndex = battleSystemUI.NavigateMenu(vector);
-                battleSystemUnits.NavigateUnit(targetUnitParty, itemIndex, ref selectedTargetUnitIndex);
+                int itemIndex = ui.NavigateMenu(vector);
+                units.NavigateUnit(targetUnitParty, itemIndex, ref selectedTargetUnitIndex);
             }
         }
-        else if (state == Datas.BattleState.SelectSkill)
+        else if (state == BattleState.SelectSkill)
         {
             if (vector.y != 0)
             {
-                int itemIndex = battleSystemUI.NavigateMenu(vector);
+                selectedSkillIndex = ui.NavigateMenu(vector);
+                CombatSkill_ skill = units.GetSkillInfo(UnitParty.PlayerParty, selectedPlayerUnitIndex, selectedSkillIndex);
+                string description = skill.Description;
+                ui.DisplaySentence(description);
             }
         }
-        else if (state == Datas.BattleState.SelectSkillTarget)
+        else if (state == BattleState.SelectSkillTarget)
         {
             if (vector.y != 0)
             {
-                int itemIndex = battleSystemUI.NavigateMenu(vector);
-                battleSystemUnits.NavigateUnit(targetUnitParty, itemIndex, ref selectedTargetUnitIndex);
+                int itemIndex = ui.NavigateMenu(vector);
+                units.NavigateUnit(targetUnitParty, itemIndex, ref selectedTargetUnitIndex);
             }
         }
     }
 
     public void SubmitUI()
     {
-        if (state == Datas.BattleState.SelectPlayerUnit)
+        if (state == BattleState.SelectPlayerUnit)
         {
-            battleSystemUI.SubmitMenu(state);
+            ui.SubmitMenu(state);
             SelectAction();
         }
-        else if (state == Datas.BattleState.SelectAction)
+        else if (state == BattleState.SelectAction)
         {
-            int itemIndex = battleSystemUI.SubmitMenu(state);
-            selectedAction = (Datas.BattleUnitAction)(itemIndex + 1);
+            int itemIndex = ui.SubmitMenu(state);
+            selectedAction = (UnitAction)(itemIndex + 1);
 
-            if (selectedAction == Datas.BattleUnitAction.Attack)
+            if (selectedAction == UnitAction.Attack)
             {
                 SelectTarget();
             }
-            else if (selectedAction == Datas.BattleUnitAction.Skill)
+            else if (selectedAction == UnitAction.Skill)
             {
                 SelectSkill();
             }
@@ -235,20 +246,20 @@ public class BattleSystemController : MonoBehaviour
                 SetPlayersAction();
             }
         }
-        else if (state == Datas.BattleState.SelectTarget)
+        else if (state == BattleState.SelectTarget)
         {
-            battleSystemUnits.SetTarget(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
+            units.SetTarget(UnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
             SetPlayersAction();
         }
-        else if (state == Datas.BattleState.SelectSkill)
+        else if (state == BattleState.SelectSkill)
         {
-            selectedSkillIndex = battleSystemUI.SubmitMenu(state);
+            selectedSkillIndex = ui.SubmitMenu(state);
             SelectSkillTarget();
         }
-        else if (state == Datas.BattleState.SelectSkillTarget)
+        else if (state == BattleState.SelectSkillTarget)
         {
-            battleSystemUnits.SetUsingSkill(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, selectedSkillIndex);
-            battleSystemUnits.SetTarget(Datas.BattleUnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
+            units.SetUsingSkill(UnitParty.PlayerParty, selectedPlayerUnitIndex, selectedSkillIndex);
+            units.SetTarget(UnitParty.PlayerParty, selectedPlayerUnitIndex, targetUnitParty, selectedTargetUnitIndex);
             SetPlayersAction();
         }
     }
@@ -257,16 +268,16 @@ public class BattleSystemController : MonoBehaviour
     {
         switch (state)
         {
-            case Datas.BattleState.SelectPlayerUnit:
+            case BattleState.SelectPlayerUnit:
                 break;
-            case Datas.BattleState.SelectAction:
+            case BattleState.SelectAction:
                 SelectPlayerUnit();
                 break;
-            case Datas.BattleState.SelectTarget:
-            case Datas.BattleState.SelectSkill:
+            case BattleState.SelectTarget:
+            case BattleState.SelectSkill:
                 SelectAction();
                 break;
-            case Datas.BattleState.SelectSkillTarget:
+            case BattleState.SelectSkillTarget:
                 SelectSkill();
                 break;
         }
@@ -274,10 +285,10 @@ public class BattleSystemController : MonoBehaviour
 
     private void SetPlayersAction()
     {
-        bool allPlayerUnitSelectingAction = battleSystemUnits.SetPlayerUnitAction(selectedPlayerUnitIndex, selectedAction);
-        battleSystemUI.SetUnitMenuItemColorState(ItemInfo.ItemColorState.DeactivatedColor);
+        bool allPlayerUnitSelectingAction = units.SetPlayerUnitAction(selectedPlayerUnitIndex, selectedAction);
+        ui.SetUnitMenuItemColorState(ItemInfo.ItemColorState.DeactivatedColor);
 
-        selectedAction = Datas.BattleUnitAction.None;
+        selectedAction = UnitAction.None;
 
         if (allPlayerUnitSelectingAction)
         {
@@ -294,10 +305,10 @@ public class BattleSystemController : MonoBehaviour
         selectedPlayerUnitIndex = 0;
         selectedTargetUnitIndex = 0;
 
-        battleSystemUnits.ResetBattleUnits();
+        units.ResetBattleUnits();
 
-        unitNames = battleSystemUnits.GetAliveUnitsNames(Datas.BattleUnitParty.PlayerParty);
-        battleSystemUI.CreateBattleMenu(unitNames, actionNames);
+        unitNames = units.GetAliveUnitsNames(UnitParty.PlayerParty);
+        ui.CreateBattleMenu(unitNames, actionNames);
     }
 
 }

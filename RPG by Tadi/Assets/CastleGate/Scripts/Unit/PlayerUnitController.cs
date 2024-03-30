@@ -4,28 +4,27 @@ using UnityEngine;
 
 public class PlayerUnitController : MonoBehaviour
 {
-    [SerializeField] private CharacterSO characterBaseData;
+    [SerializeField] private CharacterSObject characterSO;
 
-    private CharacterController character;
+    private UnitController characterController;
 
-    public CharacterSO CharacterBaseData
-    {
-        get { return characterBaseData; }
-        set
-        {
-            characterBaseData = value;
-            character.CharacterSO = value;
-        }
-    }
+    public CharacterSObject CharacterSO { get { return characterSO; } }
 
     private void Awake()
     {
-        character = GetComponentInChildren<CharacterController>();
+        if (characterSO == null)
+        {
+            Debug.LogError("Variable [characterSO] must to be set.");
+
+            return;
+        }
+
+        characterController = GetComponentInChildren<UnitController>();
     }
 
     private void Start()
     {
-        //characterController.CharacterSO = characterBaseData;
+        //characterController.CharacterSO = characterSO;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

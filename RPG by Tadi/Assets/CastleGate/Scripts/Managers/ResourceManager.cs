@@ -2,76 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using Tadi.Datas.Res;
+using Tadi.Datas.Unit;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    public enum ResourcePrefabIndex
+    public enum ResPrefabIndex
     {
         Bullet
     }
 
     // -- Variables --
-    [SerializeField] private GameObject[] objectPrefabs;
+    [SerializeField] private UnitRes unitRes;
+    [SerializeField] private WeaponRes weaponRes;
 
+    private GameObject[] objectPrefabs;
     private const int POOL_SIZE = 1;
     private int[] poolSizes;
     private List<List<GameObject>> objectPools = new List<List<GameObject>>();
 
     // -- Properties --
     //public GameObject[] BulletPrefabs { get { return objectPrefabs; } }
+    public UnitRes UnitRes { get { return unitRes; } }
+    public WeaponRes WeaponRes { get { return weaponRes; } }
 
     private void Awake()
     {
-        bool check = CheckList();
 
-        if (!check)
-            return;
-    }
-
-    private bool CheckList()
-    {
-        int enumCount = Enum.GetValues(typeof(ResourcePrefabIndex)).Length;
-
-        if (objectPrefabs.Length != enumCount)
-        {
-            Debug.LogError("Resource prefab must to be set.");
-            return false;
-        }
-
-        for (int i = 0; i < objectPrefabs.Length; i++)
-        {
-            // Get the prefab asset path of the nearest instance root
-            string prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(objectPrefabs[i]);
-            string prefabName;
-
-            if (!string.IsNullOrEmpty(prefabPath))
-            {
-                // Extract the prefab name from the path
-                prefabName = System.IO.Path.GetFileNameWithoutExtension(prefabPath);
-            }
-            else
-            {
-                Debug.LogError("The GameObject is not a prefab instance.");
-                return false;
-            }
-
-            string name = ((ResourcePrefabIndex)i).ToString();
-            bool check = prefabName.Equals(name);
-
-            if (!check)
-            {
-                Debug.LogError($"Prefab name and checked name are not matched.\nPrefab name : {prefabName}\nChecked name : {name}");
-                return false;
-            }
-        }
-
-        return true;
     }
 
     void Start()
     {
+        InitAnim();
+        InitObjectPool();
+    }
+
+    private void InitObjectPool()
+    {
+        objectPrefabs = new GameObject[]
+        {
+            weaponRes.Bullet
+        };
+
         poolSizes = new int[objectPrefabs.Length];
 
         for (int i = 0; i < poolSizes.Length; i++)
@@ -93,6 +66,18 @@ public class ResourceManager : MonoBehaviour
 
             objectPools.Add(objectPool);
         }
+    }
+
+    private void InitAnim()
+    {
+        Managers.Ins.Anim.AddAnimEvents(unitRes.KnightAnimator, UnitRes.KNIGHT_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        //Managers.Ins.Anim.AddAnimEvents(unitRes.RogueAnimator, UnitRes.ROGUE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.WizzardAnimator, UnitRes.WIZZARD_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.OrcAnimator, UnitRes.ORC_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.SkeletonMageAnimator, UnitRes.SKELETON_MAGE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.BulletAnimator, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        
     }
 
     public GameObject GetObjectFromPool(int prefabIndex)

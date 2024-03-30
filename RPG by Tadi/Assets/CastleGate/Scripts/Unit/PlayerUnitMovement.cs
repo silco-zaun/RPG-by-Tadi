@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PlayerUnitMovement: MonoBehaviour
 {
-    [SerializeField] private CharacterAnimation characterAnimation;
+    [SerializeField] private UnitAnimation anim;
+    [SerializeField] private LayerMask solidLayer;
 
     public float curMoveSpeed = 5f;
     public const float MOVE_SPEED = 5f;
     public const float DASH_SPEED = 20f;
-
-    private Rigidbody2D rigid;
     private Vector2 moveVec;
     private bool isDashing = false;
 
@@ -20,8 +20,6 @@ public class PlayerUnitMovement: MonoBehaviour
     private void Awake()
     {
         //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
-
-        rigid = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
@@ -31,18 +29,26 @@ public class PlayerUnitMovement: MonoBehaviour
 
     private void LateUpdate()
     {
-        characterAnimation.PlayMoveAnimation(moveVec);
+        anim.PlayMoveAnim(moveVec);
         HandleDefence();
     }
 
     private void HandleMovement()
     {
-        rigid.MovePosition(rigid.position + moveVec * curMoveSpeed * Time.fixedDeltaTime);
+        if (moveVec != Vector2.zero)
+        {
+            Vector3 targetPos = transform.position + (Vector3)moveVec * curMoveSpeed * Time.fixedDeltaTime;
+
+            bool walking = IsWalkable(targetPos);
+
+            if (walking)
+                transform.position = targetPos;
+        }
     }
 
     public void HandleDefence()
     {
-        characterAnimation.PlayDefenseAnimation(IsDefencing);
+        anim.PlayDefenseAnim(IsDefencing);
     }
 
     public void SetMoveVector(Vector2 moveVec)
@@ -52,7 +58,7 @@ public class PlayerUnitMovement: MonoBehaviour
 
     public void Fire()
     {
-        characterAnimation.PlayFireAnimation();
+        anim.PlayFireAnim();
     }
 
     public void Dash()
@@ -61,7 +67,7 @@ public class PlayerUnitMovement: MonoBehaviour
         {
             isDashing = true;
             curMoveSpeed = DASH_SPEED;
-            characterAnimation.PlayTrailAnimation(true);
+            anim.PlayTrailAnim(true);
             StartCoroutine(DashRoutine());
         }
     }
@@ -72,8 +78,18 @@ public class PlayerUnitMovement: MonoBehaviour
         float dashCD = .3f;
         yield return new WaitForSeconds(dashTime);
         curMoveSpeed = MOVE_SPEED;
-        characterAnimation.PlayTrailAnimation(false);
+        anim.PlayTrailAnim(false);
         yield return new WaitForSeconds(dashCD);
         isDashing = false;
+    }
+
+    private bool IsWalkable(Vector3 targetPos)
+    {
+        if (Physics2D.OverlapCircle(targetPos, 0.2f, solidLayer) != null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

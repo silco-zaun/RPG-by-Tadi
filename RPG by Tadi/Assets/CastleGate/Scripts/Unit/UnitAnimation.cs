@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager;
+
 using UnityEngine;
-using UnityEngine.Rendering;
+using Tadi.Datas.Unit;
 
 [RequireComponent(typeof(Animator))]
-public class CharacterAnimation : MonoBehaviour
+public class UnitAnimation : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprBody;
     [SerializeField] private SpriteRenderer sprLeftHand;
-    [SerializeField] private SpriteRenderer sprLeftWeapon;
     [SerializeField] private SpriteRenderer sprRightHand;
+    [SerializeField] private SpriteRenderer sprLeftWeapon;
     [SerializeField] private SpriteRenderer sprRightWeapon;
     [SerializeField] private TrailRenderer trailRender;
 
@@ -18,38 +16,35 @@ public class CharacterAnimation : MonoBehaviour
     private bool isFacingLeft = false;
     private bool isDefending = false;
 
-    //public UnityAnimationEvent OnAnimationStart;
-    //public UnityAnimationEvent OnAnimationComplete;
-
-    public System.Action OnAnimationStart;
-    public System.Action OnAnimationComplete;
+    public System.Action OnAnimStart;
+    public System.Action OnAnimComplete;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimationData(CharacterSO data)
+    public void SetAnimationData(UnitResData res)
     {
-        animator.runtimeAnimatorController = GameManager.Ins.Anim.CharacterAnimator[(int)data.CharacterType - 1];
-        sprBody.sprite = data.SprBody;
-        sprLeftHand.sprite = data.SprLeftHand;
-        sprLeftWeapon.sprite = data.SprLeftWeapon;
-        sprRightHand.sprite = data.SprRightHand;
-        sprRightWeapon.sprite = data.SprRightWeapon;
+        animator.runtimeAnimatorController = res.Animator;
+        sprBody.sprite = res.Body;
+        sprLeftHand.sprite = res.LeftHand;
+        sprRightHand.sprite = res.RightHand;
+        sprLeftWeapon.sprite = res.LeftWeapon;
+        sprRightWeapon.sprite = res.RightWeapon;
     }
 
-    public void OnAttackAnimationStart(string name)
+    public void OnAttackAnimStart(string name)
     {
-        OnAnimationStart?.Invoke();
+        OnAnimStart?.Invoke();
     }
 
-    public void OnAttackAnimationComplete(string name)
+    public void OnAttackAnimComplete(string name)
     {
-        OnAnimationComplete?.Invoke();
+        OnAnimComplete?.Invoke();
     }
 
-    public void PlayMoveAnimation(Vector2 moveVec)
+    public void PlayMoveAnim(Vector2 moveVec)
     {
         animator.SetFloat("Speed", moveVec.magnitude);
 
@@ -59,25 +54,25 @@ public class CharacterAnimation : MonoBehaviour
 
             if (isLeftDir != isFacingLeft)
             {
-                RotateCharacter(isFacingLeft);
+                RotateCharacter(isLeftDir);
             }
         }
     }
 
-    public void PlayFireAnimation(System.Action OnAnimationStart, System.Action OnAnimationComplete)
+    public void PlayFireAnim(System.Action OnAnimStart, System.Action OnAnimComplete)
     {
-        PlayFireAnimation();
+        PlayFireAnim();
 
-        this.OnAnimationStart = OnAnimationStart;
-        this.OnAnimationComplete = OnAnimationComplete;
+        this.OnAnimStart = OnAnimStart;
+        this.OnAnimComplete = OnAnimComplete;
     }
 
-    public void PlayFireAnimation()
+    public void PlayFireAnim()
     {
         animator.SetTrigger("Attack");
     }
 
-    public void PlayDefenseAnimation(bool defending)
+    public void PlayDefenseAnim(bool defending)
     {
         // 방어 상태가 바뀌었으면
         if (defending != isDefending)
@@ -92,12 +87,12 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public void PlayDeathAnimation()
+    public void PlayDeathAnim()
     {
         animator.SetTrigger("Death");
     }
 
-    public void PlayTrailAnimation(bool emitting)
+    public void PlayTrailAnim(bool emitting)
     {
         trailRender.emitting = emitting;
     }
@@ -111,12 +106,10 @@ public class CharacterAnimation : MonoBehaviour
         if (isFacingLeft)
         {
             transform.rotation = Quaternion.Euler(0, -180, 0);
-            //weaponCollider.transform.rotation = Quaternion.Euler(0, -180, 0);
         }
         else
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            //weaponCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

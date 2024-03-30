@@ -47,22 +47,22 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    public void OnExplosionAnimationStart(string name)
+    public void OnExplosionAnimStart(string name)
     {
 
     }
 
-    public void OnExplosionAnimationComplete(string name)
+    public void OnExplosionAnimComplete(string name)
     {
         // Arrived at Slide Target Position
-        GameManager.Ins.Res.ReturnObjectToPool(transform.gameObject);
+        Managers.Ins.Res.ReturnObjectToPool(transform.gameObject);
         animator.SetBool("Explosion", false);
         OnFireComplete?.Invoke();
     }
 
-    public void SetBullet(Datas.BulletType type, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    public void SetBullet(Tadi.Datas.Weapon.BulletType type, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
-        animator.runtimeAnimatorController = GameManager.Ins.Anim.BulletAnimator[(int)type - 1];
+        animator.runtimeAnimatorController = Managers.Ins.Anim.BulletAnimator[(int)type - 1];
 
         transform.position = position;
         this.fireTargetPosition = fireTargetPosition;

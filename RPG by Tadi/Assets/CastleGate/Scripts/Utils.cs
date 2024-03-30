@@ -1,87 +1,62 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
+using Tadi.Datas.BattleSystem;
 
-namespace Datas
+namespace Tadi.Utils
 {
-    public enum BattleState
+    public static class Utils
     {
-        SelectPlayerUnit, SelectAction, SelectTarget, SelectSkill, SelectSkillTarget, ProgressRound
+        public static Vector3 GetRandomDir()
+        {
+            return new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        }
+
+        public static Vector3 GetRandomXDir()
+        {
+            int value = Random.Range(0, 2) * 2 - 1;
+            Vector3 vector = new Vector3(value, 0);
+
+            return vector;
+        }
+
+        public static Vector3 GetRandomStraightDir()
+        {
+            int value = Random.Range(0, 2) * 2 - 1;
+            Vector3 vector = Random.Range(0, 2) == 0 ? new Vector3(value, 0) : new Vector3(0, value);
+
+            return vector;
+        }
+
+        public static Vector3 GetRandomStraightDir(Vector3 dir)
+        {
+            if (Random.Range(0, 2) == 0)
+                dir.x = 0f;
+            else
+                dir.y = 0f;
+
+            return dir.normalized;
+        }
+
+        public static Vector3 GetStraightDir(Vector3 dir)
+        {
+            if (Mathf.Abs(dir.x) < Mathf.Abs(dir.y))
+                dir.x = 0f;
+            else
+                dir.y = 0f;
+
+            return dir.normalized;
+        }
     }
 
-    public enum BattleCondition
-    {
-        None, Victory, Defeated, Draw
-    }
-
-    public enum BattleHorizontalLine
-    {
-        First, Second, Third
-    }
-
-    public enum BattleVertialLine
-    {
-        First, Second
-    }
-
-    public enum BattleFormationRange
-    {
-        Single, Front, Rear, FirstLine, SecondLine, ThirdLine, Party, All
-    }
-
-    public enum BattleUnitParty
-    {
-        PlayerParty, EnemyParty
-    }
-
-    public enum BattleUnitAction
-    {
-        None,
-        Attack,
-        Defense,
-        Skill,
-        //Item,
-        //Party,
-        //Formation,
-        Escape
-    }
-
-    public enum BattleUnitActionKor
-    {
-        대기,
-        공격,
-        방어,
-        스킬,
-        //아이템,
-        //파티,
-        //진형,
-        도망
-    }
-
-    public enum BattleUnitActionPriority
-    {
-        NFive = -5,
-        NFour,
-        NThree,
-        NTwo,
-        NOne,
-        Zero,
-        One,
-        Tow,
-        Three,
-        Four,
-        Five,
-    }
-
-    public static class Bat
+    public static class Battle
     {
         // Bat info
-        public const int HORIZONTAL_LINE_UNIT_COUNT = 2;
-        public const int VERTICAL_LINE_UNIT_COUNT = 3;
+        public const int PLAYER_UNIT_COUNT = 2;
+        public const int PARTY_PLAYER_COUNT = 3;
         public const int PARTY_UNIT_COUNT = 6;
-        public const int COMBAT_SKILL_MAX_LEVEL = 3;
 
-        // CharacterType stat
+        // UnitType stat
         private const int MIN_LEVEL = 1;
         private const int MAX_LEVEL = 100;
         private const float MIN_BASE_STAT = 1f;
@@ -109,7 +84,7 @@ namespace Datas
             float evStat = ivStat; // Temp value
             float nature = 1f; // Temp value
 
-            float stat = (((baseStat * 2f + ivStat + evStat) * level) / 100f + 5f) * nature;
+            float stat = ((baseStat * 2f + ivStat + evStat) * level / 100f + 5f) * nature;
 
             return stat;
         }
@@ -128,15 +103,15 @@ namespace Datas
             return maxStat;
         }
 
-        public static float GetDamage(Datas.DamageType attackType, int attackersLevel, float attackersAttack, float defendersDefense, float skillMultiplier, bool defending)
+        public static float GetDamage(Tadi.Datas.Combat.DamageType attackType, int attackersLevel, float attackersAttack, float defendersDefense, float skillMultiplier, bool defending)
         {
             float type = 1f;
 
             switch (attackType)
             {
-                case Datas.DamageType.Physical:
+                case Tadi.Datas.Combat.DamageType.Physical:
                     break;
-                case Datas.DamageType.Magic:
+                case Tadi.Datas.Combat.DamageType.Magic:
                     type = 0.8f;
                     defending = false;
                     break;
@@ -236,46 +211,46 @@ namespace Datas
             return evasion;
         }
 
-        public static BattleUnitActionPriority GetActionPriority(BattleUnitAction action)
+        public static UnitActionPriority GetActionPriority(UnitAction action)
         {
-            BattleUnitActionPriority priority;
+            UnitActionPriority priority;
 
             switch (action)
             {
-                case BattleUnitAction.Defense:
-                    priority = BattleUnitActionPriority.Five;
+                case UnitAction.Defense:
+                    priority = UnitActionPriority.Five;
                     break;
-                case BattleUnitAction.Attack:
-                case BattleUnitAction.Escape:
+                case UnitAction.Attack:
+                case UnitAction.Escape:
                 //case BattleUnitAction.Formation:
                 //case BattleUnitAction.Item:
                 //case BattleUnitAction.Party:
-                case BattleUnitAction.Skill:
+                case UnitAction.Skill:
                 default:
-                    priority = BattleUnitActionPriority.Zero;
+                    priority = UnitActionPriority.Zero;
                     break;
             }
 
             return priority;
         }
 
-        public static int GetPriority(BattleUnitAction action, float speed)
+        public static int GetPriority(UnitAction action, float speed)
         {
             int basePriority = 100;
             int speedFactor = 1;
 
             switch (action)
             {
-                case BattleUnitAction.Defense:
+                case UnitAction.Defense:
                     basePriority = 0;
                     speedFactor = 0;
                     break;
-                case BattleUnitAction.Attack:
-                case BattleUnitAction.Escape:
+                case UnitAction.Attack:
+                case UnitAction.Escape:
                 //case BattleUnitAction.Formation:
                 //case BattleUnitAction.Item:
                 //case BattleUnitAction.Party:
-                case BattleUnitAction.Skill:
+                case UnitAction.Skill:
                 default:
                     break;
             }
@@ -283,6 +258,55 @@ namespace Datas
             int priority = basePriority - (speedFactor * (int)speed);
 
             return priority;
+        }
+    }
+
+    public class ObjectPool : MonoBehaviour
+    {
+        // Prefab to pool
+        public GameObject prefab;
+
+        // Initial pool size
+        public int poolSize = 10;
+
+        // List to store pooled objects
+        private List<GameObject> pooledObjects = new List<GameObject>();
+
+        // Initialize the object pool
+        private void Start()
+        {
+            for (int i = 0; i < poolSize; i++)
+            {
+                // Instantiate objects and add them to the pool
+                GameObject obj = Instantiate(prefab);
+                obj.SetActive(false);
+                pooledObjects.Add(obj);
+            }
+        }
+
+        // Get an object from the pool
+        public GameObject GetObject()
+        {
+            // Search for an inactive object in the pool
+            foreach (GameObject obj in pooledObjects)
+            {
+                if (!obj.activeInHierarchy)
+                {
+                    obj.SetActive(true);
+                    return obj;
+                }
+            }
+
+            // If no inactive objects found, create a new one and add it to the pool
+            GameObject newObj = Instantiate(prefab);
+            pooledObjects.Add(newObj);
+            return newObj;
+        }
+
+        // Return an object to the pool
+        public void ReturnObject(GameObject obj)
+        {
+            obj.SetActive(false);
         }
     }
 }

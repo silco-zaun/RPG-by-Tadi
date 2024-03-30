@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class Managers : MonoBehaviour
 {
-    public static GameManager instance;
+    public static Managers instance;
+    private GameStateManager gameStateManager;
+    private UnitManager unitManager;
     private ResourceManager resourceManager;
     private AnimationManager animationManager;
+    private DialogueManager dialogManager;
 
-    public static GameManager Ins { get { return instance; } }
+    public static Managers Ins { get { return instance; } }
+    public GameStateManager Stat { get { return gameStateManager; } }
+    public UnitManager Unit { get { return unitManager; } }
     public ResourceManager Res { get { return resourceManager; } }
     public AnimationManager Anim { get { return animationManager; } }
+    public DialogueManager Dlg { get { return dialogManager; } }
 
     private void Awake()
     {
@@ -36,7 +42,9 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
+        gameStateManager = GetComponent<GameStateManager>();
         resourceManager = GetComponent<ResourceManager>();
         animationManager = GetComponent<AnimationManager>();
+        dialogManager = GetComponent<DialogueManager>();
     }
 }

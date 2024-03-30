@@ -1,5 +1,5 @@
 
-namespace Datas
+namespace Tadi.Datas.Weapon
 {
     public enum BulletType
     {

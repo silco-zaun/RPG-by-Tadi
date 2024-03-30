@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BattleUnitMovement : MonoBehaviour
 {
-    private CharacterAnimation characterAnimation;
+    private UnitAnimation characterAnimation;
     //private GameObject targetUnitObject;
 
     private State state;
@@ -33,7 +33,7 @@ public class BattleUnitMovement : MonoBehaviour
     private void Awake()
     {
         actorPosition = transform.position;
-        characterAnimation = GetComponentInChildren<CharacterAnimation>();
+        characterAnimation = GetComponentInChildren<UnitAnimation>();
     }
 
     // Start is called before the first frame update
@@ -59,15 +59,14 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
-    public void ExcuteAttack(Datas.AttackType attackType, Datas.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteAttack(Tadi.Datas.Combat.AttackType attackType, Tadi.Datas.Weapon.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
-        if (attackType == Datas.AttackType.Melee)
+        if (attackType == Tadi.Datas.Combat.AttackType.Melee)
         {
             ExcuteMeleeAttack(targetPosition, OnAttackTarget, OnTurnComplete);
         }
         else if (
-            attackType == Datas.AttackType.Ranged ||
-            attackType == Datas.AttackType.Magic)
+            attackType == Tadi.Datas.Combat.AttackType.Ranged)
         {
             ExcuteRangedAttack(bulletType, targetPosition, OnAttackTarget, OnTurnComplete);
         }
@@ -85,7 +84,7 @@ public class BattleUnitMovement : MonoBehaviour
                 // Arrived at Target, attack him
                 state = State.Busy;
 
-                characterAnimation.PlayFireAnimation(null,
+                characterAnimation.PlayFireAnim(null,
                     () =>
                     {
                         OnAttackTarget();
@@ -96,19 +95,19 @@ public class BattleUnitMovement : MonoBehaviour
                                 {
                                     // Slide back completed, back to idle
                                     state = State.Idle;
-                                    characterAnimation.PlayMoveAnimation(Vector2.zero);
+                                    characterAnimation.PlayMoveAnim(Vector2.zero);
                                     OnTurnComplete();
                                 });
                     });
             });
     }
 
-    public void ExcuteRangedAttack(Datas.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteRangedAttack(Tadi.Datas.Weapon.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
         // Attack him
         state = State.FireBullet;
 
-        characterAnimation.PlayFireAnimation(null,
+        characterAnimation.PlayFireAnim(null,
             () =>
             {
                 FireBulletToTarget(bulletType, targetPosition,
@@ -142,25 +141,25 @@ public class BattleUnitMovement : MonoBehaviour
         state = State.Sliding;
     }
 
-    private void FireBulletToTarget(Datas.BulletType bulletType, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    private void FireBulletToTarget(Tadi.Datas.Weapon.BulletType bulletType, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
-        bullet = GameManager.Ins.Res.GetObjectFromPool((int)ResourceManager.ResourcePrefabIndex.Bullet).transform;
+        bullet = Managers.Ins.Res.GetObjectFromPool((int)ResourceManager.ResPrefabIndex.Bullet).transform;
         bullet.GetComponent<BulletController>().SetBullet(bulletType, transform.position, fireTargetPosition, OnFireComplete);
     }
 
     public void PlayDeathAnimation()
     {
-        characterAnimation.PlayDeathAnimation();
+        characterAnimation.PlayDeathAnim();
     }
 
     public void PlayDefenseAnimation(bool defending)
     {
-        characterAnimation.PlayDefenseAnimation(defending);
+        characterAnimation.PlayDefenseAnim(defending);
     }
 
     public void PlayDefenseAnimation(bool defending, System.Action OnTurnComplete)
     {
-        characterAnimation.PlayDefenseAnimation(defending);
+        characterAnimation.PlayDefenseAnim(defending);
         OnTurnComplete();
     }
 

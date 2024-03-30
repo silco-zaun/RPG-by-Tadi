@@ -4,7 +4,7 @@
 //     version 1.7.0
 //     from Assets/CastleGate/InputSystem/Player Controls.inputactions
 //
-//     Changes to this file may cause incorrect behaveUnitObject and will be lost if
+//     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
@@ -21,52 +21,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public @PlayerControls()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""skillName"": ""Player Controls"",
+    ""name"": ""Player Controls"",
     ""maps"": [
         {
-            ""skillName"": ""Player"",
-            ""id"": ""fc6b4e52-b5f0-473a-a54e-b0b9b20e52c7"",
+            ""name"": ""Player"",
+            ""id"": ""81341f8d-b1f6-434d-8743-6be83e06c14e"",
             ""actions"": [
                 {
-                    ""skillName"": ""Move"",
-                    ""characterType"": ""Value"",
-                    ""id"": ""895748a5-26cd-4bf9-99d7-745b5d4b6263"",
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""4e2d55d9-1e6e-4adf-a065-19017ed2b831"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""skillName"": ""Look"",
-                    ""characterType"": ""Value"",
-                    ""id"": ""75c5b6c5-aac2-47fd-9290-77953fea81f7"",
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""771d6114-6a8f-4d46-9de1-66dd4e133ec2"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""skillName"": ""FireBulletToTarget"",
-                    ""characterType"": ""Button"",
-                    ""id"": ""f8d29bd8-7c86-408e-b4b2-a64a950da71b"",
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""0092caa0-9481-4ff9-98cb-6a6b90b023e0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""Dash"",
-                    ""characterType"": ""Button"",
-                    ""id"": ""1609ae85-1e80-480b-87ea-48ede2e77fa1"",
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""125dd607-4412-4128-be6d-02c2c6ab9058"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""Defense"",
-                    ""characterType"": ""Button"",
-                    ""id"": ""7f05cbb3-0b72-4ece-abd1-414c922f3592"",
+                    ""name"": ""Defense"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7ef114f-1ba7-4443-a561-945f40dcc8c2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -75,338 +75,338 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""978bfe49-cc26-4a3d-ab7b-7d7a29327403"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""WASD"",
+                    ""name"": ""WASD"",
                     ""id"": ""00ca640b-d935-4593-8157-c05846ea39b3"",
                     ""path"": ""Dpad"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""e2062cb9-1b15-46a2-838c-2f8d72a0bdd9"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""8180e8bd-4097-4f4e-ab88-4523101a6ce9"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""320bffee-a40b-4347-ac70-c210eb8bc73a"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""1c5327b5-f71c-4f60-99c7-4e737386f1d1"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""d2581a9b-1d11-4566-b27d-b92aff5fabbc"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""2e46982e-44cc-431b-9f0b-c11910bf467a"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""fcfe95b8-67b9-4526-84b5-5d0bc98d6400"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""77bff152-3580-4b21-b6de-dcd0c7e41164"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8"",
                     ""path"": ""<XRController>/{Primary2DAxis}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""3ea4d645-4504-4529-b061-ab81934c3752"",
                     ""path"": ""<Joystick>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""Move"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""c1f7a91b-d0fd-4a62-997e-7fb9b69bf235"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""Look"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse;Touch"",
-                    ""battleUnitAction"": ""Look"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""3e5f5442-8668-4b27-a940-df99bad7e831"",
                     ""path"": ""<Joystick>/{Hatswitch}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""Look"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""FireBulletToTarget"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""FireBulletToTarget"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""886e731e-7071-4ae4-95c0-e61739dad6fd"",
                     ""path"": ""<Touchscreen>/primaryTouch/tap"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Touch"",
-                    ""battleUnitAction"": ""FireBulletToTarget"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""ee3d0cd2-254e-47a7-a8cb-bc94d9658c54"",
                     ""path"": ""<Joystick>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""FireBulletToTarget"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""8255d333-5683-4943-a58a-ccb207ff1dce"",
                     ""path"": ""<XRController>/{PrimaryAction}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""battleUnitAction"": ""FireBulletToTarget"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
-                    ""id"": ""580160b5-5502-4c8d-9b06-12aeaaf7ba15"",
+                    ""name"": """",
+                    ""id"": ""a117a591-91bf-449d-83c4-b34a415e9079"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""battleUnitAction"": ""Dash"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
-                    ""id"": ""185b5480-7624-4493-ac56-748f6123e928"",
+                    ""name"": """",
+                    ""id"": ""c708c800-e10f-4f20-aae4-3d908b6548f5"",
                     ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Defense"",
+                    ""groups"": """",
+                    ""action"": ""Defense"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
             ]
         },
         {
-            ""skillName"": ""UI"",
-            ""id"": ""08a533c5-22e5-4f3a-b6c0-06daa2ada8ec"",
+            ""name"": ""UI"",
+            ""id"": ""6f0f98a9-cfd0-40b9-8933-eeb54f131e80"",
             ""actions"": [
                 {
-                    ""skillName"": ""NavigateMenu"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""2d6efeac-85a8-4941-8d0a-2c26e7ed3edb"",
+                    ""name"": ""Navigate"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""f9e9617a-76f9-45af-ae14-070d0e8137a6"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""Submit"",
-                    ""characterType"": ""Button"",
-                    ""id"": ""ab747359-98cc-4d60-8b71-36853ef7be9a"",
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c642dcc-01ed-43be-ad40-aa76e4f7c61d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""Cancel"",
-                    ""characterType"": ""Button"",
-                    ""id"": ""e93c3c3b-5793-4b54-a8d0-575fc963b737"",
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d2d4954-06a2-4ef0-a8a0-e52bf96e056c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""Point"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""6985110f-879a-4ca8-b80c-06d4ea536fd5"",
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a33967af-dd0f-4d55-a557-74b9a1ca7a0a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""skillName"": ""Click"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""ffbcf9eb-303a-4f73-a921-daa5f1a73b48"",
+                    ""name"": ""Click"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e80c4907-2881-46c5-a947-68acd659c3bf"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""skillName"": ""ScrollWheel"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""2313bb40-3a68-4624-ab8f-2de7b082e4a3"",
+                    ""name"": ""ScrollWheel"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c68a6882-fced-4af3-be5e-23f93e57f64a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""MiddleClick"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""79994d36-3585-4841-85b1-236231eec069"",
+                    ""name"": ""MiddleClick"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b9702fc6-9156-4f2c-a222-0c9122761a3d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""RightClick"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""1fc3bfdb-0449-499e-8191-1767afae865f"",
+                    ""name"": ""RightClick"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6c699434-1ef9-4b58-a623-eea257e3720b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""TrackedDevicePosition"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""018fbc24-a8aa-47c8-bae8-0b7465a3098e"",
+                    ""name"": ""TrackedDevicePosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e9cfc1c5-f9e1-4683-9215-827639ef12a2"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""skillName"": ""TrackedDeviceOrientation"",
-                    ""characterType"": ""PassThrough"",
-                    ""id"": ""ac5b9b4f-75cf-4823-9fb9-fea6a48a7079"",
+                    ""name"": ""TrackedDeviceOrientation"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""71163ab6-bdeb-4df1-8b66-b29f9e30bd94"",
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -415,420 +415,420 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""skillName"": ""Gamepad"",
+                    ""name"": ""Gamepad"",
                     ""id"": ""809f371f-c5e2-4e7a-83a1-d867598f40dd"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""14a5d6e8-4aaf-4119-a9ef-34b8c2c548bf"",
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""9144cbe6-05e1-4687-a6d7-24f99d23dd81"",
                     ""path"": ""<Gamepad>/rightStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""2db08d65-c5fb-421b-983f-c71163608d67"",
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""58748904-2ea9-4a80-8579-b500e6a76df8"",
                     ""path"": ""<Gamepad>/rightStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""8ba04515-75aa-45de-966d-393d9bbd1c14"",
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""712e721c-bdfb-4b23-a86c-a0d9fcfea921"",
                     ""path"": ""<Gamepad>/rightStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""fcd248ae-a788-4676-a12e-f4d81205600b"",
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""1f04d9bc-c50b-41a1-bfcc-afb75475ec20"",
                     ""path"": ""<Gamepad>/rightStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""fb8277d4-c5cd-4663-9dc7-ee3f0b506d90"",
                     ""path"": ""<Gamepad>/dpad"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""Joystick"",
+                    ""name"": ""Joystick"",
                     ""id"": ""e25d9774-381c-4a61-b47c-7b6b299ad9f9"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""3db53b26-6601-41be-9887-63ac74e79d19"",
                     ""path"": ""<Joystick>/stick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""0cb3e13e-3d90-4178-8ae6-d9c5501d653f"",
                     ""path"": ""<Joystick>/stick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""0392d399-f6dd-4c82-8062-c1e9c0d34835"",
                     ""path"": ""<Joystick>/stick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""942a66d9-d42f-43d6-8d70-ecb4ba5363bc"",
                     ""path"": ""<Joystick>/stick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""Keyboard"",
+                    ""name"": ""Keyboard"",
                     ""id"": ""ff527021-f211-4c02-933e-5976594c46ed"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""563fbfdd-0f09-408d-aa75-8642c4f08ef0"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""up"",
+                    ""name"": ""up"",
                     ""id"": ""eb480147-c587-4a33-85ed-eb0ab9942c43"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""2bf42165-60bc-42ca-8072-8c13ab40239b"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""down"",
+                    ""name"": ""down"",
                     ""id"": ""85d264ad-e0a0-4565-b7ff-1a37edde51ac"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""74214943-c580-44e4-98eb-ad7eebe17902"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""left"",
+                    ""name"": ""left"",
                     ""id"": ""cea9b045-a000-445b-95b8-0c171af70a3b"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""8607c725-d935-4808-84b1-8354e29bab63"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": ""right"",
+                    ""name"": ""right"",
                     ""id"": ""4cda81dc-9edd-4e03-9d7c-a71a14345d0b"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""NavigateMenu"",
+                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""9e92bb26-7e3b-4ec4-b06b-3c8f8e498ddc"",
                     ""path"": ""*/{Submit}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
-                    ""battleUnitAction"": ""Submit"",
+                    ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""82627dcc-3b13-4ba9-841d-e4b746d6553e"",
                     ""path"": ""*/{Cancel}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
-                    ""battleUnitAction"": ""Cancel"",
+                    ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""c52c8e0b-8179-41d3-b8a1-d149033bbe86"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Point"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""e1394cbc-336e-44ce-9ea8-6007ed6193f7"",
                     ""path"": ""<Pen>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Point"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""5693e57a-238a-46ed-b5ae-e64e6e574302"",
                     ""path"": ""<Touchscreen>/touch*/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Touch"",
-                    ""battleUnitAction"": ""Point"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""4faf7dc9-b979-4210-aa8c-e808e1ef89f5"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Click"",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""8d66d5ba-88d7-48e6-b1cd-198bbfef7ace"",
                     ""path"": ""<Pen>/tip"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""Click"",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""47c2a644-3ebc-4dae-a106-589b7ca75b59"",
                     ""path"": ""<Touchscreen>/touch*/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Touch"",
-                    ""battleUnitAction"": ""Click"",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""bb9e6b34-44bf-4381-ac63-5aa15d19f677"",
                     ""path"": ""<XRController>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""battleUnitAction"": ""Click"",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""38c99815-14ea-4617-8627-164d27641299"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""ScrollWheel"",
+                    ""action"": ""ScrollWheel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""24066f69-da47-44f3-a07e-0015fb02eb2e"",
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""MiddleClick"",
+                    ""action"": ""MiddleClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""4c191405-5738-4d4b-a523-c6a301dbf754"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""battleUnitAction"": ""RightClick"",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""7236c0d9-6ca3-47cf-a6ee-a97f5b59ea77"",
                     ""path"": ""<XRController>/devicePosition"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""battleUnitAction"": ""TrackedDevicePosition"",
+                    ""action"": ""TrackedDevicePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""skillName"": """",
+                    ""name"": """",
                     ""id"": ""23e01e3a-f935-4948-8d8b-9bcac77714fb"",
                     ""path"": ""<XRController>/deviceRotation"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""battleUnitAction"": ""TrackedDeviceOrientation"",
+                    ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -837,7 +837,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""skillName"": ""Keyboard&Mouse"",
+            ""name"": ""Keyboard&Mouse"",
             ""bindingGroup"": ""Keyboard&Mouse"",
             ""devices"": [
                 {
@@ -853,7 +853,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""skillName"": ""Gamepad"",
+            ""name"": ""Gamepad"",
             ""bindingGroup"": ""Gamepad"",
             ""devices"": [
                 {
@@ -864,7 +864,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""skillName"": ""Touch"",
+            ""name"": ""Touch"",
             ""bindingGroup"": ""Touch"",
             ""devices"": [
                 {
@@ -875,7 +875,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""skillName"": ""Joystick"",
+            ""name"": ""Joystick"",
             ""bindingGroup"": ""Joystick"",
             ""devices"": [
                 {
@@ -886,7 +886,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""skillName"": ""XR"",
+            ""name"": ""XR"",
             ""bindingGroup"": ""XR"",
             ""devices"": [
                 {
@@ -902,12 +902,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("FireBulletToTarget", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-        m_Player_Defence = m_Player.FindAction("Defense", throwIfNotFound: true);
+        m_Player_Defense = m_Player.FindAction("Defense", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Navigate = m_UI.FindAction("NavigateMenu", throwIfNotFound: true);
+        m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -982,7 +982,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Dash;
-    private readonly InputAction m_Player_Defence;
+    private readonly InputAction m_Player_Defense;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -991,7 +991,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
-        public InputAction @Defence => m_Wrapper.m_Player_Defence;
+        public InputAction @Defense => m_Wrapper.m_Player_Defense;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1013,9 +1013,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
-            @Defence.started += instance.OnDefence;
-            @Defence.performed += instance.OnDefence;
-            @Defence.canceled += instance.OnDefence;
+            @Defense.started += instance.OnDefense;
+            @Defense.performed += instance.OnDefense;
+            @Defense.canceled += instance.OnDefense;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1032,9 +1032,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
-            @Defence.started -= instance.OnDefence;
-            @Defence.performed -= instance.OnDefence;
-            @Defence.canceled -= instance.OnDefence;
+            @Defense.started -= instance.OnDefense;
+            @Defense.performed -= instance.OnDefense;
+            @Defense.canceled -= instance.OnDefense;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1221,7 +1221,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnDefence(InputAction.CallbackContext context);
+        void OnDefense(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
