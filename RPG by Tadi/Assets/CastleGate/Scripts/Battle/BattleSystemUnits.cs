@@ -4,22 +4,91 @@ using System.Linq;
 using UnityEngine;
 using Tadi.Datas.BattleSystem;
 using Tadi.Datas.Unit;
+using Tadi.Utils;
+using Tadi.UI.ScrollView;
 
 public class BattleSystemUnits : MonoBehaviour
 {
-    private List<BattleUnitController> battleUnits = new List<BattleUnitController>();
-    Queue<BattleUnitController> turnOrder = new Queue<BattleUnitController>();
+    [SerializeField] private List<BattleUnitInfo> playersBattleUnitInfo;
+    [SerializeField] private List<BattleUnitInfo> enemysBattleUnitInfo;
+    [SerializeField] private List<GameObject> playerUnitPos;
+    [SerializeField] private List<GameObject> enemyUnitPos;
+
+    private List<BattleUnitController> playerBattleUnits = new List<BattleUnitController>();
+    private List<BattleUnitController> enemyBattleUnits = new List<BattleUnitController>();
+    private Queue<BattleUnitController> turnOrder = new Queue<BattleUnitController>();
+
+    public void InitBattleUnit()
+    {
+        InitBattleUnits(playersBattleUnitInfo, ref playerBattleUnits, ref playerUnitPos);
+        InitBattleUnits(enemysBattleUnitInfo, ref enemyBattleUnits, ref enemyUnitPos);
+    }
+
+    //private void AddBattleUnit(BattleUnitInfo unitInfo, List<GameObject> unitPos, int unitPosIdx, int partnerPosIdx = 0)
+    private void InitBattleUnits(List<BattleUnitInfo> unitsInfo, ref List<BattleUnitController> battleUnits, ref List<GameObject> unitPos)
+    {
+        ReturnBattleUnits(ref battleUnits);
+
+        for (int i = 0; i < unitsInfo.Count; i++)
+        {
+            int front = i * Battle.PLAYER_UNIT_COUNT;
+            int rear = i * Battle.PLAYER_UNIT_COUNT + 1;
+            int unitPosIdx;
+            int partnerPosIdx;
+            
+            if (enemysBattleUnitInfo[i].UnitPos == BattlePos.Front)
+            {
+                unitPosIdx = front;
+                partnerPosIdx = rear;
+            }
+            else
+            {
+                unitPosIdx = rear;
+                partnerPosIdx = front;
+            }
+
+            GameObject unit = Managers.Ins.Unit.GetBattleUnitObject();
+            unit.transform.SetParent(unitPos[unitPosIdx].transform);
+            unit.transform.localPosition = Vector3.zero;
+
+            BattleUnitController unitController = unit.GetComponent<BattleUnitController>();
+            unitController.Init(unitsInfo[i].UnitType, unitsInfo[i].Party, 1);
+            battleUnits.Add(unitController);
+
+            if (unitsInfo[i].PartnerType != UnitType.None)
+            {
+                GameObject partner = Managers.Ins.Unit.GetBattleUnitObject();
+                partner.transform.SetParent(unitPos[partnerPosIdx].transform);
+                partner.transform.localPosition = Vector3.zero;
+
+                BattleUnitController partnerController = partner.GetComponent<BattleUnitController>();
+                partnerController.Init(unitsInfo[i].PartnerType, unitsInfo[i].Party, 1);
+                battleUnits.Add(partnerController);
+            }
+        }
+    }
+
+    public void ReturnBattleUnits(ref List<BattleUnitController> battleUnits)
+    {
+        foreach (BattleUnitController battleUnit in battleUnits)
+        {
+            Managers.Ins.Unit.ReturnBattleUnitObject(battleUnit.gameObject);
+        }
+
+        battleUnits.Clear();
+    }
 
     public void ResetBattleUnits()
     {
-        battleUnits.ForEach(u => u.ResetBattleUnit());
+        playerBattleUnits.ForEach(u => u.ResetBattleUnit());
+        enemyBattleUnits.ForEach(u => u.ResetBattleUnit());
     }
 
     public void SetTurnOrder()
     {
         List<BattleUnitController> units =
-            battleUnits.OrderByDescending(
-            u => u.UnitController.Speed).OrderByDescending(
+            playerBattleUnits.Concat(enemyBattleUnits).OrderByDescending(
+            u => u.Speed).OrderByDescending(
             u => u.ActionPriority).ToList();
 
         turnOrder.Clear();
@@ -43,31 +112,37 @@ public class BattleSystemUnits : MonoBehaviour
         return null;
     }
     
-    public List<string> GetAliveUnitsNames(UnitParty party)
+    public List<ItemInfo> GetAliveUnitInfoList(UnitParty party)
     {
-        List<string> names = new List<string>();
+        List<ItemInfo> itemInfoList = new List<ItemInfo>();
         List<BattleUnitController> alives = GetAliveUnits(party);
 
         foreach (BattleUnitController unit in alives)
         {
-            string name = "Temp";
+            itemInfoList.Add(new ItemInfo(unit.Name, MenuType.ActionMenu));
         }
 
-        return names;
+        return itemInfoList;
     }
 
-    public List<string> GetAliveUnitsSkillNames(UnitParty party, int index)
+    public List<List<ItemInfo>> GetAliveUnitsSkillInfos(UnitParty party)
     {
+        List<List<ItemInfo>> skillNameList = new List<List<ItemInfo>>();
         List<BattleUnitController> alives = GetAliveUnits(party);
-        List<string> names = alives[index].GetUsableSkillNameList();
 
-        return names;
+        foreach (BattleUnitController unit in alives)
+        {
+            List<ItemInfo> list = unit.GetUsableSkillInfoList();
+            skillNameList.Add(list);
+        }
+
+        return skillNameList;
     }
 
-    public bool SetPlayerUnitAction(int index, UnitAction action)
+    public bool SetPlayerAction(int index, UnitAction action)
     {
         List<BattleUnitController> players = GetAliveUnits(UnitParty.PlayerParty);
-        players[index].Action = action;
+        players[index].SetUnitAction(action);
         players[index].SetSelector(false);
         
         bool allPlayersSelectingActions = CheckAllPlayersSelectingActions();
@@ -75,12 +150,12 @@ public class BattleSystemUnits : MonoBehaviour
         return allPlayersSelectingActions;
     }
 
-    public CombatSkill_ GetSkillInfo(UnitParty party, int actorIndex, int skillIndex)
+    public string GetSkillDescription(UnitParty party, int actorIndex, int skillIndex)
     {
         List<BattleUnitController> actors = GetAliveUnits(party);
-        CombatSkill_ skill = actors[actorIndex].GetSkillInfo(skillIndex);
+        string desc = actors[actorIndex].GetSkillDescription(skillIndex);
 
-        return skill;
+        return desc;
     }
 
     public void SetUsingSkill(UnitParty party, int actorIndex, int skillIndex)
@@ -95,26 +170,36 @@ public class BattleSystemUnits : MonoBehaviour
         List<BattleUnitController> targets = GetAliveUnits(targetParty);
 
         targets[target].SetSelector(false);
-        actors[actor].Targets.Add(targets[target]);
+        actors[actor].TargetControllers.Add(targets[target]);
     }
 
     private void SetRandomTarget(BattleUnitController unit)
     {
-        if (unit.Targets.Count > 0)
+        if (unit.TargetControllers.Count == 0)
+            return;
+
+        for (int i = 0; i < unit.TargetControllers.Count; i++)
         {
-            for (int i = 0; i < unit.Targets.Count; i++)
+            if (unit.TargetControllers[i].IsFainted)
             {
-                if (unit.Targets[i].IsFainted)
-                {
-                    unit.Targets[i] = GetRandomAliveUnit(unit.Targets[i].Party);
-                }
+                unit.TargetControllers[i] = GetRandomAliveUnit(unit.TargetControllers[i].Party);
             }
         }
     }
 
     public List<BattleUnitController> GetAliveUnits(UnitParty party)
     {
-        List<BattleUnitController> units = battleUnits.Where(u => u.Party == party && u.IsFainted == false).ToList();
+        List<BattleUnitController> units = null;
+
+        switch (party)
+        {
+            case UnitParty.PlayerParty:
+                units = playerBattleUnits.Where(u => u.IsFainted == false).ToList();
+                break;
+            case UnitParty.EnemyParty:
+                units = enemyBattleUnits.Where(u => u.IsFainted == false).ToList();
+                break;
+        }
 
         return units;
     }
@@ -137,16 +222,16 @@ public class BattleSystemUnits : MonoBehaviour
 
         foreach (BattleUnitController unit in enemys)
         {
-            if (Random.value * 100 <= 80f)
+            if (Random.value * 100 <= 70f)
             {
                 BattleUnitController player = GetRandomAliveUnit(UnitParty.PlayerParty);
 
-                unit.Action = UnitAction.Attack;
-                unit.Targets.Add(player);
+                unit.SetUnitAction(UnitAction.Attack);
+                unit.TargetControllers.Add(player);
             }
             else
             {
-                unit.Action = UnitAction.Defense;
+                unit.SetUnitAction(UnitAction.Defense);
             }
         }
     }
@@ -155,7 +240,7 @@ public class BattleSystemUnits : MonoBehaviour
     {
         List<BattleUnitController> alives = GetAliveUnits(UnitParty.PlayerParty);
 
-        if (alives.Where(u => u.Action == UnitAction.None).Count() == 0)
+        if (alives.Where(u => u.UnitAction == UnitAction.None).Count() == 0)
         {
             return true;
         }

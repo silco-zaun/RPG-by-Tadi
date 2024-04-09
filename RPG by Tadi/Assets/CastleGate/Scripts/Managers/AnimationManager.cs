@@ -1,31 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Tadi.Datas.Res;
-using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using Tadi.Datas.Unit;
+using Tadi.Datas.Weapon;
 
 public class AnimationManager : MonoBehaviour
 {
-    private List<AnimatorController> unitAnimator;
-    private List<AnimatorController> bulletAnimator;
-
     private Dictionary<string, AnimationEvent> animationEventDictionary = new Dictionary<string, AnimationEvent>();
-
-    public List<AnimatorController> UnitAnimator { get { return unitAnimator; } }
-    public List<AnimatorController> BulletAnimator { get { return bulletAnimator; } }
-
-    private bool CheckList()
-    {
-        bool check = Check(unitAnimator, typeof(Tadi.Datas.Unit.UnitType));
-        if (!check) return check;
-
-        check = Check(bulletAnimator, typeof(Tadi.Datas.Weapon.BulletType));
-        if (!check) return check;
-
-        return check;
-    }
 
     private bool Check(List<AnimatorController> animators, Type type)
     {
@@ -47,7 +29,7 @@ public class AnimationManager : MonoBehaviour
 
             if (!check)
             {
-                Debug.LogError($"{enumName} name and animator name are not matched.\n{enumName} name : {enumValueName}\nAnimator name : {animator}");
+                Debug.LogError($"{enumName} Name and animator Name are not matched.\n{enumName} Name : {enumValueName}\nAnimator Name : {animator}");
                 return false;
             }
         }

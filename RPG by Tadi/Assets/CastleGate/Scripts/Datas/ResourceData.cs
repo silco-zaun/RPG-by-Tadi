@@ -1,4 +1,5 @@
 using System;
+using Tadi.Datas.Weapon;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -59,7 +60,9 @@ namespace Tadi.Datas.Res
         public const string BULLET_EXPLOSION_CLIP_NAME = "Explosion";
 
         [SerializeField] private GameObject bullet;
-        [SerializeField] private AnimatorController bulletAnimator;
+        [SerializeField] private AnimatorController magicBolt;
+        [SerializeField] private AnimatorController darkBolt;
+        [SerializeField] private AnimatorController fireBall;
         [SerializeField] private Sprite woodSword;
         [SerializeField] private Sprite woodShild;
         [SerializeField] private Sprite woodBow;
@@ -70,7 +73,9 @@ namespace Tadi.Datas.Res
         [SerializeField] private Sprite boneGrimoire;
 
         public GameObject Bullet { get { return bullet; } }
-        public AnimatorController BulletAnimator { get { return bulletAnimator; } }
+        public AnimatorController MagicBolt { get { return magicBolt; } }
+        public AnimatorController DarkBolt { get { return darkBolt; } }
+        public AnimatorController FireBall { get { return fireBall; } }
         public Sprite WoodSword { get { return woodSword; } }
         public Sprite WoodShild { get { return woodShild; } }
         public Sprite WoodBow { get { return woodBow; } }

@@ -1,38 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using Tadi.Datas.Unit;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class EnemyUnitController : MonoBehaviour
 {
-    [SerializeField] private CharacterSObject characterSO;
-
-    private UnitController characterController;
-
-    public CharacterSObject CharacterBaseData
-    {
-        get { return characterSO; }
-        set
-        {
-            characterSO = value;
-        }
-    }
+    private UnitController unitController;
 
     private void Awake()
     {
-        if (characterSO == null)
-        {
-            Debug.LogError("Variable [characterSO] must to be set.");
-
-            return;
-        }
-
-        characterController = GetComponentInChildren<UnitController>();
+        unitController = GetComponentInChildren<UnitController>();
     }
 
     private void Start()
     {
-        //characterController.CharacterSO = characterSO;
+        unitController.Init(UnitType.Orc, 1);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -73,9 +73,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1677329179980558431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87d66a50b113264dbe14461fc06727d, type: 3}
+  m_Script: {fileID: 11500000, guid: 056155268d1b17d49bae019ee74a0ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleUnitPrefab: {fileID: 7123937067120106228, guid: 18b8fce7d190e8747a78be76ea20a2b7, type: 3}
 --- !u!114 &8382520485597920762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +89,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 703db50a0b2a8774a96aa889cc028bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSprites:
+  unitRes:
+    knightAnimator: {fileID: 9100000, guid: 65ac43dab7cc61c439e959fcffd2cf9c, type: 2}
+    rogueAnimator: {fileID: 9100000, guid: 679eb367cfdd7a04c9b96c33957f0914, type: 2}
+    wizzardAnimator: {fileID: 9100000, guid: ea13338181233b6429491224537bce46, type: 2}
+    orcAnimator: {fileID: 9100000, guid: c6618c0196c6a644e8706971da25ca1e, type: 2}
+    skeletonMageAnimator: {fileID: 9100000, guid: 579a363b4ca145740864b8fa9058407e, type: 2}
     knightBody: {fileID: -835012401, guid: 5ac3b2c3b3dc12a4b94a466d26c4497b, type: 3}
     rogueBody: {fileID: -1106366568, guid: 1284396345ec0fe459d05a51a4fe47e7, type: 3}
     wizzardBody: {fileID: -1574211764, guid: 5b108b17a2c60d54091c504b29a6546b, type: 3}
@@ -100,7 +106,11 @@ MonoBehaviour:
     orcRightHand: {fileID: -6375015178641022721, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
     skeletonLeftHand: {fileID: 3324120851293143344, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
     skeletonRightHand: {fileID: -2497645041878999427, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
-  weaponSprites:
+  weaponRes:
+    bullet: {fileID: 184851820196191127, guid: 1d9347717e36ec942a8ca52880521485, type: 3}
+    magicBolt: {fileID: 9100000, guid: 2ff1a93a728e34e4ab9b8217950d8ba9, type: 2}
+    darkBolt: {fileID: 9100000, guid: 0b8d2efc549806d458f2274c7ee637a9, type: 2}
+    fireBall: {fileID: 9100000, guid: 9cbdafdb286d0d74a9cc6169a7485571, type: 2}
     woodSword: {fileID: 1219222050, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
     woodShild: {fileID: 1816589720, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
     woodBow: {fileID: -360524830, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
@@ -109,8 +119,6 @@ MonoBehaviour:
     woodGrimoire: {fileID: -698569205, guid: 59fd5f5763b6de444a8c9e2d43881686, type: 3}
     boneWand: {fileID: -580263076, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
     boneGrimoire: {fileID: 650840343, guid: ca102e26d1fd3364ab595d7394038cd5, type: 3}
-  weaponPrefabs:
-    bullet: {fileID: 184851820196191127, guid: 1d9347717e36ec942a8ca52880521485, type: 3}
 --- !u!114 &4894054601632486413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,16 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0387f1d325dbce74a9374276d60d19ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterAnimator:
-  - {fileID: 9100000, guid: 65ac43dab7cc61c439e959fcffd2cf9c, type: 2}
-  - {fileID: 9100000, guid: 679eb367cfdd7a04c9b96c33957f0914, type: 2}
-  - {fileID: 9100000, guid: ea13338181233b6429491224537bce46, type: 2}
-  - {fileID: 9100000, guid: c6618c0196c6a644e8706971da25ca1e, type: 2}
-  - {fileID: 9100000, guid: 579a363b4ca145740864b8fa9058407e, type: 2}
-  bulletAnimator:
-  - {fileID: 9100000, guid: 2ff1a93a728e34e4ab9b8217950d8ba9, type: 2}
-  - {fileID: 9100000, guid: 0b8d2efc549806d458f2274c7ee637a9, type: 2}
-  - {fileID: 9100000, guid: 9cbdafdb286d0d74a9cc6169a7485571, type: 2}
 --- !u!114 &8877276209816274448
 MonoBehaviour:
   m_ObjectHideFlags: 0

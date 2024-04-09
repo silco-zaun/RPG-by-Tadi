@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Tadi.Datas.Combat;
-using Tadi.Datas.CombatSkill;
+using Tadi.Datas.Skill;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Tadi.Interface.CombatSkill
@@ -17,6 +18,7 @@ namespace Tadi.Interface.CombatSkill
         public HitType HitType { get; set; }
         public PowerType PowerType { get; set; }
         public List<CombatSkillAbility> Ability { get; set; }
+        public AnimatorController BulletAnim { get; set; }
     }
 
     public interface ICombatSkillAbility

@@ -4,48 +4,36 @@ using Tadi.Utils;
 using Tadi.Datas.Unit;
 using Tadi.Datas.Combat;
 using Tadi.Datas.Weapon;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Animations;
 
 public class UnitController : MonoBehaviour
 {
     [SerializeField] private SlideBarController healthBar;
 
-    private UnitTypeData unitTypeData;
     private UnitAnimation unitAnim;
     private DamageFlash damageFlash;
 
-    private UnitType unitType;
-    private DamageType damageType;
-    private AttackType attackType;
-    private BulletType bulletType;
-
-    private int level;
-    private float maxHP;
-    private float curHP;
-    private float attack;
-    private float defense;
-    private float magicAttack;
-    private float magicDefense;
-    private float speed;
+    private UnitTypeData unitTypeData;
 
     public System.Action OnFainted;
 
-    public UnitType CharacterType { get { return unitType; } }
-    public DamageType DamageType { get { return damageType; } }
-    public AttackType AttackType { get { return attackType; } }
-    public BulletType BulletType { get { return bulletType; } }
-
+    public UnitType UnitType { get; private set; }
+    public string UnitName { get; private set; }
+    public AnimatorController BulletAnim { get; private set; }
+    public DamageType DamageType { get; private set; }
+    public AttackType AttackType { get; private set; }
     // Stats
-    public int Level
-    {
-        get { return level; }
-        set { level = value; SetStats(value); }
-    }
-    public float CurHP { get { return curHP; } }
-    public float Attack { get { return attack; } }
-    public float Defense { get { return defense; } }
-    public float MagicAttack { get { return magicAttack; } }
-    public float MagicDefense { get { return magicDefense; } }
-    public float Speed { get { return speed; } }
+    public int Level { get; private set; }
+    public float MaxHP { get; private set; }
+    public float CurHP { get; private set; }
+    public float PhysicalAttack { get; private set; }
+    public float PhysicalDefense { get; private set; }
+    public float MagicAttack { get; private set; }
+    public float MagicDefense { get; private set; }
+    public float Speed { get; private set; }
+    public List<UnitCombatSkill> CombatSkills { get; private set; }
 
     private void Awake()
     {
@@ -56,50 +44,35 @@ public class UnitController : MonoBehaviour
     public void Init(UnitType type, int level)
     {
         unitTypeData = Managers.Ins.Unit.GetUnitTypeData(type);
-        unitType = unitTypeData.UnitType;
-        damageType = unitTypeData.DamageType;
-        attackType = unitTypeData.AttackType;
-        bulletType = unitTypeData.BulletType;
-        unitAnim.SetAnimationData(unitTypeData.UnitRes);
-        SetStats(level);
+        UnitType = unitTypeData.UnitType;
+        UnitName = unitTypeData.Name;
+        BulletAnim = unitTypeData.UnitAnimRes.BulletAnimator;
+        DamageType = unitTypeData.DamageType;
+        AttackType = unitTypeData.AttackType;
+        unitAnim.SetAnimRes(unitTypeData.UnitAnimRes);
+        SetUnit(level);
     }
 
-    private void SetStats(int level)
+    private void SetUnit(int level)
     {
-        curHP = maxHP = Battle.GetHP(level, unitTypeData.BaseHP, unitTypeData.IVHP);
-        attack = Battle.GetStat(level, unitTypeData.BaseAttack, unitTypeData.IVAttack);
-        defense = Battle.GetStat(level, unitTypeData.BaseDefense, unitTypeData.IVDefense);
-        magicAttack = Battle.GetStat(level, unitTypeData.BaseMagicAttack, unitTypeData.IVMagicAttack);
-        magicDefense = Battle.GetStat(level, unitTypeData.BaseMagicDefense, unitTypeData.IVMagicDefense);
-        speed = Battle.GetStat(level, unitTypeData.BaseSpeed, unitTypeData.IVSpeed);
+        Level = level;
+        CurHP = MaxHP = Battle.GetHP(level, unitTypeData.BaseHP, unitTypeData.IVHP);
+        PhysicalAttack = Battle.GetStat(level, unitTypeData.BasePhysicalAttack, unitTypeData.IVPhysicalAttack);
+        PhysicalDefense = Battle.GetStat(level, unitTypeData.BasePhysicalDefense, unitTypeData.IVPhysicalDefense);
+        MagicAttack = Battle.GetStat(level, unitTypeData.BaseMagicAttack, unitTypeData.IVMagicAttack);
+        MagicDefense = Battle.GetStat(level, unitTypeData.BaseMagicDefense, unitTypeData.IVMagicDefense);
+        Speed = Battle.GetStat(level, unitTypeData.BaseSpeed, unitTypeData.IVSpeed);
+        CombatSkills = unitTypeData.CombatSkills.Where(s => s.LearnLevel >= level).ToList();
     }
 
-    public void TakeDamage(UnitController attacker, DamageType attackType, bool defending, float skillMultiplier = 1f)
+    public void TakeDamage(UnitController attacker, bool defending, UnitCombatSkill skill = null)
     {
         damageFlash.CallDamageFlash();
 
-        float attackersAttack = 0f;
-        float defense = 0f;
+        float damage = GetDamage(attacker, defending);
 
-        switch (attackType)
-        {
-            case DamageType.Physical:
-                attackersAttack = attacker.Attack;
-                defense = this.defense;
-                break;
-            case DamageType.Magic:
-                attackersAttack = attacker.MagicAttack;
-                defense = this.magicDefense;
-                break;
-            default:
-                Debug.LogError("enum variable [DamageType] must be set.");
-                return;
-        }
-
-        float damage = Battle.GetDamage(attackType, attacker.Level, attackersAttack, defense, skillMultiplier, defending);
-
-        curHP -= damage;
-        float normalizedHP = System.Math.Clamp(curHP / maxHP, 0f, maxHP);
+        CurHP -= damage;
+        float normalizedHP = System.Math.Clamp(CurHP / MaxHP, 0f, MaxHP);
         healthBar.SetBar(normalizedHP);
 
         bool isFainted = CheckIsFainted();
@@ -110,9 +83,32 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    public float GetDamage(UnitController attacker, bool defending, UnitCombatSkill skill = null)
+    {
+        float skillMultiplier = 1f;
+        float damage = 0f;
+        
+        if (skill != null)
+        {
+            skillMultiplier = skill.Multiplier;
+        }
+
+        switch (attacker.DamageType)
+        {
+            case DamageType.Physical:
+                damage = Battle.GetDamage(attacker.Level, attacker.PhysicalAttack, PhysicalDefense, defending, skillMultiplier);
+                break;
+            case DamageType.Magic:
+                damage = Battle.GetDamage(attacker.Level, attacker.MagicAttack, MagicDefense, false, skillMultiplier);
+                break;
+        }
+
+        return damage;
+    }
+
     public bool CheckIsFainted()
     {
-        if (curHP < 1f)
+        if (CurHP < 1f)
             return true;
 
         return false;

@@ -1,50 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+using Tadi.Datas.UI;
+using Tadi.UI.ScrollView;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+using static Tadi.UI.ScrollView.ItemInfo;
 
 public class ScrollViewItemController : MonoBehaviour
 {
-    private ItemInfo itemInfo;
     private Text text;
 
-    public ItemInfo ItemInfo
-    {
-        get { return itemInfo; }
-        set
-        {
-            itemInfo = value;
-            text.text = itemInfo.name;
-        }
-    }
+    public ItemInfo ItemInfo { get; private set; }
 
     private void Awake()
     {
         text = GetComponent<Text>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init(ItemInfo itemInfo)
     {
-        
-    }
+        ItemInfo = itemInfo;
+        text.text = itemInfo.Name;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SetUnselectedItemColor();
     }
 
     public void SetUnselectedItemColor()
     {
-        switch (itemInfo.colorState)
+        switch (ItemInfo.ColorState)
         {
-            case ItemInfo.ItemColorState.OriginColor:
-                text.color = UIManager.Instance.OriginColor;
+            case ItemState.Origin:
+                text.color = UIData.OriginColor;
                 break;
-            case ItemInfo.ItemColorState.DeactivatedColor:
-                text.color = UIManager.Instance.DeactivateColor;
+            case ItemState.Deactivated:
+                text.color = UIData.DeactivateColor;
                 break;
             default:
                 break;
@@ -53,26 +40,6 @@ public class ScrollViewItemController : MonoBehaviour
 
     public void SetSelectedItemColor()
     {
-        GetComponent<Text>().color = UIManager.Instance.SelectedColor;
-    }
-}
-
-public class ItemInfo
-{
-    public enum ItemColorState
-    {
-        OriginColor,
-        DeactivatedColor
-    }
-
-    public string name;
-    public Color textColor = UIManager.Instance.OriginColor;
-    public ItemColorState colorState;
-
-    public ItemInfo() { }
-
-    public ItemInfo(string name)
-    {
-        this.name = name;
+        GetComponent<Text>().color = UIData.SelectedColor;
     }
 }

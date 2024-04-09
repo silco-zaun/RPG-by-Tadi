@@ -7,24 +7,24 @@ public class PlayerUnitCommands : MonoBehaviour
 {
     [SerializeField] private PlayerUnitMovement playerMovement;
 
-    private PlayerControls inputActions;
+    //private PlayerControls inputActions;
 
     private void Awake()
     {
-        inputActions = new PlayerControls();
+        //inputActions = new PlayerControls();
         //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
     }
 
     private void OnEnable()
     {
         //playerControls.Player.FireBulletToTarget.Enable(); // example
-        inputActions.Enable();
+        //inputActions.Enable();
     }
 
     private void OnDisable()
     {
         //playerControls.Player.FireBulletToTarget.Disable(); // example
-        inputActions.Disable();
+        //inputActions.Disable();
     }
 
     private void FixedUpdate()
@@ -55,7 +55,8 @@ public class PlayerUnitCommands : MonoBehaviour
 
     private void HandleDefence()
     {
-        bool isDefenceBtnPressed = inputActions.Player.Defense.IsPressed();
+        //bool isDefenceBtnPressed = inputActions.Player.Defense.IsPressed();
+        bool isDefenceBtnPressed = Managers.Ins.Stat.PlayerActions.Player.Defense.IsPressed();
         playerMovement.IsDefencing = isDefenceBtnPressed;
     }
 }

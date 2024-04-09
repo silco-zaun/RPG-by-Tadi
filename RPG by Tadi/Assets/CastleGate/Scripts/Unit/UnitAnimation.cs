@@ -24,7 +24,7 @@ public class UnitAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimationData(UnitResData res)
+    public void SetAnimRes(UnitAnimRes res)
     {
         animator.runtimeAnimatorController = res.Animator;
         sprBody.sprite = res.Body;

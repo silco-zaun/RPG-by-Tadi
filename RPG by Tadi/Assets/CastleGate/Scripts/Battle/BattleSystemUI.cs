@@ -1,80 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
+using Tadi.Datas.BattleSystem;
+using Tadi.UI.ScrollView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BattleSystemUI : MonoBehaviour
 {
-    [SerializeField] private ScrollViewController battleMenu;
+    [SerializeField] private MenuController battleMenu;
     [SerializeField] private Text dialogText;
 
-    // breadth index = parent breadth index * childs per parent + child index
+    private const int UNIT_MENU_DEPTH = 0;
+    private const int ACTION_MENU_DEPTH = 1;
+    private const int TARGET_MENU_DEPTH = 2;
+    private const int SKILL_MENU_DEPTH = 2;
+    private const int SKILL_TARGET_MENU_DEPTH = 3;
+    private int unitIndex = 0;
+    private int menuIndex = 0;
 
-    // Root
-    private const int DEPTH_ROOT_INDEX = 0;
-    private int rootBreadthIndex = 0; // 0
-    private int unitMenuItemCount;
-
-    // Depth 1
-    private const int DEPTH_1_INDEX = 1;
-    private int depth1ChildsPerParent; // unitMenuItemCount
-    private int depth1BreadthIndex = 0; // unitMenuItemIndex
-
-    // Depth 2
-    private const int DEPTH_2_INDEX = 2;
-    private const int TARGET_MENU_CHILD_INDEX = 0;
-    private const int SKILL_MENU_CHILD_INDEX = 1;
-    private int depth2ChildsPerParent = 2; // 2
-    private int depth2BreadthIndex = 0; // depth1BreadthIndex * depth2ChildsPerParent + (TARGET_MENU_CHILD_INDEX or SKILL_MENU_CHILD_INDEX)
-
-    // Depth 3
-    private const int DEPTH_3_INDEX = 3;
-    private const int SKILL_TARGET_MENU_CHILD_INDEX = 0;
-    private int depth3ChildsPerParent = 1; // 1
-    private int depth3BreadthIndex = 0; // skillMenuBreadthIndex / depth2ChildsPerParent
-
-    public ScrollViewController BattleMenu { get { return battleMenu; } }
+    public MenuController BattleMenu { get { return battleMenu; } }
     
     private void Awake()
     {
     }
 
-    public void CreateBattleMenu(List<string> unitNames, List<string> actionNames)
+    public void CreateBattleMenu(List<ItemInfo> unitNameList, List<ItemInfo> targetNameList, List<ItemInfo> actionNameList, List<List<ItemInfo>> skillNameList)
     {
-        depth1ChildsPerParent = unitNames.Count; // unitMenuItemCount
-
-        battleMenu.RemoveAllMenusInTree();
-        battleMenu.SetRootMenu(unitNames); // Root - Unit Menu
-        BattleMenu.AddChildMenus(DEPTH_ROOT_INDEX, depth1ChildsPerParent, actionNames); // Depth1 - Action Menu
-        BattleMenu.AddChildMenus(DEPTH_1_INDEX, depth2ChildsPerParent, null); // Depth2 - Target Menu, CharacterSkill Menu
-        BattleMenu.AddChildMenus(DEPTH_2_INDEX, depth3ChildsPerParent, null); // Depth3 - CharacterSkill Target Menu
+        battleMenu.Tree.SetRootMenu(MenuType.UnitMenu, unitNameList);
+        battleMenu.Tree.AddChildMenus(0, MenuType.ActionMenu, actionNameList);
+        battleMenu.Tree.AddChildMenus(1, MenuType.TargetMenu, targetNameList);
+        battleMenu.Tree.AddChildMenus(1, MenuType.SkillMenu, skillNameList);
+        battleMenu.Tree.AddChildMenus(2, MenuType.SkillTargetMenu, targetNameList);
     }
 
     public int SetUIToSelectPlayerUnit()
     {
-        int index = battleMenu.ChangeMenu(DEPTH_ROOT_INDEX, rootBreadthIndex);
+        menuIndex = unitIndex = battleMenu.ChangeMenu(MenuType.UnitMenu, UNIT_MENU_DEPTH, 0);
 
-        return index;
+        return unitIndex;
     }
     
     public void SetUIToSelectAction()
     {
-        battleMenu.ChangeMenu(DEPTH_1_INDEX, depth1BreadthIndex);
+        battleMenu.ChangeMenu(MenuType.ActionMenu, ACTION_MENU_DEPTH, menuIndex);
     }
 
-    public void SetUIToSelectTargetUnit(List<string> targets)
+    public void SetUIToSelectTargetUnit()
     {
-        battleMenu.ChangeMenu(DEPTH_2_INDEX, depth2BreadthIndex, targets);
+        battleMenu.ChangeMenu(MenuType.TargetMenu, TARGET_MENU_DEPTH, menuIndex);
     }
 
-    public void SetUIToSelectSkill(List<string> skills)
+    public void SetUIToSelectSkill()
     {
-        battleMenu.ChangeMenu(DEPTH_2_INDEX, depth2BreadthIndex, skills);
+        battleMenu.ChangeMenu(MenuType.SkillMenu, SKILL_MENU_DEPTH, menuIndex);
     }
 
-    public void SetUIToSelectSkillTarget(List<string> targets)
+    public void SetUIToSelectSkillTarget()
     {
-        battleMenu.ChangeMenu(DEPTH_3_INDEX, depth3BreadthIndex, targets);
+        battleMenu.ChangeMenu(MenuType.SkillTargetMenu, SKILL_TARGET_MENU_DEPTH, menuIndex);
     }
 
     public void SetUIToProgressRound()
@@ -82,9 +65,15 @@ public class BattleSystemUI : MonoBehaviour
         battleMenu.ClearMenus();
     }
 
-    public void SetUnitMenuItemColorState(ItemInfo.ItemColorState colorState)
+    public void SetPlayerAction(ItemState colorState)
     {
-        battleMenu.SetItemColorState(DEPTH_ROOT_INDEX, rootBreadthIndex, depth1BreadthIndex, colorState);
+        menuIndex = 0;
+        SetUnitMenuItemColorState(colorState);
+    }
+
+    private void SetUnitMenuItemColorState(ItemState colorState)
+    {
+        battleMenu.SetItemState(MenuType.UnitMenu, UNIT_MENU_DEPTH, menuIndex, unitIndex, colorState);
     }
 
     public int NavigateMenu(Vector2 vector)
@@ -94,37 +83,16 @@ public class BattleSystemUI : MonoBehaviour
         return selectedItemIndex;
     }
 
-    public int SubmitMenu(Tadi.Datas.BattleSystem.BattleState state)
+    public int SubmitMenu(BattleState state)
     {
         int itemIndex = battleMenu.SubmitItem();
-
-        switch (state)
-        {
-            case Tadi.Datas.BattleSystem.BattleState.SelectPlayerUnit:
-                depth1BreadthIndex = itemIndex;
-                break;
-            case Tadi.Datas.BattleSystem.BattleState.SelectTarget:
-                depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + TARGET_MENU_CHILD_INDEX;
-                break;
-            case Tadi.Datas.BattleSystem.BattleState.SelectSkill:
-                depth2BreadthIndex = depth1BreadthIndex * depth2ChildsPerParent + SKILL_MENU_CHILD_INDEX;
-                break;
-            case Tadi.Datas.BattleSystem.BattleState.SelectSkillTarget:
-                depth3BreadthIndex = depth2BreadthIndex * depth3ChildsPerParent + SKILL_TARGET_MENU_CHILD_INDEX;
-                break;
-        }
 
         return itemIndex;
     }
 
     public void ResetAllMenu()
     {
-        battleMenu.ResetAllMenu();
-    }
-
-    public void SetDialogText()
-    {
-        //Managers.Ins.Dlg.dialogueText = dialogText;
+        battleMenu.Tree.ResetAllMenu();
     }
 
     public void TypeSentence(string line)

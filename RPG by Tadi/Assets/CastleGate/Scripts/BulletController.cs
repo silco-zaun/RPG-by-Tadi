@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Tadi.Datas.Weapon;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -60,9 +62,9 @@ public class BulletController : MonoBehaviour
         OnFireComplete?.Invoke();
     }
 
-    public void SetBullet(Tadi.Datas.Weapon.BulletType type, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    public void SetBullet(AnimatorController bulletAnimator, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
-        animator.runtimeAnimatorController = Managers.Ins.Anim.BulletAnimator[(int)type - 1];
+        animator.runtimeAnimatorController = bulletAnimator;
 
         transform.position = position;
         this.fireTargetPosition = fireTargetPosition;

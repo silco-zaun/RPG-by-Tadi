@@ -71,7 +71,7 @@ namespace Tadi.Datas.BattleSystem
         // -- Variables --
         [SerializeField] private UnitType unitType;
         [SerializeField] private BattlePos unitPos;
-        [SerializeField] private int unitLevel;
+        [SerializeField] private int unitLevel = 1;
         [SerializeField] private UnitType partnerType;
         [SerializeField] private int partnerLevel;
         [SerializeField] private UnitParty party;

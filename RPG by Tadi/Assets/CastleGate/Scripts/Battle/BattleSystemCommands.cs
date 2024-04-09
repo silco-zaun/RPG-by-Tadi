@@ -8,23 +8,22 @@ public class BattleSystemCommands : MonoBehaviour
 {
     private BattleSystemController battleController;
 
-    private BattleControls inputActions;
+    //private BattleControls inputActions;
 
     private void Awake()
     {
         battleController = GetComponent<BattleSystemController>();
-        inputActions = new BattleControls();
-        //battleControls.UI.NavigateMenu;
+        //inputActions = new BattleControls();
     }
 
     private void OnEnable()
     {
-        inputActions.Enable();
+        //inputActions.Enable();
     }
 
     private void OnDisable()
     {
-        inputActions.Disable();
+        //inputActions.Disable();
     }
 
     private void OnNavigate(InputValue value)

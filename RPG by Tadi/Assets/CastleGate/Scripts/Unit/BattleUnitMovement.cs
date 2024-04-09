@@ -1,23 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
+using Tadi.Datas.Combat;
+using UnityEditor.Animations;
+using Tadi.Datas.Unit;
 
 public class BattleUnitMovement : MonoBehaviour
 {
-    private UnitAnimation characterAnimation;
-    //private GameObject targetUnitObject;
+    private UnitAnimation anim;
 
     private State state;
     private float slideSpeed = 10f;
-    //private float bulletInitSpeed = 10f;
-    //private float bulletCurSpeed = 10f;
-    //private float bulletAccel = 50f;
     private Vector3 actorPosition;
-    private Vector3 slideTargetPosition;
-    //private Vector3 fireTargetPosition;
+    private Vector3 targetPosition;
     private float reachedDistance = 1f;
     private Transform bullet;
+    private AnimatorController bulletAnimator;
 
     private System.Action OnSlideComplete;
 
@@ -32,8 +29,7 @@ public class BattleUnitMovement : MonoBehaviour
 
     private void Awake()
     {
-        actorPosition = transform.position;
-        characterAnimation = GetComponentInChildren<UnitAnimation>();
+        anim = GetComponentInChildren<UnitAnimation>();
     }
 
     // Start is called before the first frame update
@@ -59,20 +55,39 @@ public class BattleUnitMovement : MonoBehaviour
         }
     }
 
-    public void ExcuteAttack(Tadi.Datas.Combat.AttackType attackType, Tadi.Datas.Weapon.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteAttack(UnitController actor, UnitController target, System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
-        if (attackType == Tadi.Datas.Combat.AttackType.Melee)
+        actorPosition = transform.position;
+        targetPosition = target.transform.position;
+        bulletAnimator = actor.BulletAnim;
+
+        if (actor.AttackType == AttackType.Melee)
         {
-            ExcuteMeleeAttack(targetPosition, OnAttackTarget, OnTurnComplete);
+            MeleeAttackMovement(OnAttackTarget, OnTurnComplete);
         }
-        else if (
-            attackType == Tadi.Datas.Combat.AttackType.Ranged)
+        else if (actor.AttackType == AttackType.Ranged)
         {
-            ExcuteRangedAttack(bulletType, targetPosition, OnAttackTarget, OnTurnComplete);
+            RangedAttackMovement(OnAttackTarget, OnTurnComplete);
         }
     }
 
-    public void ExcuteMeleeAttack(Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void ExcuteSkillAttack(UnitController actor, UnitController target, UnitCombatSkill skill, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    {
+        actorPosition = transform.position;
+        targetPosition = target.transform.position;
+        bulletAnimator = skill.BulletAnim;
+
+        if (skill.AttackType == AttackType.Melee)
+        {
+            MeleeAttackMovement(OnAttackTarget, OnTurnComplete);
+        }
+        else if (skill.AttackType == AttackType.Ranged)
+        {
+            RangedAttackMovement(OnAttackTarget, OnTurnComplete);
+        }
+    }
+
+    public void MeleeAttackMovement(System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
         Vector3 attackDir = (targetPosition - actorPosition).normalized;
         Vector3 slideTargetPosition = targetPosition - attackDir * reachedDistance;
@@ -84,33 +99,33 @@ public class BattleUnitMovement : MonoBehaviour
                 // Arrived at Target, attack him
                 state = State.Busy;
 
-                characterAnimation.PlayFireAnim(null,
+                anim.PlayFireAnim(null,
                     () =>
                     {
                         OnAttackTarget();
 
-                        // ExcuteMeleeAttack completed, slide back
+                        // MeleeAttackMovement completed, slide back
                         SlideUnitToTarget(actorPosition,
                                 () =>
                                 {
                                     // Slide back completed, back to idle
                                     state = State.Idle;
-                                    characterAnimation.PlayMoveAnim(Vector2.zero);
+                                    anim.PlayMoveAnim(Vector2.zero);
                                     OnTurnComplete();
                                 });
                     });
             });
     }
 
-    public void ExcuteRangedAttack(Tadi.Datas.Weapon.BulletType bulletType, Vector3 targetPosition, System.Action OnAttackTarget, System.Action OnTurnComplete)
+    public void RangedAttackMovement(System.Action OnAttackTarget, System.Action OnTurnComplete)
     {
-        // Attack him
+        // PhysicalAttack him
         state = State.FireBullet;
 
-        characterAnimation.PlayFireAnim(null,
+        anim.PlayFireAnim(null,
             () =>
             {
-                FireBulletToTarget(bulletType, targetPosition,
+                FireBulletToTarget(
                     () =>
                     {
                         state = State.Idle;
@@ -122,49 +137,49 @@ public class BattleUnitMovement : MonoBehaviour
 
     private void HandleUnitSliding()
     {
-        transform.position += (slideTargetPosition - transform.position) * slideSpeed * Time.fixedDeltaTime;
+        transform.position += (targetPosition - transform.position) * slideSpeed * Time.fixedDeltaTime;
 
-        bool isArriving = Vector3.Distance(transform.position, slideTargetPosition) < 0.1f;
+        bool isArriving = Vector3.Distance(transform.position, targetPosition) < 0.1f;
 
         if (isArriving)
         {
             // Arrived at Slide Target Position
-            transform.position = slideTargetPosition;
+            transform.position = targetPosition;
             OnSlideComplete();
         }
     }
 
-    private void SlideUnitToTarget(Vector3 slideTargetPosition, System.Action OnSlideComplete)
+    private void SlideUnitToTarget(Vector3 targetPosition, System.Action OnSlideComplete)
     {
-        this.slideTargetPosition = slideTargetPosition;
+        this.targetPosition = targetPosition;
         this.OnSlideComplete = OnSlideComplete;
         state = State.Sliding;
     }
 
-    private void FireBulletToTarget(Tadi.Datas.Weapon.BulletType bulletType, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    private void FireBulletToTarget(System.Action OnFireComplete)
     {
         bullet = Managers.Ins.Res.GetObjectFromPool((int)ResourceManager.ResPrefabIndex.Bullet).transform;
-        bullet.GetComponent<BulletController>().SetBullet(bulletType, transform.position, fireTargetPosition, OnFireComplete);
+        bullet.GetComponent<BulletController>().SetBullet(bulletAnimator, transform.position, targetPosition, OnFireComplete);
     }
 
     public void PlayDeathAnimation()
     {
-        characterAnimation.PlayDeathAnim();
+        anim.PlayDeathAnim();
     }
 
     public void PlayDefenseAnimation(bool defending)
     {
-        characterAnimation.PlayDefenseAnim(defending);
+        anim.PlayDefenseAnim(defending);
     }
 
     public void PlayDefenseAnimation(bool defending, System.Action OnTurnComplete)
     {
-        characterAnimation.PlayDefenseAnim(defending);
+        anim.PlayDefenseAnim(defending);
         OnTurnComplete();
     }
 
     public void RotateCharacter(bool isFacingLeft)
     {
-        characterAnimation.RotateCharacter(isFacingLeft);
+        anim.RotateCharacter(isFacingLeft);
     }
 }

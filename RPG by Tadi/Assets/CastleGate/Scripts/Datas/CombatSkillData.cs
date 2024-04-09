@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Tadi.Datas.Combat;
+using Tadi.Datas.Weapon;
 using Tadi.Interface.CombatSkill;
+using UnityEditor.Animations;
 
-namespace Tadi.Datas.CombatSkill
+namespace Tadi.Datas.Skill
 {
     public enum ActionType
     {
@@ -54,20 +56,25 @@ namespace Tadi.Datas.CombatSkill
     public static class CombatSkillData
     {
         // Melee
-        public static CombatSkill Smash { get; set; }
-        public static CombatSkill GuardBreak { get; set; }
-        public static CombatSkill CounterAttack { get; set; }
-        public static CombatSkill FinalAttack { get; set; }
-        // Rogue
-        public static CombatSkill HawkWing { get; set; }
-        public static CombatSkill PoisonAttack { get; set; }
-        public static CombatSkill SpinSlash { get; set; }
-        public static CombatSkill GrimReaper { get; set; }
+        public static CombatSkill Smash { get; private set; }
+        public static CombatSkill GuardBreak { get; private set; }
+        public static CombatSkill CounterAttack { get; private set; }
+        public static CombatSkill FinalAttack { get; private set; }
+        // Ranged
+        public static CombatSkill HawkWing { get; private set; }
+        public static CombatSkill PoisonAttack { get; private set; }
+        public static CombatSkill SpinSlash { get; private set; }
+        public static CombatSkill GrimReaper { get; private set; }
         // Magic
-        public static CombatSkill FireBall { get; set; }
-        public static CombatSkill Barrier { get; set; }
-        public static CombatSkill FlameStorm { get; set; }
-        public static CombatSkill DesolateTouch { get; set; }
+        public static CombatSkill FireBall { get; private set; }
+        public static CombatSkill Barrier { get; private set; }
+        public static CombatSkill FlameStorm { get; private set; }
+        public static CombatSkill DesolateTouch { get; private set; }
+
+        static CombatSkillData()
+        {
+            Init();
+        }
 
         public static void Init()
         {
@@ -334,6 +341,7 @@ namespace Tadi.Datas.CombatSkill
                     Modifier = 1.8f,
                 }
             };
+            FireBall.BulletAnim = Managers.Ins.Res.WeaponRes.FireBall;
 
             // -- 수정 필요
             Barrier = new CombatSkill();
@@ -424,7 +432,6 @@ namespace Tadi.Datas.CombatSkill
         }
     }
 
-
     public class CombatSkill : ICombatSkill
     {
         public string Name { get; set; }
@@ -436,6 +443,7 @@ namespace Tadi.Datas.CombatSkill
         public HitType HitType { get; set; }
         public PowerType PowerType { get; set; }
         public List<CombatSkillAbility> Ability { get; set; }
+        public AnimatorController BulletAnim { get; set; }
     }
 
     public class CombatSkillAbility : ICombatSkillAbility
@@ -465,12 +473,12 @@ namespace Tadi.Datas.CombatSkill
     //public class RangedCombatSkillAbility : ICombatSkillAbility, //IRangedCombatSkillAbility
     //{
     //    public string Description { get; set; }
-    //    public float Modifier { get; set; }
+    //    public float Multiplier { get; set; }
     //    public float Accuracy { get; set; }
     //
     //    public RangedCombatSkillAbility()
     //    {
-    //        Modifier = 1f;
+    //        Multiplier = 1f;
     //        Accuracy = 1f;
     //    }
     //}
@@ -485,7 +493,7 @@ namespace Tadi.Datas.CombatSkill
     //    public PowerType PowerType { get; set; }
     //}
     //
-    //public class CombatSkill
+    //public class Skill
     //{
     //    public const int COMBAT_SKILL_MAX_LEVEL = 3;
     //

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tadi.Datas.BattleSystem;
+using Tadi.Datas.Combat;
+using UnityEditor.ShaderGraph.Internal;
 
 namespace Tadi.Utils
 {
@@ -103,26 +105,14 @@ namespace Tadi.Utils
             return maxStat;
         }
 
-        public static float GetDamage(Tadi.Datas.Combat.DamageType attackType, int attackersLevel, float attackersAttack, float defendersDefense, float skillMultiplier, bool defending)
+        public static float GetDamage(int attackersLevel, float attackersAttack, float defendersDefense, bool defending, float skillMultiplier = 1f)
         {
-            float type = 1f;
-
-            switch (attackType)
-            {
-                case Tadi.Datas.Combat.DamageType.Physical:
-                    break;
-                case Tadi.Datas.Combat.DamageType.Magic:
-                    type = 0.8f;
-                    defending = false;
-                    break;
-            }
-
             float critical = GetCritical(0);
             float defensive = defending ? 0.1f : 1f;
             float random = Random.Range(0.85f, 1.15f);
 
             float unmodifiedDamage = (attackersLevel * 2 / 5 + 2) * attackersAttack / defendersDefense + 2;
-            float modifiers = type * critical * skillMultiplier * defensive * random;
+            float modifiers = critical * skillMultiplier * defensive * random;
             float damage = Mathf.FloorToInt(unmodifiedDamage * modifiers);
 
             return damage;
@@ -147,7 +137,7 @@ namespace Tadi.Utils
             float skillAccuracy = GetHitChanceBasedOnSkillAccuracy();
             float random = Random.Range(0.95f, 1.05f);
 
-            // speed 0 ~ 5 : attackersLevel 0 ~ 5 : usingSkill 0 ~ 2
+            // speed 0 ~ 5 : attackersLevel 0 ~ 5 : UsingSkill 0 ~ 2
             float hitChance = hitChanceBasedOnSpeed * skillAccuracy * random;
 
             return hitChance;

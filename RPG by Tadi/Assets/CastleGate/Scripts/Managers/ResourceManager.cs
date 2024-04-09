@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using System.Linq;
 using Tadi.Datas.Res;
-using Tadi.Datas.Unit;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
@@ -71,12 +68,14 @@ public class ResourceManager : MonoBehaviour
     private void InitAnim()
     {
         Managers.Ins.Anim.AddAnimEvents(unitRes.KnightAnimator, UnitRes.KNIGHT_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
-        //Managers.Ins.Anim.AddAnimEvents(unitRes.RogueAnimator, UnitRes.ROGUE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        //Managers.Ins.Anim.AddAnimEvents(unitRes.RogueAnimator, UnitAnimRes.ROGUE_ATTACK_CLIP_NAME, UnitAnimRes.ATTACK_CLIP_KEYWORD);
         Managers.Ins.Anim.AddAnimEvents(unitRes.WizzardAnimator, UnitRes.WIZZARD_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
         Managers.Ins.Anim.AddAnimEvents(unitRes.OrcAnimator, UnitRes.ORC_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
         Managers.Ins.Anim.AddAnimEvents(unitRes.SkeletonMageAnimator, UnitRes.SKELETON_MAGE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
 
-        Managers.Ins.Anim.AddAnimEvents(weaponRes.BulletAnimator, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.MagicBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.DarkBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.FireBall, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
         
     }
 

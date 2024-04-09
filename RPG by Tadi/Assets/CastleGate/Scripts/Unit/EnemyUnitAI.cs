@@ -11,11 +11,10 @@ public class EnemyUnitAI : MonoBehaviour
         GoBack
     }
 
-    [SerializeField] private GameObject target;
     [SerializeField] private UnitAnimation anim;
     [SerializeField] private LayerMask solidLayer;
 
-    [SerializeField] private Vector2 detectorSize = new Vector2(15, 10);
+    private EnemyUnitAIDetector detector;
 
     public State state;
     private Vector3 startingPosition;
@@ -24,6 +23,11 @@ public class EnemyUnitAI : MonoBehaviour
     private const float WAIT_SECOND = 1f;
     private const float ROAM_RANGE = 3f;
     private bool isMoving;
+
+    private void Awake()
+    {
+        detector = GetComponent<EnemyUnitAIDetector>();
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -72,9 +76,9 @@ public class EnemyUnitAI : MonoBehaviour
 
     private void HandleChasing()
     {
-        if (!isMoving)
+        if (!isMoving && detector.Target != null)
         {
-            Vector3 dir = (target.transform.position - transform.position).normalized;
+            Vector3 dir = (detector.Target.transform.position - transform.position).normalized;
             moveVec = Tadi.Utils.Utils.GetStraightDir(dir);
 
             Vector3 movePos = transform.position + moveVec;
@@ -139,9 +143,7 @@ public class EnemyUnitAI : MonoBehaviour
 
     private void FindTarget()
     {
-        float targetRange = 5f;
-
-        if (Vector3.Distance(transform.position, target.transform.position) < targetRange)
+        if (detector.PlayerDetected)
         {
             state = State.ChaseTarget;
         }
@@ -163,21 +165,5 @@ public class EnemyUnitAI : MonoBehaviour
         {
             Debug.Log(collider.gameObject.name);
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        //bool showGizmos = true;
-        //GameObject detectorOrigin = null;
-        //
-        //Color idleColor = Color.blue;
-        //Color detectedColor = Color.red;
-        //
-        //if (showGizmos)// && detectorOrigin != null)
-        //{
-        //    Gizmos.color = idleColor;
-        //
-        //    Gizmos.DrawCube((Vector2)transform.position, detectorSize);
-        //}
     }
 }

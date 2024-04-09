@@ -43,6 +43,7 @@ public class Managers : MonoBehaviour
         }
 
         gameStateManager = GetComponent<GameStateManager>();
+        unitManager = GetComponent<UnitManager>();
         resourceManager = GetComponent<ResourceManager>();
         animationManager = GetComponent<AnimationManager>();
         dialogManager = GetComponent<DialogueManager>();
