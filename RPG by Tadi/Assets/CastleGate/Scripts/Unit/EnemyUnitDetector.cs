@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyUnitAIDetector : MonoBehaviour
+public class EnemyUnitDetector : MonoBehaviour
 {
     [Header("OverlapBox parameters")]
     [SerializeField] private Transform detectorOrigin;

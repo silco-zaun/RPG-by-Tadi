@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyUnitNav : MonoBehaviour
+public class AgentMove : MonoBehaviour
 {
     private Vector3 target;
-    NavMeshAgent agent;
+    private NavMeshAgent agent;
+    public float moveSpeed = 3f; // Desired move speed in units per second
 
     private void Awake()
     {

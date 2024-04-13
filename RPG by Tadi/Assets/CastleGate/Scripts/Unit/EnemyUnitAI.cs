@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyUnitAI : MonoBehaviour
@@ -11,22 +12,24 @@ public class EnemyUnitAI : MonoBehaviour
         GoBack
     }
 
-    [SerializeField] private UnitAnimation anim;
     [SerializeField] private LayerMask solidLayer;
 
-    private EnemyUnitAIDetector detector;
+    private UnitAnimation anim;
+    private EnemyUnitNavMesh nav;
+    private EnemyUnitDetector detector;
 
     public State state;
     private Vector3 startingPosition;
     private Vector3 moveVec;
-    private const float MOVE_SPEED = 1f;
-    private const float WAIT_SECOND = 1f;
     private const float ROAM_RANGE = 3f;
     private bool isMoving;
+    public float arrivalThreshold = 0.1f;
 
     private void Awake()
     {
-        detector = GetComponent<EnemyUnitAIDetector>();
+        anim = GetComponentInChildren<UnitAnimation>();
+        nav = GetComponent<EnemyUnitNavMesh>();
+        detector = GetComponent<EnemyUnitDetector>();
     }
 
     // Start is called before the first frame update
@@ -34,24 +37,29 @@ public class EnemyUnitAI : MonoBehaviour
     {
         state = State.Roaming;
         startingPosition = transform.position;
+
+        Vector3 roamingPos = GetRoamingPosition();
+
     }
 
     private void FixedUpdate()
     {
+        FindTarget();
+
         switch (state)
         {
             case State.Roaming:
                 HandleRoaming();
                 break;
             case State.ChaseTarget:
+                MissTarget();
                 HandleChasing();
                 break;
             case State.GoBack:
+                ArriveStartingPos();
                 HandleGoBack();
                 break;
         }
-
-        FindTarget();
     }
 
     private void LateUpdate()
@@ -63,82 +71,68 @@ public class EnemyUnitAI : MonoBehaviour
     {
         if (!isMoving)
         {
-            moveVec = Tadi.Utils.Utils.GetRandomXDir();
-
-            Vector3 movePos = transform.position + moveVec;
-
-            bool walking = IsWalkable(movePos);
-
-            if (walking)
-                StartCoroutine(Move(movePos));
+            StartCoroutine(Roaming());
         }
     }
 
     private void HandleChasing()
     {
-        if (!isMoving && detector.Target != null)
+        if (detector.Target != null)
         {
-            Vector3 dir = (detector.Target.transform.position - transform.position).normalized;
-            moveVec = Tadi.Utils.Utils.GetStraightDir(dir);
-
-            Vector3 movePos = transform.position + moveVec;
-
-            bool walking = IsWalkable(movePos);
-
-            if (walking)
-                StartCoroutine(Move(movePos));
+            nav.SetDestination(detector.Target.transform.position, ref moveVec);
         }
     }
 
     private void HandleGoBack()
     {
-        if (!isMoving)
+        if (Vector3.Distance(transform.position, startingPosition) < arrivalThreshold)
         {
-            Vector3 dir = (startingPosition - transform.position).normalized;
-
-            moveVec = Tadi.Utils.Utils.GetStraightDir(dir);
-
-            Vector3 movePos = transform.position + moveVec;
-
-            bool walking = IsWalkable(movePos);
-
-            if (walking)
-                StartCoroutine(Move(movePos));
+            state = State.Roaming;
+        }
+        else
+        {
+            nav.SetDestination(startingPosition, ref moveVec);
         }
     }
 
-    private Vector3 GetRoamingPosition()
-    {
-        return startingPosition + Tadi.Utils.Utils.GetRandomDir() * Random.Range(10f, 70f);
-    }
-
-    private IEnumerator Move(Vector3 movePos)
+    public IEnumerator Roaming()
     {
         isMoving = true;
 
-        while ((movePos - transform.position).sqrMagnitude > Mathf.Epsilon)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, movePos, MOVE_SPEED * Time.fixedDeltaTime);
+        Vector3 target = GetRoamingPosition();
 
-            yield return null;
+        // Set the agent's destination to the random point
+        nav.SetDestination(target, ref moveVec);
+
+        // Wait until the character has reached the destination
+        while (Vector3.Distance(transform.position, target) > arrivalThreshold)
+        {
+            yield return null; // Wait for the next frame
         }
 
-        transform.position = movePos;
+        // Character has arrived at the destination
         moveVec = Vector3.zero;
 
-        yield return new WaitForSeconds(WAIT_SECOND);
+        yield return new WaitForSeconds(2f);
 
         isMoving = false;
     }
 
-    private bool IsWalkable(Vector3 movePos)
+    private Vector3 GetRoamingPosition()
     {
-        if (Physics2D.OverlapCircle(movePos, 0.2f, solidLayer) != null)
+        // Get a random direction
+        Vector3 movePosition;
+
+        if (Vector2.Distance((Vector2)startingPosition, (Vector2)transform.position) < 1f)
         {
-            return false;
+            movePosition = new Vector3(startingPosition.x - 1f, startingPosition.y, 0);
+        }
+        else
+        {
+            movePosition = startingPosition;
         }
 
-        return true;
+        return movePosition;
     }
 
     private void FindTarget()
@@ -147,23 +141,21 @@ public class EnemyUnitAI : MonoBehaviour
         {
             state = State.ChaseTarget;
         }
-        else if (Vector3.Distance(startingPosition, transform.position) > ROAM_RANGE)
+    }
+
+    private void MissTarget()
+    {
+        if (!detector.PlayerDetected)
         {
             state = State.GoBack;
         }
-        else if (Vector3.Distance(startingPosition, transform.position) < 0.1f)
-        {
-            state = State.Roaming;
-        }
     }
 
-    private void PerformDetection()
+    private void ArriveStartingPos()
     {
-        Collider2D collider = Physics2D.OverlapBox((Vector2)transform.position, Vector2.one, 0);
-
-        if (collider != null)
+        if (Vector3.Distance(startingPosition, transform.position) < arrivalThreshold)
         {
-            Debug.Log(collider.gameObject.name);
+            state = State.Roaming;
         }
     }
 }

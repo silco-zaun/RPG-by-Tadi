@@ -36,9 +36,9 @@ public class PlayerUnitMovement: MonoBehaviour
         {
             Vector3 targetPos = transform.position + (Vector3)moveVec * curMoveSpeed * Time.fixedDeltaTime;
 
-            bool walking = IsWalkable(targetPos);
+            //bool walking = IsWalkable(targetPos);
 
-            if (walking)
+            //if (walking)
                 transform.position = targetPos;
         }
     }

@@ -1,39 +1,29 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Navigate : MonoBehaviour
+public class EnemyUnitNavMesh : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    public bool showPath;
-    public bool showAhead;
+    [SerializeField] private GameObject target;
+    [SerializeField] private bool showPath;
+    [SerializeField] private bool showAhead;
 
-    // Start is called before the first frame update
-    void Start()
+    private NavMeshAgent agent;
+    private float moveSpeed = 3f; // Desired move speed in units per second
+
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetDestination(Vector3 target, ref Vector3 moveVec)
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            target.z = 0;
-            agent.destination = target;
-        }
-    }
-    public static void DebugDrawPath(Vector3[] corners)
-    {
-        if (corners.Length < 2) { return; }
-        int i = 0;
-        for (; i < corners.Length - 1; i++)
-        {
-            Debug.DrawLine(corners[i], corners[i + 1], Color.blue);
-        }
-        Debug.DrawLine(corners[0], corners[1], Color.red);
+        agent.SetDestination(target);
+        moveVec = (target - transform.position).normalized;
     }
 
     private void OnDrawGizmos()
@@ -41,7 +31,7 @@ public class Navigate : MonoBehaviour
         DrawGizmos(agent, showPath, showAhead);
     }
 
-    public static void DrawGizmos(NavMeshAgent agent, bool showPath, bool showAhead)
+    private void DrawGizmos(NavMeshAgent agent, bool showPath, bool showAhead)
     {
         if (Application.isPlaying && agent != null)
         {
