@@ -24,15 +24,24 @@ public class ResourceManager : MonoBehaviour
     public UnitRes UnitRes { get { return unitRes; } }
     public WeaponRes WeaponRes { get { return weaponRes; } }
 
-    private void Awake()
-    {
-
-    }
-
-    void Start()
+    public void Init()
     {
         InitAnim();
         InitObjectPool();
+    }
+
+    private void InitAnim()
+    {
+        Managers.Ins.Anim.AddAnimEvents(unitRes.KnightAnimator, UnitRes.KNIGHT_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        //Managers.Ins.Anim.AddAnimEvents(unitRes.RogueAnimator, UnitAnimRes.ROGUE_ATTACK_CLIP_NAME, UnitAnimRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.WizzardAnimator, UnitRes.WIZZARD_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.OrcAnimator, UnitRes.ORC_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+        Managers.Ins.Anim.AddAnimEvents(unitRes.SkeletonMageAnimator, UnitRes.SKELETON_MAGE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
+
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.MagicBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.DarkBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+        Managers.Ins.Anim.AddAnimEvents(weaponRes.FireBall, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
+
     }
 
     private void InitObjectPool()
@@ -56,27 +65,13 @@ public class ResourceManager : MonoBehaviour
 
             for (int j = 0; j < poolSizes[i]; j++)
             {
-                GameObject obj = Instantiate(objectPrefabs[i]);
+                GameObject obj = Instantiate(objectPrefabs[i], ObjectPoolController.Ins.transform);
                 obj.SetActive(false);
                 objectPool.Add(obj);
             }
-
+            
             objectPools.Add(objectPool);
         }
-    }
-
-    private void InitAnim()
-    {
-        Managers.Ins.Anim.AddAnimEvents(unitRes.KnightAnimator, UnitRes.KNIGHT_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
-        //Managers.Ins.Anim.AddAnimEvents(unitRes.RogueAnimator, UnitAnimRes.ROGUE_ATTACK_CLIP_NAME, UnitAnimRes.ATTACK_CLIP_KEYWORD);
-        Managers.Ins.Anim.AddAnimEvents(unitRes.WizzardAnimator, UnitRes.WIZZARD_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
-        Managers.Ins.Anim.AddAnimEvents(unitRes.OrcAnimator, UnitRes.ORC_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
-        Managers.Ins.Anim.AddAnimEvents(unitRes.SkeletonMageAnimator, UnitRes.SKELETON_MAGE_ATTACK_CLIP_NAME, UnitRes.ATTACK_CLIP_KEYWORD);
-
-        Managers.Ins.Anim.AddAnimEvents(weaponRes.MagicBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
-        Managers.Ins.Anim.AddAnimEvents(weaponRes.DarkBolt, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
-        Managers.Ins.Anim.AddAnimEvents(weaponRes.FireBall, WeaponRes.BULLET_EXPLOSION_CLIP_NAME, WeaponRes.BULLET_EXPLOSION_CLIP_NAME);
-        
     }
 
     public GameObject GetObjectFromPool(int prefabIndex)

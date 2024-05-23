@@ -24,7 +24,7 @@ public class UnitAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimRes(UnitAnimRes res)
+    public void Init(UnitAnimRes res)
     {
         animator.runtimeAnimatorController = res.Animator;
         sprBody.sprite = res.Body;
@@ -32,6 +32,8 @@ public class UnitAnimation : MonoBehaviour
         sprRightHand.sprite = res.RightHand;
         sprLeftWeapon.sprite = res.LeftWeapon;
         sprRightWeapon.sprite = res.RightWeapon;
+
+        PlayMoveAnim(Vector2.zero);
     }
 
     public void OnAttackAnimStart(string name)
@@ -48,6 +50,19 @@ public class UnitAnimation : MonoBehaviour
     {
         animator.SetFloat("Speed", moveVec.magnitude);
 
+        if (moveVec.x != 0)
+        {
+            bool isLeftDir = moveVec.x < 0;
+
+            if (isLeftDir != isFacingLeft)
+            {
+                RotateCharacter(isLeftDir);
+            }
+        }
+    }
+
+    public void PlayLookAnim(Vector2 moveVec)
+    {
         if (moveVec.x != 0)
         {
             bool isLeftDir = moveVec.x < 0;

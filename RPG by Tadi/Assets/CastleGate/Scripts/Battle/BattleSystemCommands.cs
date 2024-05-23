@@ -1,6 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Tadi.Data.State;
+using Tadi.Data.UI;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,41 +8,48 @@ public class BattleSystemCommands : MonoBehaviour
 {
     private BattleSystemController battleController;
 
-    //private BattleControls inputActions;
-
     private void Awake()
     {
         battleController = GetComponent<BattleSystemController>();
-        //inputActions = new BattleControls();
     }
 
     private void OnEnable()
     {
-        //inputActions.Enable();
+
+        PlayerInputData.navigateAction.performed += OnNavigate;
+        PlayerInputData.submitAction.performed += OnSubmit;
+        PlayerInputData.cancelAction.performed += OnCancel;
     }
 
     private void OnDisable()
     {
-        //inputActions.Disable();
+        PlayerInputData.navigateAction.performed -= OnNavigate;
+        PlayerInputData.submitAction.performed -= OnSubmit;
+        PlayerInputData.cancelAction.performed -= OnCancel;
     }
 
-    private void OnNavigate(InputValue value)
+    private void OnNavigate(InputAction.CallbackContext context)
     {
-        Vector2 vector = value.Get<Vector2>();
-
-        if (vector.x != 0 || vector.y != 0)
+        if (StateData.PlayerState == PlayerState.Battle)
         {
-            battleController.Navigate(vector);
+            Vector2 vector = context.ReadValue<Vector2>();
+
+            if (vector.x != 0 || vector.y != 0)
+            {
+                battleController.Navigate(vector);
+            }
         }
     }
 
-    private void OnSubmit()
+    private void OnSubmit(InputAction.CallbackContext context)
     {
-        battleController.SubmitUI();
+        if (StateData.PlayerState == PlayerState.Battle)
+            battleController.SubmitUI();
     }
 
-    private void OnCancel()
+    private void OnCancel(InputAction.CallbackContext context)
     {
-        battleController.CancelUI();
+        if (StateData.PlayerState == PlayerState.Battle)
+            battleController.CancelUI();
     }
 }

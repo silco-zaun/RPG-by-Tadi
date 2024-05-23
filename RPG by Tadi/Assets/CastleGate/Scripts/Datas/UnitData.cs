@@ -1,9 +1,6 @@
-
-using UnityEditor.Animations;
 using UnityEngine;
 using Tadi.Datas.Combat;
 using Tadi.Datas.Skill;
-using Tadi.Datas.Weapon;
 using Tadi.Interface.unit;
 using System.Collections.Generic;
 
@@ -11,7 +8,10 @@ namespace Tadi.Datas.Unit
 {
     public enum UnitType
     {
-        None, Knight, Rogue, Wizzard, Orc, SkeletonMage
+        None, 
+        Knight, Rogue, Wizzard, // Player
+        Orc, SkeletonMage, // Enemy
+        LizardMan, TurtleKing // NPC
     }
 
     public static class UnitData
@@ -21,6 +21,8 @@ namespace Tadi.Datas.Unit
         public static UnitTypeData Wizzard { get; private set; }
         public static UnitTypeData Orc { get; private set; }
         public static UnitTypeData SkeletonMage { get; private set; }
+        public static UnitTypeData LizardMan { get; private set; }
+        public static UnitTypeData TurtleKing { get; private set; }
 
         static UnitData()
         {
@@ -152,7 +154,7 @@ namespace Tadi.Datas.Unit
             };
             Orc.DamageType = DamageType.Physical;
             Orc.AttackType = AttackType.Melee;
-            Orc.BaseHP = 100;
+            Orc.BaseHP = 10;
             Orc.BasePhysicalAttack = 120;
             Orc.BasePhysicalDefense = 120;
             Orc.BaseMagicAttack = 80;
@@ -198,20 +200,83 @@ namespace Tadi.Datas.Unit
             SkeletonMage.IVMagicAttack = 25;
             SkeletonMage.IVMagicDefense = 25;
             SkeletonMage.IVSpeed = 20;
+
+            LizardMan = new UnitTypeData();
+            LizardMan.UnitType = UnitType.LizardMan;
+            LizardMan.Name = "리자드맨";
+            LizardMan.Description = "서식지가 인간에 의해 파괴되어 동족들 모두 죽을 위기해 처해 있었으나 용왕의 도움을 받아 구사일생한 도마뱀. 용왕에게 충성을 맹세했고 능력을 인정받아 용궁 정예군 대장으로 활동하고 있다.";
+            LizardMan.UnitAnimRes = new UnitAnimRes(
+                Managers.Ins.Res.UnitRes.LizardManAnimator,
+                Managers.Ins.Res.WeaponRes.MagicBolt,
+                Managers.Ins.Res.UnitRes.LizardManBody,
+                null, null, null, null);
+            LizardMan.CombatSkills = new List<UnitCombatSkill>()
+            {
+                new UnitCombatSkill(CombatSkillData.FireBall, 1, 1),
+                new UnitCombatSkill(CombatSkillData.Barrier, 1, 5),
+                new UnitCombatSkill(CombatSkillData.FlameStorm, 1, 10),
+                new UnitCombatSkill(CombatSkillData.DesolateTouch, 1, 20)
+            };
+            LizardMan.DamageType = DamageType.Magic;
+            LizardMan.AttackType = AttackType.Ranged;
+            LizardMan.BaseHP = 100;
+            LizardMan.BasePhysicalAttack = 80;
+            LizardMan.BasePhysicalDefense = 80;
+            LizardMan.BaseMagicAttack = 120;
+            LizardMan.BaseMagicDefense = 120;
+            LizardMan.BaseSpeed = 100;
+            LizardMan.IVHP = 20;
+            LizardMan.IVPhysicalAttack = 15;
+            LizardMan.IVPhysicalDefense = 15;
+            LizardMan.IVMagicAttack = 25;
+            LizardMan.IVMagicDefense = 25;
+            LizardMan.IVSpeed = 20;
+
+
+            TurtleKing = new UnitTypeData();
+            TurtleKing.UnitType = UnitType.TurtleKing;
+            TurtleKing.Name = "용왕";
+            TurtleKing.Description = "토끼의 간을 용왕에게 바친 공로를 인정받아 용왕의 자리를 물려받은 거북이. 젊은시절 용궁 최고의 장군 이었다.";
+            TurtleKing.UnitAnimRes = new UnitAnimRes(
+                Managers.Ins.Res.UnitRes.TurtleKingAnimator,
+                Managers.Ins.Res.WeaponRes.MagicBolt,
+                Managers.Ins.Res.UnitRes.TurtleKingBody,
+                null, null, null, null);
+            TurtleKing.CombatSkills = new List<UnitCombatSkill>()
+            {
+                new UnitCombatSkill(CombatSkillData.FireBall, 1, 1),
+                new UnitCombatSkill(CombatSkillData.Barrier, 1, 5),
+                new UnitCombatSkill(CombatSkillData.FlameStorm, 1, 10),
+                new UnitCombatSkill(CombatSkillData.DesolateTouch, 1, 20)
+            };
+            TurtleKing.DamageType = DamageType.Magic;
+            TurtleKing.AttackType = AttackType.Ranged;
+            TurtleKing.BaseHP = 100;
+            TurtleKing.BasePhysicalAttack = 80;
+            TurtleKing.BasePhysicalDefense = 80;
+            TurtleKing.BaseMagicAttack = 120;
+            TurtleKing.BaseMagicDefense = 120;
+            TurtleKing.BaseSpeed = 100;
+            TurtleKing.IVHP = 20;
+            TurtleKing.IVPhysicalAttack = 15;
+            TurtleKing.IVPhysicalDefense = 15;
+            TurtleKing.IVMagicAttack = 25;
+            TurtleKing.IVMagicDefense = 25;
+            TurtleKing.IVSpeed = 20;
         }
     }
 
     public class UnitAnimRes
     {
-        public AnimatorController Animator { get; private set; }
-        public AnimatorController BulletAnimator { get; private set; }
+        public RuntimeAnimatorController Animator { get; private set; }
+        public RuntimeAnimatorController BulletAnimator { get; private set; }
         public Sprite Body { get; private set; }
         public Sprite LeftHand { get; private set; }
         public Sprite RightHand { get; private set; }
         public Sprite LeftWeapon { get; private set; }
         public Sprite RightWeapon { get; private set; }
 
-        public UnitAnimRes(AnimatorController animator, AnimatorController bulletAnimator, Sprite body, Sprite leftHand, Sprite rightHand, Sprite leftWeapon, Sprite rightWeapon)
+        public UnitAnimRes(RuntimeAnimatorController animator, RuntimeAnimatorController bulletAnimator, Sprite body, Sprite leftHand, Sprite rightHand, Sprite leftWeapon, Sprite rightWeapon)
         {
             Animator = animator;
             BulletAnimator = bulletAnimator;
@@ -233,7 +298,7 @@ namespace Tadi.Datas.Unit
         public AttackType AttackType { get { return Skill.AttackType; } }
         public string Description { get { return Skill.Ability[SkillLevel].Description; } }
         public float Multiplier { get { return Skill.Ability[SkillLevel].Modifier; } }
-        public AnimatorController BulletAnim { get { return Skill.BulletAnim; } }
+        public RuntimeAnimatorController BulletAnim { get { return Skill.BulletAnim; } }
 
         public UnitCombatSkill(CombatSkill skill, int skillLevel, int learnLevel)
         {

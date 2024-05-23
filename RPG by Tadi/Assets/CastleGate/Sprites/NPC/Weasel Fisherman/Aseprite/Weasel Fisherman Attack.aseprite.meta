@@ -1,0 +1,335 @@
+fileFormatVersion: 2
+guid: 69b55fef65d056c43a83a987ebfd0c8b
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Weasel Fisherman Attack_Frame_0
+    originalName: 
+    pivot: {x: 0.2857143, y: -0.73684204}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 79
+      y: 51
+      width: 42
+      height: 38
+    spriteID: 6ca14a7ec4cced24f8d261e092db7ea4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 79, y: 51}
+  - name: Weasel Fisherman Attack_Frame_1
+    originalName: 
+    pivot: {x: 0.29545453, y: -0.7}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 205
+      width: 44
+      height: 40
+    spriteID: 7d8b5dc63d4e9204c8fdb73ce902ee35
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 205}
+  - name: Weasel Fisherman Attack_Frame_2
+    originalName: 
+    pivot: {x: 0.3589744, y: -0.8510638}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 94
+      width: 39
+      height: 47
+    spriteID: 6605db90d09256e41a0ec85caaa4d199
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 94}
+  - name: Weasel Fisherman Attack_Frame_3
+    originalName: 
+    pivot: {x: 0.39473683, y: -0.875}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 149
+      width: 38
+      height: 48
+    spriteID: b1d96b518f53d3242a7966ad71844837
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 149}
+  - name: Weasel Fisherman Attack_Frame_4
+    originalName: 
+    pivot: {x: 0.28358206, y: -1.1714287}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 51
+      width: 67
+      height: 35
+    spriteID: 6ec76076e5921b741bbb331a5198218a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 51}
+  - name: Weasel Fisherman Attack_Frame_5
+    originalName: 
+    pivot: {x: 0.20879121, y: -0.8205129}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 91
+      height: 39
+    spriteID: da0c818ed439b03438cc819341e56c91
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Weasel Fisherman Attack_Frame_6
+    originalName: 
+    pivot: {x: 0.5199999, y: -1.1666666}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 79
+      y: 97
+      width: 25
+      height: 24
+    spriteID: 54f920d52649bb746a3a169bb31fa61a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 79, y: 97}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: -1062825908
+    name: Weasel Fisherman Attack
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Weasel Fisherman Attack_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 36
+        y: 28
+        width: 42
+        height: 38
+      spriteId: 6ca14a7ec4cced24f8d261e092db7ea4
+    - name: Weasel Fisherman Attack_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 35
+        y: 28
+        width: 44
+        height: 40
+      spriteId: 7d8b5dc63d4e9204c8fdb73ce902ee35
+    - name: Weasel Fisherman Attack_Frame_2
+      frameIndex: 2
+      cellRect:
+        x: 34
+        y: 40
+        width: 39
+        height: 47
+      spriteId: 6605db90d09256e41a0ec85caaa4d199
+    - name: Weasel Fisherman Attack_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 33
+        y: 42
+        width: 38
+        height: 48
+      spriteId: b1d96b518f53d3242a7966ad71844837
+    - name: Weasel Fisherman Attack_Frame_4
+      frameIndex: 4
+      cellRect:
+        x: 29
+        y: 41
+        width: 67
+        height: 35
+      spriteId: 6ec76076e5921b741bbb331a5198218a
+    - name: Weasel Fisherman Attack_Frame_5
+      frameIndex: 5
+      cellRect:
+        x: 29
+        y: 32
+        width: 91
+        height: 39
+      spriteId: da0c818ed439b03438cc819341e56c91
+    - name: Weasel Fisherman Attack_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 35
+        y: 28
+        width: 25
+        height: 24
+      spriteId: 54f920d52649bb746a3a169bb31fa61a
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  generatePhysicsShape: 0
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 96, y: 96}

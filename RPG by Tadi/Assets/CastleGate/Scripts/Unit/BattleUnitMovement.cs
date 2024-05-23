@@ -1,7 +1,6 @@
 
 using UnityEngine;
 using Tadi.Datas.Combat;
-using UnityEditor.Animations;
 using Tadi.Datas.Unit;
 
 public class BattleUnitMovement : MonoBehaviour
@@ -14,7 +13,7 @@ public class BattleUnitMovement : MonoBehaviour
     private Vector3 targetPosition;
     private float reachedDistance = 1f;
     private Transform bullet;
-    private AnimatorController bulletAnimator;
+    private RuntimeAnimatorController bulletAnimator;
 
     private System.Action OnSlideComplete;
 
@@ -92,11 +91,11 @@ public class BattleUnitMovement : MonoBehaviour
         Vector3 attackDir = (targetPosition - actorPosition).normalized;
         Vector3 slideTargetPosition = targetPosition - attackDir * reachedDistance;
 
-        // Slide to Target
+        // Slide to DetectedTarget
         SlideUnitToTarget(slideTargetPosition,
             () =>
             {
-                // Arrived at Target, attack him
+                // Arrived at DetectedTarget, attack him
                 state = State.Busy;
 
                 anim.PlayFireAnim(null,
@@ -143,7 +142,7 @@ public class BattleUnitMovement : MonoBehaviour
 
         if (isArriving)
         {
-            // Arrived at Slide Target Position
+            // Arrived at Slide DetectedTarget Position
             transform.position = targetPosition;
             OnSlideComplete();
         }

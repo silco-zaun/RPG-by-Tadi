@@ -2,8 +2,6 @@
 
 using Tadi.Datas.Unit;
 using Tadi.Datas.Combat;
-using Tadi.Datas.Weapon;
-using UnityEngine;
 
 namespace Tadi.Interface.unit
 {
@@ -39,5 +37,16 @@ namespace Tadi.Interface.unit
         public float IVMagicAttack { get; set; }
         public float IVMagicDefense { get; set; }
         public float IVSpeed { get; set; }
+    }
+
+    public interface IInteractable
+    {
+        enum InteractState
+        {
+            None,
+            ShowDialog,
+        }
+
+        public void Interact(InteractState state);
     }
 }

@@ -1,62 +1,106 @@
-using System.Collections;
-using System.Collections.Generic;
+using Tadi.Data.State;
+using Tadi.Data.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerUnitCommands : MonoBehaviour
 {
-    [SerializeField] private PlayerUnitMovement playerMovement;
+    public enum State
+    {
+        FreeRoam,
+        ShowDialogue,
+    }
 
-    //private PlayerControls inputActions;
+    private PlayerUnitMovement move;
 
     private void Awake()
     {
-        //inputActions = new PlayerControls();
-        //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
+        move = GetComponent<PlayerUnitMovement>();
     }
 
     private void OnEnable()
     {
-        //playerControls.Player.FireBulletToTarget.Enable(); // example
-        //inputActions.Enable();
+        PlayerInputData.OnMove += OnMove;
+        PlayerInputData.attackAction.performed += OnAttack;
+        PlayerInputData.dashAction.performed += OnDash;
     }
 
     private void OnDisable()
     {
-        //playerControls.Player.FireBulletToTarget.Disable(); // example
-        //inputActions.Disable();
-    }
-
-    private void FixedUpdate()
-    {
-
+        PlayerInputData.OnMove -= OnMove;
+        PlayerInputData.attackAction.performed -= OnAttack;
+        PlayerInputData.dashAction.performed -= OnDash;
     }
 
     private void LateUpdate()
     {
-        HandleDefence();
+        switch (StateData.PlayerState)
+        {
+            case PlayerState.FreeRoam:
+                HandleDefence();
+                break;
+            case PlayerState.ShowDialogue:
+                break;
+        }
     }
 
-    private void OnMove(InputValue value)
+    private void OnMove(Vector2 moveVec)
     {
-        Vector2 moveVec = value.Get<Vector2>();
-        playerMovement.SetMoveVector(moveVec);
+        switch (StateData.PlayerState)
+        {
+            case PlayerState.FreeRoam:
+                move.SetMoveVector(moveVec);
+                break;
+            case PlayerState.ShowDialogue:
+                break;
+        }
     }
 
-    private void OnFire()
+    private void OnAttack(InputAction.CallbackContext context)
     {
-        playerMovement.Fire();
+        switch (StateData.PlayerState)
+        {
+            case PlayerState.FreeRoam:
+                move.Attack();
+                break;
+            case PlayerState.ShowDialogue:
+                bool endDialogue = Managers.Ins.Dlg.DisplayNextDialogLine();
+
+                if (endDialogue)
+                {
+                    SetToFreeRoamState();
+                }
+                break;
+        }
     }
 
-    private void OnDash()
+    private void OnDash(InputAction.CallbackContext context)
     {
-        playerMovement.Dash();
+        switch (StateData.PlayerState)
+        {
+            case PlayerState.FreeRoam:
+                move.Dash();
+                break;
+            case PlayerState.ShowDialogue:
+                break;
+        }
     }
 
     private void HandleDefence()
     {
-        //bool isDefenceBtnPressed = inputActions.Player.Defense.IsPressed();
-        bool isDefenceBtnPressed = Managers.Ins.Stat.PlayerActions.Player.Defense.IsPressed();
-        playerMovement.IsDefencing = isDefenceBtnPressed;
+        //bool isDefenceBtnPressed = inputActions.Player.PlayDefenseAnim.IsPressed();
+        bool isDefenceBtnPressed = PlayerInputData.defenseAction.IsPressed();
+        move.IsDefencing = isDefenceBtnPressed;
+    }
+
+    public void SetToFreeRoamState()
+    {
+        StateData.PlayerState = PlayerState.FreeRoam;
+    }
+
+    public void SetToShowDialogState()
+    {
+        move.SetMoveVector(Vector2.zero);
+        StateData.PlayerState = PlayerState.ShowDialogue;
     }
 }

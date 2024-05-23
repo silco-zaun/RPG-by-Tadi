@@ -16,12 +16,16 @@ public class PlayerUnitMovement: MonoBehaviour
 
     private void Awake()
     {
-        //playerControls.Player.FireBulletToTarget.performed += OnFire; // example
+        //playerControls.Player.FireBulletToTarget.performed += OnAttack; // example
+    }
+
+    private void Start()
+    {
     }
 
     private void FixedUpdate()
     {
-        HandleMovement();
+        HandleMoveInput();
     }
 
     private void LateUpdate()
@@ -30,7 +34,7 @@ public class PlayerUnitMovement: MonoBehaviour
         HandleDefence();
     }
 
-    private void HandleMovement()
+    private void HandleMoveInput()
     {
         if (moveVec != Vector2.zero)
         {
@@ -53,7 +57,7 @@ public class PlayerUnitMovement: MonoBehaviour
         this.moveVec = moveVec;
     }
 
-    public void Fire()
+    public void Attack()
     {
         anim.PlayFireAnim();
     }

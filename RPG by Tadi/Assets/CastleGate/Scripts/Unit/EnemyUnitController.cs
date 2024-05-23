@@ -1,30 +1,40 @@
-
+using System.Collections.Generic;
+using Tadi.Datas.BattleSystem;
 using Tadi.Datas.Unit;
+using Tadi.Interface.unit;
 using UnityEngine;
 
-public class EnemyUnitController : MonoBehaviour
+public class EnemyUnitController : MonoBehaviour, IInteractable
 {
-    private UnitController unitController;
+    [SerializeField] private UnitType unitType;
+    [SerializeField] private int unitLevel = 1;
+    [SerializeField] private List<BattleUnitInfo> battleUnitInfo;
+
+    private EnemyUnitAI unitAI;
+    private UnitController unit;
+
+    public List<BattleUnitInfo> BattleUnitInfo { get { return battleUnitInfo; } }
 
     private void Awake()
     {
-        unitController = GetComponentInChildren<UnitController>();
+        unitAI = GetComponent<EnemyUnitAI>();
+        unit = GetComponentInChildren<UnitController>();
     }
 
     private void Start()
     {
-        unitController.Init(UnitType.Orc, 1);
+        Init();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void Init()
     {
-        /*
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        unit.Init(unitType, unitLevel);
 
-        if (enemy)
-        {
-            // Start Bat
-        }
-        */
+        unitAI.UnitType = unitType;
+    }
+
+    public void Interact(IInteractable.InteractState state)
+    {
+
     }
 }

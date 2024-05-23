@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Tadi.Datas.Combat;
-using Tadi.Datas.Weapon;
 using Tadi.Interface.CombatSkill;
-using UnityEditor.Animations;
+using UnityEngine;
 
 namespace Tadi.Datas.Skill
 {
@@ -443,7 +442,7 @@ namespace Tadi.Datas.Skill
         public HitType HitType { get; set; }
         public PowerType PowerType { get; set; }
         public List<CombatSkillAbility> Ability { get; set; }
-        public AnimatorController BulletAnim { get; set; }
+        public RuntimeAnimatorController BulletAnim { get; set; }
     }
 
     public class CombatSkillAbility : ICombatSkillAbility
@@ -463,7 +462,7 @@ namespace Tadi.Datas.Skill
     //{
     //    public string Name { get; set; }
     //    public int Cooltime { get; set; }
-    //    public Target Target { get; set; }
+    //    public DetectedTarget DetectedTarget { get; set; }
     //    public Range Range { get; set; }
     //    public HitType HitType { get; set; }
     //    public PowerType PowerType { get; set; }
@@ -487,7 +486,7 @@ namespace Tadi.Datas.Skill
     //{
     //    public string Name { get; set; }
     //    public int Cooltime { get; set; }
-    //    public Target Target { get; set; }
+    //    public DetectedTarget DetectedTarget { get; set; }
     //    public Range Range { get; set; }
     //    public HitType HitType { get; set; }
     //    public PowerType PowerType { get; set; }
@@ -500,7 +499,7 @@ namespace Tadi.Datas.Skill
     //    public string Name { get; set; }
     //    public List<CombatSkillAbility> Ability { get; set; }
     //    public int Cooltime { get; set; }
-    //    public Target Target { get; set; }
+    //    public DetectedTarget DetectedTarget { get; set; }
     //    public Range Range { get; set; }
     //    public PowerType PowerType { get; set; }
     //

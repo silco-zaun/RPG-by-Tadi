@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using Tadi.UI.ScrollView;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ScrollViewItemPool : MonoBehaviour
 {

@@ -7,7 +7,7 @@ public class AgentMove : MonoBehaviour
 {
     private Vector3 target;
     private NavMeshAgent agent;
-    public float moveSpeed = 3f; // Desired move speed in units per second
+    public float moveSpeed = 3f; // Desired move speed in AIUnits per second
 
     private void Awake()
     {

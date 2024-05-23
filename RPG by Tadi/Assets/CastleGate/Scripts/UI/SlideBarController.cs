@@ -12,7 +12,7 @@ public class SlideBarController : MonoBehaviour
 
     public void SetBar(float newValue)
     {
-        StartCoroutine(SetBarRoutine(newValue));
+        bar.transform.localScale = new Vector3(newValue, 1f);
     }
 
     public IEnumerator SetBarRoutine(float newValue)

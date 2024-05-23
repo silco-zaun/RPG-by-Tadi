@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 5197944156012376620}
   - component: {fileID: 8382520485597920762}
   - component: {fileID: 4894054601632486413}
-  - component: {fileID: 8877276209816274448}
+  - component: {fileID: 5230989290967123197}
+  - component: {fileID: 8179433866211535055}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -61,9 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dfcc618361e6a64d9324a7a1b23e584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  units: {fileID: 0}
-  battleSystem: {fileID: 0}
 --- !u!114 &5197944156012376620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,11 +93,15 @@ MonoBehaviour:
     wizzardAnimator: {fileID: 9100000, guid: ea13338181233b6429491224537bce46, type: 2}
     orcAnimator: {fileID: 9100000, guid: c6618c0196c6a644e8706971da25ca1e, type: 2}
     skeletonMageAnimator: {fileID: 9100000, guid: 579a363b4ca145740864b8fa9058407e, type: 2}
+    lizardManAnimator: {fileID: 9100000, guid: 932d94b9488c75c438ea8ec051699de1, type: 2}
+    turtleKingAnimator: {fileID: 9100000, guid: fedc0043234c71d4b8af2bc1f7e36e10, type: 2}
     knightBody: {fileID: -835012401, guid: 5ac3b2c3b3dc12a4b94a466d26c4497b, type: 3}
     rogueBody: {fileID: -1106366568, guid: 1284396345ec0fe459d05a51a4fe47e7, type: 3}
     wizzardBody: {fileID: -1574211764, guid: 5b108b17a2c60d54091c504b29a6546b, type: 3}
     orcBody: {fileID: -491629717, guid: 17c624dcb86c70c42a28ba8298db1ad4, type: 3}
     skeletonMageBody: {fileID: -1336137469, guid: b3a45c9cd09dd1c4e8a846d3ebd5230d, type: 3}
+    lizardManBody: {fileID: -1164338891, guid: cb0fe8d708c5e744aaaa3c475efdab72, type: 3}
+    turtleKingBody: {fileID: -726670973, guid: 0f5a35bb54f48804c92f90cdc7c42aa9, type: 3}
     humanLeftHand: {fileID: -2523599077907299729, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
     humanRightHand: {fileID: 8326627396399632596, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
     orcLeftHand: {fileID: -2597094214951350933, guid: 7c827ecf7eb60684d973d5b29a7b9ce4, type: 3}
@@ -131,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0387f1d325dbce74a9374276d60d19ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8877276209816274448
+--- !u!114 &5230989290967123197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,12 +142,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1677329179980558431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c95d78fc7c3f3c4a9c3076276193aae, type: 3}
+  m_Script: {fileID: 11500000, guid: 3aeef3c0ab15a6d40ba5940ecf0acb08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueBox: {fileID: 0}
-  characterIcon: {fileID: 0}
-  characterName: {fileID: 0}
-  dialogueText: {fileID: 0}
-  isDialogueActive: 0
-  lettersPerSecond: 10
+--- !u!114 &8179433866211535055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677329179980558431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98365395b087b8141adfcdefb285cd21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

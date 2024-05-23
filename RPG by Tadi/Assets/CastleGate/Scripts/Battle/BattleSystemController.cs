@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tadi.Datas.BattleSystem;
-using Tadi.Utils;
 using Tadi.UI.ScrollView;
+using System;
+using System.Collections;
 
-public class BattleSystemController : MonoBehaviour
+public class BattleSystemController : Singleton<BattleSystemController>
 {
     private BattleSystemUI ui;
     private BattleSystemUnits units;
+    private GameObject enemyUnitObject;
 
     // Bat Info
     private BattleState state;
@@ -25,15 +27,36 @@ public class BattleSystemController : MonoBehaviour
 
     public BattleState State { get { return state; } }
 
-    private void Awake()
+    Action<BattleCondition> OnBattleEnd;
+
+    private new void Awake()
     {
+        base.Awake();
+
         ui = GetComponent<BattleSystemUI>();
         units = GetComponent<BattleSystemUnits>();
     }
 
     private void Start()
     {
-        units.InitBattleUnit();
+        //Managers.Ins.Stat.BattleSystem = gameObject;
+    }
+
+    private void OnEnable()
+    {
+        if (ui != null) { }
+    }
+
+    private void OnDisable()
+    {
+        if (ui != null) { }
+    }
+
+    public void Init(List<BattleUnitInfo> playersBattleUnitInfo, List<BattleUnitInfo> enemysBattleUnitInfo, GameObject enemyUnitObject, Action<BattleCondition> OnBattleEnd)
+    {
+        this.OnBattleEnd = OnBattleEnd;
+        this.enemyUnitObject = enemyUnitObject;
+        units.InitBattleUnit(playersBattleUnitInfo, enemysBattleUnitInfo);
         SetItemInfoList();
         ui.CreateBattleMenu(unitNameList, targetNameList, actionNameList, skillNameList);
         SelectPlayerUnit();
@@ -58,7 +81,7 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectPlayerUnit()
     {
-        ui.TypeSentence("행동할 유닛을 선택합니다.");
+        StartCoroutine(ui.TypeSentence("행동할 유닛을 선택합니다."));
         state = BattleState.SelectPlayerUnit;
         int index = ui.SetUIToSelectPlayerUnit();
 
@@ -67,14 +90,14 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectAction()
     {
-        ui.TypeSentence("행동을 정합니다.");
+        StartCoroutine(ui.TypeSentence("행동을 정합니다."));
         state = BattleState.SelectAction;
         ui.SetUIToSelectAction();
     }
 
     private void SelectTarget()
     {
-        ui.TypeSentence("타겟을 정합니다.");
+        StartCoroutine(ui.TypeSentence("타겟을 정합니다."));
         state = BattleState.SelectTarget;
 
         if (selectedAction == UnitAction.Attack)
@@ -94,7 +117,7 @@ public class BattleSystemController : MonoBehaviour
 
     private void SelectSkillTarget()
     {
-        ui.TypeSentence("타겟을 정합니다.");
+        StartCoroutine(ui.TypeSentence("타겟을 정합니다."));
         state = BattleState.SelectSkillTarget;
 
         if (selectedAction == UnitAction.Skill)
@@ -106,7 +129,7 @@ public class BattleSystemController : MonoBehaviour
 
     private void ProgressRound()
     {
-        ui.TypeSentence("행동을 시작 합니다.");
+        StartCoroutine(ui.TypeSentence("행동을 시작 합니다."));
         state = BattleState.ProgressRound;
         ui.SetUIToProgressRound();
         units.SetEnemyUnitBehavior();
@@ -146,7 +169,7 @@ public class BattleSystemController : MonoBehaviour
         // Bat Over
         if (condition != BattleCondition.None)
         {
-            BattleOver();
+            StartCoroutine(BattleEndRoutine());
         }
         // All Utils behavior completed
         else if (unit == null)
@@ -172,9 +195,22 @@ public class BattleSystemController : MonoBehaviour
         // Duration and Removal: Manage the duration of status effects and conditions
     }
 
-    private void BattleOver()
+    private IEnumerator BattleEndRoutine()
     {
-        ui.TypeSentence("전투가 종료 되었습니다.");
+        ResetRound();
+
+        yield return StartCoroutine(ui.TypeSentence("전투가 종료 되었습니다."));
+
+        Managers.Ins.Stat.BattleEnd();
+
+        BattleCondition condition = units.CheckBattleCondition();
+
+        if (condition == BattleCondition.Win)
+        {
+            Destroy(enemyUnitObject);
+        }
+
+        OnBattleEnd?.Invoke(condition);
     }
 
     public void Navigate(Vector2 vector)
@@ -309,5 +345,4 @@ public class BattleSystemController : MonoBehaviour
         SetItemInfoList();
         ui.CreateBattleMenu(unitNameList, targetNameList, actionNameList, skillNameList);
     }
-
 }

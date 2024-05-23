@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Tadi.UI.ScrollView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +51,10 @@ public class MenuController : MonoBehaviour
 
         SetUpAndDownText(IsOverflow());
         int index = itemPool.GetInitIndex(curContentInfo.CurItemIndex);
-        SelectItem(index);
+        curContentInfo.PrevItemIndex = curContentInfo.CurItemIndex;
+        curContentInfo.CurItemIndex = index;
+
+        SelectItem();
 
         return index;
     }
@@ -77,15 +79,12 @@ public class MenuController : MonoBehaviour
         menuInfo.ItemInfoList[unitIndex].ColorState = colorState;
     }
 
-    public void SelectItem(int itemIndex)
+    public void SelectItem()
     {
-        ContentInfo menuInfo = curContentInfo;
+        itemPool.SetItemsColor(curContentInfo.CurItemIndex);
 
-        menuInfo.PrevItemIndex = itemIndex;
-        menuInfo.CurItemIndex = (itemIndex + itemPool.ItemsCount) % itemPool.ItemsCount;
-
-        itemPool.SetItemsColor(menuInfo.CurItemIndex);
-        ChangePage(menuInfo.CurItemPage, menuInfo.ItemCountPerPage);
+        if (curContentInfo.IsChangedPage)
+            ChangePage(curContentInfo.CurItemPage, curContentInfo.ItemCountPerPage);
     }
 
     public int SelectItem(Vector2 vector)
@@ -135,8 +134,7 @@ public class MenuController : MonoBehaviour
 
         Vector2 newTargetLocalPosition = new Vector2(
             0 - (viewPortLocalPosition.x + targetItemLocalPosition.x) + (viewPortWidth / 2) - (itemWidth / 2),
-            0 - (viewPortLocalPosition.y + targetItemLocalPosition.y) + (viewPortHeight / 2) - (itemHeight / 2)
-            );
+            0 - (viewPortLocalPosition.y + targetItemLocalPosition.y) + (viewPortHeight / 2) - (itemHeight / 2));
 
         scrollRect.content.localPosition = newTargetLocalPosition;
     }

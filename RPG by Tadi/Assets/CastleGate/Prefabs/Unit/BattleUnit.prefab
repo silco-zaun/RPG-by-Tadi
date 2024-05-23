@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2051676969
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 17c438f819b109d47b44f8045035ddb5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -160,6 +160,10 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 8282646513409513156}
+    - target: {fileID: 5224535748023426911, guid: 43979d6656e2c2743bdd97e28baeb9e7, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ea13338181233b6429491224537bce46, type: 2}
     - target: {fileID: 7971967380385023158, guid: 43979d6656e2c2743bdd97e28baeb9e7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

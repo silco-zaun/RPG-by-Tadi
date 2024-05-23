@@ -9,8 +9,8 @@ using Tadi.UI.ScrollView;
 
 public class BattleSystemUnits : MonoBehaviour
 {
-    [SerializeField] private List<BattleUnitInfo> playersBattleUnitInfo;
-    [SerializeField] private List<BattleUnitInfo> enemysBattleUnitInfo;
+    //[SerializeField] private List<BattleUnitInfo> playersBattleUnitInfo;
+    //[SerializeField] private List<BattleUnitInfo> enemysBattleUnitInfo;
     [SerializeField] private List<GameObject> playerUnitPos;
     [SerializeField] private List<GameObject> enemyUnitPos;
 
@@ -18,7 +18,7 @@ public class BattleSystemUnits : MonoBehaviour
     private List<BattleUnitController> enemyBattleUnits = new List<BattleUnitController>();
     private Queue<BattleUnitController> turnOrder = new Queue<BattleUnitController>();
 
-    public void InitBattleUnit()
+    public void InitBattleUnit(List<BattleUnitInfo> playersBattleUnitInfo, List<BattleUnitInfo> enemysBattleUnitInfo)
     {
         InitBattleUnits(playersBattleUnitInfo, ref playerBattleUnits, ref playerUnitPos);
         InitBattleUnits(enemysBattleUnitInfo, ref enemyBattleUnits, ref enemyUnitPos);
@@ -36,7 +36,7 @@ public class BattleSystemUnits : MonoBehaviour
             int unitPosIdx;
             int partnerPosIdx;
             
-            if (enemysBattleUnitInfo[i].UnitPos == BattlePos.Front)
+            if (unitsInfo[i].UnitPos == BattlePos.Front)
             {
                 unitPosIdx = front;
                 partnerPosIdx = rear;
@@ -52,7 +52,7 @@ public class BattleSystemUnits : MonoBehaviour
             unit.transform.localPosition = Vector3.zero;
 
             BattleUnitController unitController = unit.GetComponent<BattleUnitController>();
-            unitController.Init(unitsInfo[i].UnitType, unitsInfo[i].Party, 1);
+            unitController.Init(unitsInfo[i].UnitType, unitsInfo[i].Party, unitsInfo[i].UnitLevel);
             battleUnits.Add(unitController);
 
             if (unitsInfo[i].PartnerType != UnitType.None)
@@ -62,7 +62,7 @@ public class BattleSystemUnits : MonoBehaviour
                 partner.transform.localPosition = Vector3.zero;
 
                 BattleUnitController partnerController = partner.GetComponent<BattleUnitController>();
-                partnerController.Init(unitsInfo[i].PartnerType, unitsInfo[i].Party, 1);
+                partnerController.Init(unitsInfo[i].PartnerType, unitsInfo[i].Party, unitsInfo[i].PartnerLevel);
                 battleUnits.Add(partnerController);
             }
         }
@@ -263,11 +263,11 @@ public class BattleSystemUnits : MonoBehaviour
         }
         else if (playersCount == 0)
         {
-            battleResult = BattleCondition.Defeated;
+            battleResult = BattleCondition.Lose;
         }
         else if (enemysCount == 0)
         {
-            battleResult = BattleCondition.Victory;
+            battleResult = BattleCondition.Win;
         }
         else
         {

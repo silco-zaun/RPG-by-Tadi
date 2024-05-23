@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Tadi.Datas.Weapon;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -56,13 +52,13 @@ public class BulletController : MonoBehaviour
 
     public void OnExplosionAnimComplete(string name)
     {
-        // Arrived at Slide Target Position
+        // Arrived at Slide DetectedTarget Position
         Managers.Ins.Res.ReturnObjectToPool(transform.gameObject);
         animator.SetBool("Explosion", false);
         OnFireComplete?.Invoke();
     }
 
-    public void SetBullet(AnimatorController bulletAnimator, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
+    public void SetBullet(RuntimeAnimatorController bulletAnimator, Vector3 position, Vector3 fireTargetPosition, System.Action OnFireComplete)
     {
         animator.runtimeAnimatorController = bulletAnimator;
 

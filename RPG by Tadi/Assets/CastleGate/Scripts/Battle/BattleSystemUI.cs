@@ -95,10 +95,11 @@ public class BattleSystemUI : MonoBehaviour
         battleMenu.Tree.ResetAllMenu();
     }
 
-    public void TypeSentence(string line)
+    public IEnumerator TypeSentence(string line)
     {
         StopAllCoroutines();
-        StartCoroutine(Managers.Ins.Dlg.TypeSentence(dialogText, line));
+
+        yield return StartCoroutine(Managers.Ins.Dlg.TypeSentence(dialogText, line));
     }
 
     public void DisplaySentence(string line)

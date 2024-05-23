@@ -12,7 +12,7 @@ namespace Tadi.Datas.BattleSystem
 
     public enum BattleCondition
     {
-        None, Victory, Defeated, Draw
+        None, Win, Lose, Draw
     }
 
     public enum UnitParty

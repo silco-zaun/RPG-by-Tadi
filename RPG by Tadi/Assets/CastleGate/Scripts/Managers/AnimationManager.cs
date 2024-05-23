@@ -1,15 +1,22 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
-using Tadi.Datas.Unit;
-using Tadi.Datas.Weapon;
 
 public class AnimationManager : MonoBehaviour
 {
     private Dictionary<string, AnimationEvent> animationEventDictionary = new Dictionary<string, AnimationEvent>();
 
-    private bool Check(List<AnimatorController> animators, Type type)
+    private void Awake()
+    {
+        Debug.Log("test1");
+    }
+
+    private void Start()
+    {
+        Debug.Log("test2");
+    }
+
+    private bool Check(List<RuntimeAnimatorController> animators, Type type)
     {
         Array enumValues = Enum.GetValues(type);
         string enumName = type.Name;
@@ -37,7 +44,7 @@ public class AnimationManager : MonoBehaviour
         return true;
     }
 
-    public void AddAnimEvents(AnimatorController animController, string clipName, string eventKeyword)
+    public void AddAnimEvents(RuntimeAnimatorController animController, string clipName, string eventKeyword)
     {
         AnimationClip[] clips = animController.animationClips;
 

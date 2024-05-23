@@ -1,6 +1,3 @@
-using System;
-using Tadi.Datas.Weapon;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Tadi.Datas.Res
@@ -15,17 +12,21 @@ namespace Tadi.Datas.Res
         public const string SKELETON_MAGE_ATTACK_CLIP_NAME = "RightAttack";
         public const string ATTACK_CLIP_KEYWORD = "Attack";
 
-        [SerializeField] private AnimatorController knightAnimator;
-        [SerializeField] private AnimatorController rogueAnimator;
-        [SerializeField] private AnimatorController wizzardAnimator;
-        [SerializeField] private AnimatorController orcAnimator;
-        [SerializeField] private AnimatorController skeletonMageAnimator;
+        [SerializeField] private RuntimeAnimatorController knightAnimator;
+        [SerializeField] private RuntimeAnimatorController rogueAnimator;
+        [SerializeField] private RuntimeAnimatorController wizzardAnimator;
+        [SerializeField] private RuntimeAnimatorController orcAnimator;
+        [SerializeField] private RuntimeAnimatorController skeletonMageAnimator;
+        [SerializeField] private RuntimeAnimatorController lizardManAnimator;
+        [SerializeField] private RuntimeAnimatorController turtleKingAnimator;
         // Body
         [SerializeField] private Sprite knightBody;
         [SerializeField] private Sprite rogueBody;
         [SerializeField] private Sprite wizzardBody;
         [SerializeField] private Sprite orcBody;
         [SerializeField] private Sprite skeletonMageBody;
+        [SerializeField] private Sprite lizardManBody;
+        [SerializeField] private Sprite turtleKingBody;
         // Hand
         [SerializeField] private Sprite humanLeftHand;
         [SerializeField] private Sprite humanRightHand;
@@ -34,17 +35,21 @@ namespace Tadi.Datas.Res
         [SerializeField] private Sprite skeletonLeftHand;
         [SerializeField] private Sprite skeletonRightHand;
 
-        public AnimatorController KnightAnimator { get { return knightAnimator; } }
-        public AnimatorController RogueAnimator { get { return rogueAnimator; } }
-        public AnimatorController WizzardAnimator { get { return wizzardAnimator; } }
-        public AnimatorController OrcAnimator { get { return orcAnimator; } }
-        public AnimatorController SkeletonMageAnimator { get { return skeletonMageAnimator; } }
+        public RuntimeAnimatorController KnightAnimator { get { return knightAnimator; } }
+        public RuntimeAnimatorController RogueAnimator { get { return rogueAnimator; } }
+        public RuntimeAnimatorController WizzardAnimator { get { return wizzardAnimator; } }
+        public RuntimeAnimatorController OrcAnimator { get { return orcAnimator; } }
+        public RuntimeAnimatorController SkeletonMageAnimator { get { return skeletonMageAnimator; } }
+        public RuntimeAnimatorController LizardManAnimator { get { return lizardManAnimator; } }
+        public RuntimeAnimatorController TurtleKingAnimator { get { return turtleKingAnimator; } }
         // Body
         public Sprite KnightBody { get { return knightBody; } }
         public Sprite RogueBody { get { return rogueBody; } }
         public Sprite WizzardBody { get { return wizzardBody; } }
         public Sprite OrcBody { get { return orcBody; } }
         public Sprite SkeletonMageBody { get { return skeletonMageBody; } }
+        public Sprite LizardManBody { get { return lizardManBody; } }
+        public Sprite TurtleKingBody { get { return turtleKingBody; } }
         // Hand
         public Sprite HumanLeftHand { get { return humanLeftHand; } }
         public Sprite HumanRightHand { get { return humanRightHand; } }
@@ -60,9 +65,9 @@ namespace Tadi.Datas.Res
         public const string BULLET_EXPLOSION_CLIP_NAME = "Explosion";
 
         [SerializeField] private GameObject bullet;
-        [SerializeField] private AnimatorController magicBolt;
-        [SerializeField] private AnimatorController darkBolt;
-        [SerializeField] private AnimatorController fireBall;
+        [SerializeField] private RuntimeAnimatorController magicBolt;
+        [SerializeField] private RuntimeAnimatorController darkBolt;
+        [SerializeField] private RuntimeAnimatorController fireBall;
         [SerializeField] private Sprite woodSword;
         [SerializeField] private Sprite woodShild;
         [SerializeField] private Sprite woodBow;
@@ -73,9 +78,9 @@ namespace Tadi.Datas.Res
         [SerializeField] private Sprite boneGrimoire;
 
         public GameObject Bullet { get { return bullet; } }
-        public AnimatorController MagicBolt { get { return magicBolt; } }
-        public AnimatorController DarkBolt { get { return darkBolt; } }
-        public AnimatorController FireBall { get { return fireBall; } }
+        public RuntimeAnimatorController MagicBolt { get { return magicBolt; } }
+        public RuntimeAnimatorController DarkBolt { get { return darkBolt; } }
+        public RuntimeAnimatorController FireBall { get { return fireBall; } }
         public Sprite WoodSword { get { return woodSword; } }
         public Sprite WoodShild { get { return woodShild; } }
         public Sprite WoodBow { get { return woodBow; } }

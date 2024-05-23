@@ -3,10 +3,8 @@ using UnityEngine;
 using Tadi.Utils;
 using Tadi.Datas.Unit;
 using Tadi.Datas.Combat;
-using Tadi.Datas.Weapon;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
 
 public class UnitController : MonoBehaviour
 {
@@ -21,7 +19,7 @@ public class UnitController : MonoBehaviour
 
     public UnitType UnitType { get; private set; }
     public string UnitName { get; private set; }
-    public AnimatorController BulletAnim { get; private set; }
+    public RuntimeAnimatorController BulletAnim { get; private set; }
     public DamageType DamageType { get; private set; }
     public AttackType AttackType { get; private set; }
     // Stats
@@ -43,14 +41,21 @@ public class UnitController : MonoBehaviour
 
     public void Init(UnitType type, int level)
     {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            // Activate the child GameObject
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+
         unitTypeData = Managers.Ins.Unit.GetUnitTypeData(type);
         UnitType = unitTypeData.UnitType;
         UnitName = unitTypeData.Name;
         BulletAnim = unitTypeData.UnitAnimRes.BulletAnimator;
         DamageType = unitTypeData.DamageType;
         AttackType = unitTypeData.AttackType;
-        unitAnim.SetAnimRes(unitTypeData.UnitAnimRes);
+        unitAnim.Init(unitTypeData.UnitAnimRes);
         SetUnit(level);
+        InitHealthBar();
     }
 
     private void SetUnit(int level)
@@ -62,24 +67,35 @@ public class UnitController : MonoBehaviour
         MagicAttack = Battle.GetStat(level, unitTypeData.BaseMagicAttack, unitTypeData.IVMagicAttack);
         MagicDefense = Battle.GetStat(level, unitTypeData.BaseMagicDefense, unitTypeData.IVMagicDefense);
         Speed = Battle.GetStat(level, unitTypeData.BaseSpeed, unitTypeData.IVSpeed);
-        CombatSkills = unitTypeData.CombatSkills.Where(s => s.LearnLevel >= level).ToList();
+        CombatSkills = unitTypeData.CombatSkills.Where(s => s.LearnLevel <= level).ToList();
     }
 
-    public void TakeDamage(UnitController attacker, bool defending, UnitCombatSkill skill = null)
+    public void TakeDamage(UnitController attacker, bool defending)
     {
         damageFlash.CallDamageFlash();
 
         float damage = GetDamage(attacker, defending);
 
         CurHP -= damage;
+
         float normalizedHP = System.Math.Clamp(CurHP / MaxHP, 0f, MaxHP);
-        healthBar.SetBar(normalizedHP);
+        StartCoroutine(healthBar.SetBarRoutine(normalizedHP));
 
         bool isFainted = CheckIsFainted();
 
         if (isFainted)
         {
             OnFainted?.Invoke();
+        }
+    }
+
+    private void InitHealthBar()
+    {
+        if (healthBar != null)
+        {
+            float normalizedHP = System.Math.Clamp(CurHP / MaxHP, 0f, MaxHP);
+
+            healthBar.SetBar(normalizedHP);
         }
     }
 

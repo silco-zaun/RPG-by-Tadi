@@ -7,26 +7,27 @@ public class UnitManager : MonoBehaviour
 {
     [SerializeField] private GameObject battleUnitPrefab;
 
+    private GameObject battleUnitPool;
     private int battleUnitObjectPoolSize = 10;
     private List<GameObject> pooledbattleUnitObjects = new List<GameObject>();
 
     private void Awake()
     {
-        
+        battleUnitPool = GameObject.Find("BattleUnitPool");
     }
 
     private void Start()
     {
         //UnitData.Init();
-        InitBattleUnitObjectPool();
+        Init();
     }
 
-    private void InitBattleUnitObjectPool()
+    public void Init()
     {
         for (int i = 0; i < battleUnitObjectPoolSize; i++)
         {
             // Instantiate objects and add them to the pool
-            GameObject obj = Instantiate(battleUnitPrefab);
+            GameObject obj = Instantiate(battleUnitPrefab, battleUnitPool.transform);
             obj.SetActive(false);
             pooledbattleUnitObjects.Add(obj);
         }
@@ -76,6 +77,12 @@ public class UnitManager : MonoBehaviour
                 break;
             case UnitType.SkeletonMage:
                 data = UnitData.SkeletonMage;
+                break;
+            case UnitType.LizardMan:
+                data = UnitData.LizardMan;
+                break;
+            case UnitType.TurtleKing:
+                data = UnitData.TurtleKing;
                 break;
             default:
                 Debug.LogError("[UnitType] must to be set.");

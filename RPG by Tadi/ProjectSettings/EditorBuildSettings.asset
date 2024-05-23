@@ -6,7 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/CastleGate/Scenes/Village.unity
+    guid: 6d25bc8073fcfd64983a92996b7d220d
+  - enabled: 1
     path: Assets/CastleGate/Scenes/Eastern Dionis.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/CastleGate/Scenes/Eastern Dionis Dungeon.unity
+    guid: 18302de5057c4354f92cbb47613ceb67
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c48378eb406d13b498b62a99a47b4c5d, type: 2}

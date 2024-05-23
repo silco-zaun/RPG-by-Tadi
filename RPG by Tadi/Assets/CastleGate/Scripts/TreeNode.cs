@@ -52,7 +52,7 @@ namespace Tadi.Utils.Tree
                 {
                     TreeNode<T> node = queue.Dequeue();
 
-                    // Check if the root's depth and breadth indices match the Target indices
+                    // Check if the root's depth and breadth indices match the DetectedTarget indices
                     if (depth == depthIndex && i == breadthIndex)
                     {
                         return node; // Found the root
@@ -64,7 +64,7 @@ namespace Tadi.Utils.Tree
                         queue.Enqueue(child);
                     }
                 }
-                depth++; // Move to the next depth learnLevel
+                depth++; // PlayMoveAnim to the next depth learnLevel
             }
 
             return null; // Node with the specified indices not found

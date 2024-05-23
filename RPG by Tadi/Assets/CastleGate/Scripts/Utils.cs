@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tadi.Datas.BattleSystem;
-using Tadi.Datas.Combat;
-using UnityEditor.ShaderGraph.Internal;
 
 namespace Tadi.Utils
 {

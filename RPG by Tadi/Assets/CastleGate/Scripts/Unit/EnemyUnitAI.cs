@@ -1,161 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Tadi.Datas.BattleSystem;
 using UnityEngine;
 
-public class EnemyUnitAI : MonoBehaviour
+public class EnemyUnitAI : UnitAI
 {
-    public enum State
-    {
-        Roaming,
-        ChaseTarget,
-        GoBack
-    }
-
-    [SerializeField] private LayerMask solidLayer;
-
-    private UnitAnimation anim;
-    private EnemyUnitNavMesh nav;
-    private EnemyUnitDetector detector;
-
-    public State state;
-    private Vector3 startingPosition;
-    private Vector3 moveVec;
-    private const float ROAM_RANGE = 3f;
-    private bool isMoving;
-    public float arrivalThreshold = 0.1f;
-
-    private void Awake()
-    {
-        anim = GetComponentInChildren<UnitAnimation>();
-        nav = GetComponent<EnemyUnitNavMesh>();
-        detector = GetComponent<EnemyUnitDetector>();
-    }
+    [SerializeField] private GameObject deactivateObject; 
 
     // Start is called before the first frame update
     private void Start()
     {
-        state = State.Roaming;
-        startingPosition = transform.position;
-
-        Vector3 roamingPos = GetRoamingPosition();
-
+        Init();
     }
 
-    private void FixedUpdate()
+    private void Init()
     {
-        FindTarget();
+        OnBattleEnd = BattleEnd;
 
-        switch (state)
-        {
-            case State.Roaming:
-                HandleRoaming();
-                break;
-            case State.ChaseTarget:
-                MissTarget();
-                HandleChasing();
-                break;
-            case State.GoBack:
-                ArriveStartingPos();
-                HandleGoBack();
-                break;
-        }
+        behave = UnitBehave.Roaming;
+
+        detector.AddDetector(5f, OnEnterFOVDetector, OnExitFOVDetector);
+        detector.AddDetector(1f, OnEnterContactingDetector, OnExitContactingDetector);
     }
 
-    private void LateUpdate()
+    private void OnEnterFOVDetector(GameObject target)
     {
-        anim.PlayMoveAnim(moveVec);
+        ChasingTarget(0);
     }
 
-    private void HandleRoaming()
+    private void OnExitFOVDetector()
     {
-        if (!isMoving)
-        {
-            StartCoroutine(Roaming());
-        }
+        MissTarget(0);
     }
 
-    private void HandleChasing()
+    private void OnEnterContactingDetector(GameObject target)
     {
-        if (detector.Target != null)
-        {
-            nav.SetDestination(detector.Target.transform.position, ref moveVec);
-        }
+        Battle(1, target);
     }
 
-    private void HandleGoBack()
+    private void OnExitContactingDetector()
     {
-        if (Vector3.Distance(transform.position, startingPosition) < arrivalThreshold)
-        {
-            state = State.Roaming;
-        }
-        else
-        {
-            nav.SetDestination(startingPosition, ref moveVec);
-        }
+        LookingTarget(1);
     }
 
-    public IEnumerator Roaming()
+    private void BattleEnd(BattleCondition result)
     {
-        isMoving = true;
-
-        Vector3 target = GetRoamingPosition();
-
-        // Set the agent's destination to the random point
-        nav.SetDestination(target, ref moveVec);
-
-        // Wait until the character has reached the destination
-        while (Vector3.Distance(transform.position, target) > arrivalThreshold)
+        if (result == BattleCondition.Win)
         {
-            yield return null; // Wait for the next frame
-        }
-
-        // Character has arrived at the destination
-        moveVec = Vector3.zero;
-
-        yield return new WaitForSeconds(2f);
-
-        isMoving = false;
-    }
-
-    private Vector3 GetRoamingPosition()
-    {
-        // Get a random direction
-        Vector3 movePosition;
-
-        if (Vector2.Distance((Vector2)startingPosition, (Vector2)transform.position) < 1f)
-        {
-            movePosition = new Vector3(startingPosition.x - 1f, startingPosition.y, 0);
-        }
-        else
-        {
-            movePosition = startingPosition;
-        }
-
-        return movePosition;
-    }
-
-    private void FindTarget()
-    {
-        if (detector.PlayerDetected)
-        {
-            state = State.ChaseTarget;
-        }
-    }
-
-    private void MissTarget()
-    {
-        if (!detector.PlayerDetected)
-        {
-            state = State.GoBack;
-        }
-    }
-
-    private void ArriveStartingPos()
-    {
-        if (Vector3.Distance(startingPosition, transform.position) < arrivalThreshold)
-        {
-            state = State.Roaming;
+            if (deactivateObject != null)
+                deactivateObject.SetActive(false);
         }
     }
 }
